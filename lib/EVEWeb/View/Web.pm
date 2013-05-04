@@ -11,7 +11,7 @@ __PACKAGE__->config({
     PRE_PROCESS  => 'config/main',
     WRAPPER      => 'site/wrapper',
     ERROR        => 'error.tt2',
-    TIMER        => 0,
+    TIMER        => 1,
     render_die   => 1,
 });
 
