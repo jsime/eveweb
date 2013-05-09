@@ -18,14 +18,17 @@ create index users_updated_at_idx on public.users (updated_at);
 create index users_deleted_at_idx on public.users (deleted_at);
 
 create table public.sessions (
-    session_id  serial not null primary key,
-    user_id     integer not null,
-    started_at  timestamp with time zone not null default now(),
-    ended_at    timestamp with time zone,
-    last_used   timestamp with time zone
+    session_id   serial not null primary key,
+    user_id      integer not null,
+    session_key  text not null,
+    session_data text not null,
+    started_at   timestamp with time zone not null default now(),
+    ended_at     timestamp with time zone,
+    last_used    timestamp with time zone
 );
 
 create index sessions_user_id_idx on public.sessions (user_id);
+create unique index sessions_session_key_idx on public.sessions (session_key);
 create index sessions_started_at_idx on public.sessions (started_at);
 create index sessions_ended_at_idx on public.sessions (ended_at);
 create index sessions_last_used_idx on public.sessions (last_used);
@@ -36,26 +39,51 @@ alter table public.sessions add foreign key (user_id) references public.users (u
 -- Static data imported from CCP's EVE data exports
 create schema ccp;
 
-create table ccp.attributes (
-    attribute_id
-    name
-    description
+create table ccp.icons (
+    icon_id     integer not null primary key,
+    filename    text not null,
+    description text
 );
+
+create table ccp.attributes (
+    attribute_id    integer not null primary key,
+    icon_id         integer not null,
+    name            text not null,
+    description     text
+);
+
+create index attributes_icon_id_idx on ccp.attributes (icon_id);
+create index attributes_name_idx on ccp.attributes (name);
+
+alter table ccp.attributes add foreign key (icon_id) references ccp.icons (icon_id);
 
 create table ccp.skills (
-    skill_id
-    name
-    description
-    rank
-    primary_attribute_id
-    secondary_attribute_id
+    skill_id                integer not null primary key,
+    name                    text not null,
+    description             text not null,
+    rank                    integer not null,
+    primary_attribute_id    integer not null,
+    secondary_attribute_id  integer not null
 );
 
+create unique index skills_name_idx on ccp.skills (name);
+create index skills_primary_attribute_id_idx on ccp.skills (primary_attribute_id);
+create index skills_secondary_attribute_id_idx on ccp.skills (secondary_attribute_id);
+
+alter table ccp.skills add foreign key (primary_attribute_id) references ccp.attributes (attribute_id);
+alter table ccp.skills add foreign key (secondary_attribute_id) references ccp.attributes (attribute_id);
+
 create table ccp.skill_requirements (
-    skill_id
-    required_skill_id
-    required_level
+    skill_id            integer not null,
+    required_skill_id   integer not null,
+    required_level      integer not null
 );
+
+alter table ccp.skill_requirements add primary key (skill_id, required_skill_id);
+create index skill_requirements_required_skill_id_idx on ccp.skill_requirements (required_skill_id);
+
+alter table ccp.skill_requirements add foreign key (skill_id) references ccp.skills (skill_id) on update cascade on delete cascade;
+alter table ccp.skill_requirements add foreign key (required_skill_id) references ccp.skills (skill_id) on update cascade on delete cascade;
 
 -- SCHEMA: eve
 -- Contains data collected through the EVE API provided by CCP
@@ -85,6 +113,7 @@ create table eve.pilots (
     name
     race
     bloodline
+    ancestry
     gender
     birthdate
     sec_status
