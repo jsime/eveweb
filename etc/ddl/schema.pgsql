@@ -85,6 +85,18 @@ create index skill_requirements_required_skill_id_idx on ccp.skill_requirements 
 alter table ccp.skill_requirements add foreign key (skill_id) references ccp.skills (skill_id) on update cascade on delete cascade;
 alter table ccp.skill_requirements add foreign key (required_skill_id) references ccp.skills (skill_id) on update cascade on delete cascade;
 
+create table ccp.items (
+    item_id
+    name
+
+);
+
+create table ccp.implants (
+    implant_id
+    item_id
+    slot
+);
+
 -- SCHEMA: eve
 -- Contains data collected through the EVE API provided by CCP
 create schema eve;
@@ -127,6 +139,20 @@ create table eve.pilot_skills (
     training
     started_at
     started_points
+);
+
+create table eve.pilot_clones (
+    pilot_clone_id
+    pilot_id
+    clone_type
+    name
+    notes
+    
+);
+
+create table eve.pilot_clone_implants (
+    pilot_clone_id
+    implant_id
 );
 
 -- SCHEMA: plans
