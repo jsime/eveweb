@@ -1,8 +1,11 @@
 use strict;
 use warnings;
 
+use Plack::Builder;
 use EVEWeb;
 
-my $app = EVEWeb->apply_default_middlewares(EVEWeb->psgi_app);
-$app;
+builder {
+    enable "Plack::Middleware::ReverseProxy";
+    EVEWeb->psgi_app;
+};
 
