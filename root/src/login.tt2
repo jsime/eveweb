@@ -1,0 +1,15 @@
+[% META title = 'Login' %]
+
+<form method="post" action="[% c.uri_for('/login') %]">
+<p>
+<label for="username">Username</label>
+<input id="username" type="text" name="username" value="[% username %]" />
+</p>
+<p>
+<label for="password">Password</label>
+<input id="password" type="password" name="password" value="" />
+</p>
+<p>
+<input type="submit" value="Login" />
+</p>
+</form>
