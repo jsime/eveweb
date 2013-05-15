@@ -4,6 +4,8 @@ use namespace::autoclean;
 
 use Catalyst::Runtime 5.80;
 
+use DBIx::DataStore ( config => 'yaml' );
+
 # Set flags and add plugins for the application.
 #
 # Note that ORDERING IS IMPORTANT here as plugins are initialized in order,
@@ -20,6 +22,15 @@ use Catalyst qw/
     -Debug
     ConfigLoader
     Static::Simple
+
+    StackTrace
+
+    Session
+    Session::State::Cookie
+    Session::Store::Memcached
+
+    Authentication
+    Authentication::Credential::Password
 /;
 
 extends 'Catalyst';
@@ -41,7 +52,34 @@ __PACKAGE__->config(
     disable_component_resolution_regex_fallback => 1,
     enable_catalyst_header => 1, # Send X-Catalyst header
     default_view => 'Web',
+
+    'Plugin::Session' => {
+        cookie_domain => 'dev.ube-kosan.com',
+        memcached_new_args => {
+            'data'      => ['192.168.122.1:11211'],
+            'namespace' => ['eveweb'],
+        },
+    }
 );
+
+__PACKAGE__->config->{'authentication'} = {
+    'default_realm' => 'default',
+    'realms' => {
+        'default' => {
+            'credential' => {
+                'class'              => 'Password',
+                'password_field'     => 'password',
+                'password_type'      => 'salted_hash',
+                'password_salt_len'  => 16
+            },
+            'store' => {
+                'class'     => 'DBIx::DataStore',
+                'datastore' => 'eveweb',
+                #'dbh'   => 
+            }
+        }
+    }
+};
 
 # Start the application
 __PACKAGE__->setup();
