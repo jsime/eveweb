@@ -17,6 +17,30 @@ create index users_created_at_idx on public.users (created_at);
 create index users_updated_at_idx on public.users (updated_at);
 create index users_deleted_at_idx on public.users (deleted_at);
 
+create table public.roles (
+    role_id serial not null primary key,
+    role_name text not null
+);
+
+create unique index roles_lower_role_name_idx on public.roles (lower(role_name));
+
+create table public.user_roles (
+    user_id     integer not null,
+    role_id     integer not null,
+    granted_by  integer,
+    created_at  timestamp with time zone not null default now()
+);
+
+alter table public.user_roles add primary key (user_id, role_id);
+
+create index user_roles_role_id_idx on public.user_roles (role_id);
+create index user_roles_granted_by_idx on public.user_roles (granted_by);
+create index user_roles_created_at_idx on public.user_roles (created_at);
+
+alter table public.user_roles add foreign key (user_id) references public.users (user_id) on update cascade on delete cascade;
+alter table public.user_roles add foreign key (role_id) references public.roles (role_id) on update cascade on delete cascade;
+alter table public.user_roles add foreign key (granted_by) references public.users (user_id) on update cascade on delete set null;
+
 create table public.sessions (
     session_id   serial not null primary key,
     user_id      integer not null,
