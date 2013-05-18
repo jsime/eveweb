@@ -4,8 +4,6 @@ use namespace::autoclean;
 
 use Catalyst::Runtime 5.80;
 
-use DBIx::DataStore ( config => 'yaml' );
-
 # Set flags and add plugins for the application.
 #
 # Note that ORDERING IS IMPORTANT here as plugins are initialized in order,
@@ -59,27 +57,30 @@ __PACKAGE__->config(
             'data'      => ['192.168.122.1:11211'],
             'namespace' => ['eveweb'],
         },
-    }
-);
+    },
 
-__PACKAGE__->config->{'authentication'} = {
-    'default_realm' => 'default',
-    'realms' => {
-        'default' => {
-            'credential' => {
-                'class'              => 'Password',
-                'password_field'     => 'password',
-                'password_type'      => 'salted_hash',
-                'password_salt_len'  => 16
-            },
-            'store' => {
-                'class'     => 'DBIx::DataStore',
-                'datastore' => 'eveweb',
-                #'dbh'   => 
+    'Model::DB' => {
+        datastore => 'eveweb',
+    },
+
+    'authentication' => {
+        'default_realm' => 'default',
+        'realms' => {
+            'default' => {
+                'credential' => {
+                    'class'              => 'Password',
+                    'password_field'     => 'password',
+                    'password_type'      => 'salted_hash',
+                    'password_salt_len'  => 16
+                },
+                'store' => {
+                    'class'     => 'DBIx::DataStore',
+                    'datastore' => 'eveweb',
+                }
             }
         }
     }
-};
+);
 
 # Start the application
 __PACKAGE__->setup();
