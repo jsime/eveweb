@@ -24,7 +24,8 @@ Catalyst Controller.
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->response->body('Matched EVEWeb::Controller::Logout in Logout.');
+    $c->logout;
+    $c->response->redirect($c->uri_for('/'));
 }
 
 
