@@ -24,11 +24,12 @@ use Catalyst qw/
     StackTrace
 
     Session
-    Session::State::Cookie
     Session::Store::Memcached
+    Session::State::Cookie
 
     Authentication
     Authentication::Credential::Password
+    Authorization::Roles
 /;
 
 extends 'Catalyst';
@@ -63,20 +64,17 @@ __PACKAGE__->config(
         datastore => 'eveweb',
     },
 
-    'authentication' => {
-        'default_realm' => 'default',
-        'realms' => {
-            'default' => {
-                'credential' => {
-                    'class'              => 'Password',
-                    'password_field'     => 'password',
-                    'password_type'      => 'salted_hash',
-                    'password_salt_len'  => 16
-                },
-                'store' => {
-                    'class'     => 'DBIx::DataStore',
-                    'datastore' => 'eveweb',
-                }
+    'Plugin::Authentication' => {
+        'default' => {
+            'credential' => {
+                'class'              => 'Password',
+                'password_field'     => 'password',
+                'password_type'      => 'salted_hash',
+                'password_salt_len'  => 16
+            },
+            'store' => {
+                'class'     => 'DBIx::DataStore',
+                'datastore' => 'eveweb',
             }
         }
     }
