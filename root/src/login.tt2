@@ -1,5 +1,11 @@
 [% META title = 'Login' %]
 
+[% IF error_msg %]
+<div class="error">
+<p>[% error_msg %]</p>
+</div>
+[% END %]
+
 <form method="post" action="[% c.uri_for('/login') %]">
 <p>
 <label for="username">Username</label>
