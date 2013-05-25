@@ -27,6 +27,11 @@ sub index :Path :Args(0) {
     my $username = $c->request->params->{'username'};
     my $password = $c->request->params->{'password'};
 
+    if ($c->sessionid && $c->user_exists) {
+        $c->response->redirect($c->uri_for('/'));
+        return;
+    }
+
     if ($username && $password) {
         if ($c->authenticate({ username => $username, password => $password })) {
             $c->response->redirect($c->uri_for('/'));
