@@ -2,6 +2,8 @@ package EVEWeb::Controller::Root;
 use Moose;
 use namespace::autoclean;
 
+use Data::Dumper;
+
 BEGIN { extends 'Catalyst::Controller' }
 
 #
@@ -28,6 +30,11 @@ The root page (/)
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
+
+    if (!$c->sessionid || !$c->user_exists) {
+        $c->response->redirect($c->uri_for('/login'));
+        return;
+    }
 
     $c->stash( template => 'index.tt2' );
 }
