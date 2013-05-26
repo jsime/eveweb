@@ -6,7 +6,8 @@
 </div>
 [% END %]
 
-<form method="post" action="[% c.uri_for('/login') %]">
+<div id="dlg-login" title="Authorization Required">
+<form id="form-login" method="post" action="[% c.uri_for('/login') %]">
 <p>
 <label for="username">Username</label>
 <input id="username" type="text" name="username" value="[% username %]" />
@@ -16,6 +17,24 @@
 <input id="password" type="password" name="password" value="" />
 </p>
 <p>
-<input type="submit" value="Login" />
+<a href="[% c.uri_for('/account/register') %]">Register Account ...</a>
+</p>
+<p>
+<a href="[% c.uri_for('/account/recover') %]">Forgot Your Password?</a>
 </p>
 </form>
+</div>
+
+<script>
+$(function() {
+    $("#dlg-login").dialog({
+        dialogClass: "no-close",
+        draggable: false,
+        buttons: {
+            Login: function() {
+                $("#form-login").submit();
+            }
+        }
+    });
+});
+</script>
