@@ -7,22 +7,24 @@
 [% END %]
 
 <div id="dlg-login" title="Authorization Required">
-<form id="form-login" method="post" action="[% c.uri_for('/login') %]">
-<p>
-<label for="username">Username
-<input id="username" type="text" name="username" value="[% username %]" /></label>
-</p>
-<p>
-<label for="password">Password
-<input id="password" type="password" name="password" value="" /></label>
-</p>
-<p>
-<a href="[% c.uri_for('/account/register') %]">Register New Account</a>
-</p>
-<p>
-<a href="[% c.uri_for('/account/recover') %]">Forgot Your Password?</a>
-</p>
-</form>
+    <form id="form-login" method="post" action="[% c.uri_for('/login') %]">
+        <fieldset>
+            <div>
+            <label for="username">Username
+            <input id="username" type="text" name="username" value="[% username %]" /></label>
+            </div>
+            <div>
+            <label for="password">Password
+            <input id="password" type="password" name="password" value="" /></label>
+            </div>
+        </fieldset>
+        <p>
+            <a href="[% c.uri_for('/account/register') %]">Register New Account</a>
+        </p>
+        <p>
+            <a href="[% c.uri_for('/account/recover') %]">Forgot Your Password?</a>
+        </p>
+    </form>
 </div>
 
 <script>
