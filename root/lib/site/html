@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>[% template.title or site.title %]</title>
+    <link rel="stylesheet" href="/static/reset.css" type="text/css" />
     <link rel="stylesheet" href="//f.fontdeck.com/s/css/+3xWzMOQDxuQYFY8o01GBYz9eaE/dev.ube-kosan.com/33606.css" type="text/css" />
     <link rel="stylesheet" href="/static/base.css" type="text/css" />
     <link rel="stylesheet" href="/static/ui.css" type="text/css" />
