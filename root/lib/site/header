@@ -4,12 +4,12 @@
 <ul>
     <li>
         <div class="menu">
-            <a class="hover-link">[% c.user.get('email') %]</a>
+            <a class="hover-link">[% c.user.get('username') %]'s Account</a>
             <div class="sub">
                 <ul class="sub-options">
                     <li><a href="[% c.uri_for('/account') %]">Profile</a></li>
                     <li><a href="[% c.uri_for('/account/api') %]">API Keys</a></li>
-                    <li class="sep" />
+                    <li class="blank"></li>
                     <li><a href="[% c.uri_for('/logout') %]">Log Out</a></li>
                 </ul>
             </div>

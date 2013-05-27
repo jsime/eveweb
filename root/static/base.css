@@ -95,9 +95,20 @@ div#header {
     position: relative;
     text-align: right;
 } 
+.menu li.blank {
+    padding: 8px;
+}
 .menu li a {
     display:block;
+    padding: 8px 12px;
 } 
+
+.menu li a, .menu li a:hover, .menu li a:active, .menu li a:visited {
+    color: #fff;
+}
+.menu li a:hover {
+    background-color: #3a4450;
+}
 .sub {
     background: #6ddef6;
     position:absolute;
@@ -105,6 +116,7 @@ div#header {
     width:200px;
     padding:40px 0 3px;
     display:none;
+    text-align: left;
 } 
 a.hover-link {
     color: #fff;
@@ -118,6 +130,7 @@ a.hover-link {
     margin:0px;
     padding:0px;
     text-align: left;
+    width: 100%;
 }
 
 /* jQuery overrides/additions */
