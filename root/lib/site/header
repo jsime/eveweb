@@ -21,7 +21,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $(".menu").hover(
-            function(){$(".sub").fadeToggle(400);},
+            function(){$(".sub").fadeToggle(200);},
             function(){$(".sub").hide();}
         );
     });
