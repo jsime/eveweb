@@ -2,8 +2,28 @@
 <!--<h1><a href="[% c.uri_for('/') %]">[% template.title or site.title %]</a></h1>-->
 [% IF c.user_exists %]
 <ul>
-    <li class="ui-icon-person"><a href="[% c.uri_for('/account') %]">[% c.user.get('email') %]</a></li>
+    <li>
+        <div class="menu">
+            <a class="hover-link">[% c.user.get('email') %]</a>
+            <div class="sub">
+                <ul class="sub-options">
+                    <li><a href="[% c.uri_for('/account') %]">Profile</a></li>
+                    <li><a href="[% c.uri_for('/account/api') %]">API Keys</a></li>
+                    <li class="sep" />
+                    <li><a href="[% c.uri_for('/logout') %]">Log Out</a></li>
+                </ul>
+            </div>
+        </div>
+    </li>
 </ul>
 [% END %]
 <h1><a href="[% c.uri_for('/') %]">UBE KOSAN</a></h1>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".menu").hover(
+            function(){$(".sub").fadeToggle(400);},
+            function(){$(".sub").hide();}
+        );
+    });
+</script>
 <!-- END site/header -->
