@@ -22,7 +22,7 @@
     $(document).ready(function(){
         $(".menu").hover(
             function(){$(".sub").fadeToggle(200);},
-            function(){$(".sub").hide();}
+            function(){$(".sub").fadeToggle(200);}
         );
     });
 </script>
