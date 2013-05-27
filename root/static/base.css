@@ -87,15 +87,37 @@ div#header {
     margin: 0;
     padding: 0;
 }
-#header ul li {
+.menu {
     font-family:"Proxima Nova Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    font-weight:bold;
-    font-style:normal;
-    font-size: 0.75em;
-}
-#header ul li a, #header ul li a:active, #header ul li a:hover, #header ul li a:visited {
+    font-weight: bold;
+    font-style: normal;
+    width: 200px;
+    position: relative;
+    text-align: right;
+} 
+.menu li a {
+    display:block;
+} 
+.sub {
+    background: #6ddef6;
+    position:absolute;
+    z-index:2;
+    width:200px;
+    padding:40px 0 3px;
+    display:none;
+} 
+a.hover-link {
     color: #fff;
-    text-decoration: none;
+    width:190px;
+    position:absolute;
+    z-index:110;
+    display:block;
+} 
+.sub-options {
+    list-style:none;
+    margin:0px;
+    padding:0px;
+    text-align: left;
 }
 
 /* jQuery overrides/additions */
