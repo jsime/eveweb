@@ -135,6 +135,24 @@ a.hover-link {
     width: 100%;
 }
 
+/* Site Navigation */
+#nav {
+    float: left;
+    width: 120px;
+    background-color: #3399ff;
+}
+#nav ul {
+    list-style-type: none;
+}
+#nav ul li button {
+    margin: 4px;
+    width: 64px;
+    height: 64px;
+    border: 0;
+    background-color: #3a4450;
+    color: #fff;
+}
+
 /* Form elements */
 label {
     display: inline-block;
