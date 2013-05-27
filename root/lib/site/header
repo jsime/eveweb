@@ -16,8 +16,6 @@
         </div>
     </li>
 </ul>
-[% END %]
-<h1><a href="[% c.uri_for('/') %]">UBE KOSAN</a></h1>
 <script type="text/javascript">
     $(document).ready(function(){
         $(".menu").hover(
@@ -26,4 +24,6 @@
         );
     });
 </script>
+[% END %]
+<h1><a href="[% c.uri_for('/') %]">UBE KOSAN</a></h1>
 <!-- END site/header -->
