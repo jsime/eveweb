@@ -30,6 +30,7 @@ $(function() {
     $("#dlg-login").dialog({
         dialogClass: "no-close",
         draggable: false,
+        resizable: false,
         buttons: {
             Login: function() {
                 $("#form-login").submit();
