@@ -1,4 +1,9 @@
 <!-- BEGIN site/header -->
 <!--<h1><a href="[% c.uri_for('/') %]">[% template.title or site.title %]</a></h1>-->
+[% IF c.user_exists %]
+<ul>
+    <li class="ui-icon-person"><a href="[% c.uri_for('/account') %]">[% c.user.get('email') %]</a></li>
+</ul>
+[% END %]
 <h1><a href="[% c.uri_for('/') %]">UBE KOSAN</a></h1>
 <!-- END site/header -->

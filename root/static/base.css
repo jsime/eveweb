@@ -81,6 +81,22 @@ div#header {
     color: #d4d4d4;
     text-decoration: none;
 }
+#header ul {
+    float: right;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+#header ul li {
+    font-family:"Proxima Nova Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-weight:bold;
+    font-style:normal;
+    font-size: 0.75em;
+}
+#header ul li a, #header ul li a:active, #header ul li a:hover, #header ul li a:visited {
+    color: #fff;
+    text-decoration: none;
+}
 
 /* Site Footer */
 div#footer {
