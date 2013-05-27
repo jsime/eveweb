@@ -57,9 +57,9 @@ p strong em, p em strong {
     font-weight:bold;
     font-style:italic;
 }
-a {
-    color: #66b3ff;
-    text-decoration: none;
+a, a:active, a:hover, a:visited {
+    color: #66b3ff !important;
+    text-decoration: none !important;
 }
 h1, h2, h3, h4 {
     font-family:"Din Text Pro Extra Black", Verdana, sans-serif;
@@ -136,4 +136,16 @@ a.hover-link {
 /* jQuery overrides/additions */
 .no-close .ui-dialog-titlebar-close {
   display: none;
+}
+.ui-widget input, .ui-button-text, .ui-dialog-title {
+    font-family:"Proxima Nova Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif !important;
+    font-size-adjust:0.488 !important;
+    font-weight:normal;
+    font-style:normal;
+/*
+    font-family:"Proxima Nova Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-size-adjust:0.488;
+    font-weight:bold;
+    font-style:normal;
+*/
 }
