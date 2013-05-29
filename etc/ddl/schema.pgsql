@@ -2,20 +2,39 @@
 -- General account, authorization, configuration data
 
 create table public.users (
-    user_id     serial not null primary key,
-    email       text not null,
-    username    text not null,
-    password    text not null,
-    created_at  timestamp with time zone not null default now(),
-    updated_at  timestamp with time zone,
-    deleted_at  timestamp with time zone
+    user_id      serial not null primary key,
+    email        text not null,
+    username     text not null,
+    password     text not null,
+    verify_token text not null,
+    verified     boolean not null default false,
+    created_at   timestamp with time zone not null default now(),
+    updated_at   timestamp with time zone,
+    deleted_at   timestamp with time zone
 );
 
 create unique index users_lower_email_idx on public.users (lower(email));
 create unique index users_lower_username_idx on public.users (lower(username));
+create index users_verified_idx on public.users (verified);
 create index users_created_at_idx on public.users (created_at);
 create index users_updated_at_idx on public.users (updated_at);
 create index users_deleted_at_idx on public.users (deleted_at);
+
+create table public.password_resets (
+    user_id     integer not null,
+    reset_token text not null,
+    sent_at     timestamp with time zone not null default now(),
+    viewed_at   timestamp with time zone,
+    reset_at    timestamp with time zone,
+    valid_until timestamp with time zone
+);
+
+alter table public.password_resets add primary key (user_id, reset_token);
+create index password_resets_reset_token_idx on public.password_resets (reset_token);
+create index password_resets_sent_at_idx on public.password_resets (sent_at);
+create index password_resets_viewed_at_idx on public.password_resets (viewed_at);
+create index password_resets_reset_at_idx on public.password_resets (reset_at);
+create index password_resets_valid_until_idx on public.password_resets (valid_until);
 
 create table public.roles (
     role_id serial not null primary key,
