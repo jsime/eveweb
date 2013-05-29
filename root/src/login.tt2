@@ -33,6 +33,7 @@ $(function() {
         dialogClass: "no-close",
         draggable: false,
         resizable: false,
+        minWidth: 350,
         buttons: {
             Login: function() {
                 $("#form-login").submit();
