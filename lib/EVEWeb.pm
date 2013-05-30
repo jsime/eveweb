@@ -77,6 +77,20 @@ __PACKAGE__->config(
                 'datastore' => 'eveweb',
             }
         }
+    },
+
+    'View::Email::Template' => {
+        template_prefix => 'email',
+        default => {
+            view => 'Web',
+            content_type => 'text/plain',
+        },
+        sender => {
+            mailer => 'SMTP',
+            mailer_args => {
+                host => 'sagan',
+            },
+        }
     }
 );
 
