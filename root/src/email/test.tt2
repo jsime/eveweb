@@ -1,2 +1,0 @@
-This is just a test. The username at the time this
-was sent was [% c.user.get('username') %].
