@@ -1,10 +1,10 @@
 <div id="header">[% PROCESS site/header %]</div>
 
 <div id="content">
-    <div id="nav">
-    [% PROCESS site/navigation %]
-    </div>
     <div id="main">
     [% content %]
+    </div>
+    <div id="nav">
+    [% PROCESS site/navigation %]
     </div>
 </div>

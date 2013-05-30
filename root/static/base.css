@@ -153,6 +153,12 @@ a.hover-link {
     color: #fff;
 }
 
+/* Main Content */
+#main {
+    float: right;
+    text-align: left;
+}
+
 /* Form elements */
 label {
     display: inline-block;
