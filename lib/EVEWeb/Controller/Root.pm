@@ -31,12 +31,29 @@ The root page (/)
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    if (!$c->sessionid || !$c->user_exists) {
-        $c->response->redirect($c->uri_for('/login'));
-        return;
+    $c->stash( template => 'index.tt2' );
+}
+
+=head2 auto
+
+Enforce login requirement for all but a select number of pages (login, registration, etc.).
+
+=cut
+
+sub auto :Private {
+    my ($self, $c) = @_;
+
+    # Paths for which access is permitted to visitors not logged in
+    foreach my $path (qw( login account/register )) {
+        return 1 if $c->request->path eq $path;
     }
 
-    $c->stash( template => 'index.tt2' );
+    if (!$c->user_exists) {
+        $c->response->redirect($c->uri_for('/login'));
+        return 0;
+    }
+
+    return 1;
 }
 
 =head2 default
