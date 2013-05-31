@@ -1,0 +1,44 @@
+<div id="register" title="Register New Account">
+<form method="post" action="[% c.uri_for('/account/register/do') %]">
+<fieldset>
+<div>
+<label for="username">Username
+<input type="text" id="username" name="username" /></label>
+</div>
+<div>
+<label for="email">Email
+<input type="text" id="email" name="email" /></label>
+</div>
+<div>
+<label for="password">Password
+<input type="password" id="password" name="password" /></label>
+</div>
+<div>
+<label for="password_retype">Retype Password
+<input type="password" id="password_retype" name="password_retype" /></label>
+</div>
+</fieldset>
+[% captcha %]
+</p>
+<div>
+<label for="terms_accept">
+<input type="checkbox" id="terms_accept" name="terms_accept" />
+I accept the <a href="[% c.uri_for('/terms') %]" target="_blank">terms and agreements</a> governing
+the use of this website and its services.</label>
+</div>
+</form>
+</div>
+
+<script type="text/javascript">
+$("#register").dialog({
+    dialogClass: 'no-close',
+    resizable: false,
+    draggable: false,
+    minWidth:  400,
+    buttons: {
+        'Register': function(){
+            $("#register form").submit();
+        },
+    }
+});
+</script>
