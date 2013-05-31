@@ -82,7 +82,7 @@ __PACKAGE__->config(
     'View::Email::Template' => {
         template_prefix => 'email',
         default => {
-            view => 'Web',
+            view => 'TT',
             content_type => 'text/plain',
         },
         sender => {
