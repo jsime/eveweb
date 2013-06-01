@@ -44,7 +44,7 @@ sub auto :Private {
     my ($self, $c) = @_;
 
     # Paths for which access is permitted to visitors not logged in
-    foreach my $path (qw( login account/register )) {
+    foreach my $path (qw( login account/register account/register/do account/register/verify )) {
         return 1 if $c->request->path eq $path;
     }
 
