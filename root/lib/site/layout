@@ -1,10 +1,15 @@
 <div id="header">[% PROCESS site/header %]</div>
 
 <div id="content">
-    <div id="main">
-    [% content %]
-    </div>
     <div id="nav">
     [% PROCESS site/navigation %]
     </div>
+    [% IF errors %]
+    <div class="error">
+        [% FOREACH error IN errors %]
+        <p>[% error %]</p>
+        [% END %]
+    </div>
+    [% END %]
+    [% content %]
 </div>
