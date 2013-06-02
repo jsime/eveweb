@@ -36,8 +36,6 @@ sub index :Path :Args(0) {
         undef,
         { theme => 'white' }
     );
-
-    $c->stash->{'template'} = 'account/register/index.tt2';
 }
 
 =head2 do
