@@ -8,6 +8,7 @@ __PACKAGE__->config({
         EVEWeb->path_to( 'root', 'src' ),
         EVEWeb->path_to( 'root', 'lib' )
     ],
+    TEMPLATE_EXTENSION => '.tt2',
     PRE_PROCESS  => 'config/main',
     WRAPPER      => 'site/wrapper',
     ERROR        => 'error.tt2',
