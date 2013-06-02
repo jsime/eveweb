@@ -141,6 +141,8 @@ sub do :Local :Args(0) {
         return;
     }
 
+    $c->stash->{'user'}{'user_id'} = $res->{'user_id'};
+
     $c->stash->{'email'} = {
         to       => $c->request->params->{'email'},
         from     => $c->config->{'email_from'} || 'eveweb@ube-kosan.com',
@@ -149,7 +151,7 @@ sub do :Local :Args(0) {
     };
     $c->forward($c->view('Email::Template'));
 
-    $c->response->redirect($c->uri_for('/accout/verify', $res->{'user_id'}));
+    $c->response->redirect($c->uri_for('/accout/register/verify', $res->{'user_id'}));
 }
 
 =head2 verify
