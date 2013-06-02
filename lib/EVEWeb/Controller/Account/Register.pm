@@ -3,6 +3,7 @@ use Moose;
 use namespace::autoclean;
 
 use Captcha::reCAPTCHA;
+use Crypt::SaltedHash;
 use Digest::SHA qw( sha1_hex );
 
 BEGIN { extends 'Catalyst::Controller'; }
@@ -115,10 +116,16 @@ sub do :Local :Args(0) {
         return;
     }
 
+    # While I'd love to use Bcrypt here, it seems the current crop of Catalyst auth/credential
+    # plugins don't quite support it (can't seem to find a way to pass cost setting in).
+    my $hasher = Crypt::SaltedHash->new();
+    $hasher->add($c->request->params->{'password'});
+
     $c->stash->{'user'} = {
         username     => $c->request->params->{'username'},
         email        => $c->request->params->{'email'},
-        verify_token => sha1_hex(rand()),
+        password     => $hasher->generate,
+        verify_token => sha1_hex(rand()), # this doesn't need to be cryptographically secure, just random
     };
 
     my $res = $c->model('DB')->do(q{
