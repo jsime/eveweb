@@ -40,8 +40,6 @@ sub index :Path :Args(0) {
             $c->stash( error_msg => "Invalid username or password.");
         }
     }
-
-    $c->stash( template => 'login.tt2' );
 }
 
 
