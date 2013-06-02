@@ -1,0 +1,12 @@
+<p>
+Please check your e-mail for a verification message. That message will contain a
+link for you to click to verify your account before it may be used. Alternatively,
+you may copy & paste the verification token from the email into the form below.
+</p>
+
+<form id="account-verify" method="post" action="[% c.uri_for('/account/reister/verify') %]">
+<input type="hidden" name="user_id" value="[% user_id %]" />
+<label for="verify_token">Verification Token:
+<input type="text" name="verify_token" id="verify_token" />
+<input type="submit" value="Verify Account" />
+</form>
