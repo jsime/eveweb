@@ -3,6 +3,7 @@ use Moose;
 use namespace::autoclean;
 
 use Captcha::reCAPTCHA;
+use Digest::SHA qw( sha1_hex );
 
 BEGIN { extends 'Catalyst::Controller'; }
 
@@ -53,7 +54,7 @@ sub do :Local :Args(0) {
     $c->stash->{'field_errors'} = {};
 
     foreach my $fld (qw( username email password password_retype )) {
-        if (!$c->request->params->{$fld} or $c->request->params->{$fld} != m{\w}o) {
+        if (!$c->request->params->{$fld} or $c->request->params->{$fld} !~ m{\w}o) {
             $c->stash->{'field_errors'}{$fld} = 1;
             $c->stash->{$fld} = '';
         } else {
@@ -105,10 +106,43 @@ sub do :Local :Args(0) {
         }
     }
 
+    if (!exists $c->request->params->{'terms_accept'} or lc($c->request->params->{'terms_accept'}) ne 'on') {
+        push(@{$c->stash->{'errors'}}, 'You must accept the terms of service for this site before you may register an account.');
+    }
+
     if (@{$c->stash->{'errors'}} > 0) {
         $c->forward('index');
         return;
     }
+
+    $c->stash->{'user'} = {
+        username     => $c->request->params->{'username'},
+        email        => $c->request->params->{'email'},
+        verify_token => sha1_hex(rand()),
+    };
+
+    my $res = $c->model('DB')->do(q{
+        insert into public.users ??? returning user_id
+    }, $c->stash->{'user'});
+
+    if (!$res or !$res->next) {
+        push(@{$c->stash->{'error'}}, 'An error occurred while creating your account. You may try again, but if this persists, please contact site administrators.');
+    }
+
+    if (@{$c->stash->{'errors'}} > 0) {
+        $c->forward('index');
+        return;
+    }
+
+    $c->stash->{'email'} = {
+        to       => $c->request->params->{'email'},
+        from     => $c->config->{'email_from'} || 'eveweb@ube-kosan.com',
+        subject  => 'Confirm your registration',
+        template => 'account/verify_registration.tt2',
+    };
+    $c->forward($c->view('Email::Template'));
+
+    $c->response->redirect($c->uri_for('/accout/verify', $res->{'user_id'}));
 }
 
 =head2 verify
