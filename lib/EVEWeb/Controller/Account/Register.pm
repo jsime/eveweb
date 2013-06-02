@@ -163,7 +163,7 @@ login. Otherwise we complain.
 
 =cut
 
-sub verify :Local :Args(2) {
+sub verify :Local {
     my ($self, $c, $user_id, $token) = @_;
 }
 
