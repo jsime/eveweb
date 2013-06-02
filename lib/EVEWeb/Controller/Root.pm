@@ -43,9 +43,16 @@ Enforce login requirement for all but a select number of pages (login, registrat
 sub auto :Private {
     my ($self, $c) = @_;
 
+    my @noauth_paths = qw(
+        login
+        account/register
+        account/register/do
+        account/register/verify
+    );
+
     # Paths for which access is permitted to visitors not logged in
-    foreach my $path (qw( login account/register account/register/do account/register/verify )) {
-        return 1 if $c->request->path eq $path;
+    foreach my $path (@noauth_paths) {
+        return 1 if $c->request->path =~ m{^$path};
     }
 
     if (!$c->user_exists) {
