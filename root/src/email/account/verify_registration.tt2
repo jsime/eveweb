@@ -1,0 +1,12 @@
+Someone has used this email address to sign up for an EVEWeb account at
+[% c.uri_for('/') %].
+
+    Username: [% username %]
+
+If that was you, then welcome! If not, you may disregard this email and
+the account will not be activated or available for use.
+
+To activate the account associated with this address, please visit the
+following URL:
+
+[% c.uri_for('/account/verify', verify_token) %]
