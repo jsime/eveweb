@@ -163,6 +163,38 @@ login. Otherwise we complain.
 
 sub verify :Local {
     my ($self, $c, $user_id, $token) = @_;
+
+    # Support both path style passing as well as POST arguments from the
+    # form in case the user copies & pastes the verification token.
+    $user_id = $user_id || $c->request->params->{'user_id'};
+    $token   = $token   || $c->request->params->{'token'};
+
+    if (!$user_id || $user_id !~ m{^\d+$}o) {
+        # Keeping it simple for now. Just redirect to / if we don't at least
+        # have a User ID.
+        $c->response->redirect($c->uri_for('/'));
+        return;
+    }
+
+    if ($token && $token =~ m{^[0-9a-f]+$}o) {
+        my $res = $c->model('DB')->do(q{
+            update public.users
+            set verified = 't'
+            where user_id = ? and verify_token = ? and not verified
+            returning *
+        }, $user_id, $token);
+
+        if ($res && $res->next) {
+            # User verified successfully. Send to account page with a flash.
+            $c->flash->{'message'} = 'Your account has been verified and is now ready for use.';
+            $c->response->redirect($c->uri_for('/account'));
+            return;
+        }
+
+        # Reaching this point means we received a User ID and a token, but they didn't
+        # match an unverified account for any number of reasons.
+        $c->stash->{'errors'} = ['There was an error verifying the specified account'];
+    }
 }
 
 =head1 AUTHOR
