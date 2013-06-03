@@ -116,7 +116,7 @@ sub do :Local :Args(0) {
 
     # While I'd love to use Bcrypt here, it seems the current crop of Catalyst auth/credential
     # plugins don't quite support it (can't seem to find a way to pass cost setting in).
-    my $hasher = Crypt::SaltedHash->new();
+    my $hasher = Crypt::SaltedHash->new( salt_len => 16 );
     $hasher->add($c->request->params->{'password'});
 
     $c->stash->{'user'} = {
