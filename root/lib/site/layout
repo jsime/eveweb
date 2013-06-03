@@ -10,6 +10,13 @@
         <p>[% error %]</p>
         [% END %]
     </div>
+    [% IF c.flash.message %]
+    <div class="flash">
+        <p>
+        [% c.flash.message %]
+        </p>
+    </div>
+    [% END %]
     [% END %]
     [% content %]
 </div>
