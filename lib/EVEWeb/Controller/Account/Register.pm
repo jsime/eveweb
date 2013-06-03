@@ -195,6 +195,8 @@ sub verify :Local {
         # match an unverified account for any number of reasons.
         $c->stash->{'errors'} = ['There was an error verifying the specified account'];
     }
+
+    $c->stash->{'user_id'} = $user_id;
 }
 
 =head1 AUTHOR
