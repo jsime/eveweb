@@ -137,20 +137,43 @@ a.hover-link {
 
 /* Site Navigation */
 #nav {
-    float: left;
-    width: 120px;
-    background-color: #3399ff;
+    display: inline-block;
 }
 #nav ul {
     list-style-type: none;
 }
-#nav ul li button {
-    margin: 4px;
-    width: 64px;
-    height: 64px;
-    border: 0;
+#nav ul li {
+    padding: 0;
     background-color: #3a4450;
+}
+#nav ul li button {
+    background-color: #d4d4d4;
+    color: #3a4450;
+    width: 160px;
+    border-top: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 4px solid #3a4450;
+    margin: 0;
+    padding: 4px;
+    font-family:"Proxima Nova Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-size-adjust:0.488;
+    font-weight:bold;
+    font-style:normal;
+    font-size: 14px;
+}
+#nav ul li button:hover {
+    border-right: 4px solid #3399ff;
+}
+#nav ul li button.active {
+    background-color: #3399ff;
+    border-right: 4px solid #3399ff;
     color: #fff;
+}
+
+/* Content Area */
+#content {
+    display: inline-block;
 }
 
 /* Form elements */
