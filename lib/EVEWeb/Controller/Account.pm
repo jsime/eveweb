@@ -24,6 +24,14 @@ Catalyst Controller.
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
+    my $res = $c->model('DB')->do(q{
+        select * from users where user_id = ?
+    }, $c->user->get('user_id'));
+
+    die unless $res->next;
+
+    $c->stash->{'user'} = { map { $_ => $res->{$_} } $res->columns };
+
     $c->stash->{'template'} = 'account/index.tt2';
 }
 
