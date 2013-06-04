@@ -1,9 +1,8 @@
 <div id="header">[% PROCESS site/header %]</div>
-
+[% IF c.user_exists %]
+<div id="nav">[% PROCESS site/navigation %]</div>
+[% END %]
 <div id="content">
-    <div id="nav">
-    [% PROCESS site/navigation %]
-    </div>
     [% IF errors %]
     <div class="error">
         [% FOREACH error IN errors %]
