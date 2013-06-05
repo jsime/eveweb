@@ -60,6 +60,14 @@ sub auto :Private {
         return 0;
     }
 
+    my $res = $c->model('DB')->do(q{
+        select * from users where user_id = ?
+    }, $c->user->get('user_id'));
+
+    die "Invalid user provided" unless $res && $res->next;
+
+    $c->stash->{'user'} = { map { $_ => $res->{$_} } $res->columns };
+
     return 1;
 }
 
