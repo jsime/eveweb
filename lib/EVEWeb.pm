@@ -97,6 +97,12 @@ __PACKAGE__->config(
 # Start the application
 __PACKAGE__->setup();
 
+# Force SSL always, so that even when we're being something like nginx which
+# proxies to use locally via HTTP, we redirect to https:// URLs
+after 'prepare_headers' => sub {
+    shift->req->secure(1);
+};
+
 =head1 NAME
 
 EVEWeb - Catalyst based application
