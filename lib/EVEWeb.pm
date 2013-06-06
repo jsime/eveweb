@@ -53,7 +53,9 @@ __PACKAGE__->config(
     default_view => 'Web',
 
     'Plugin::Session' => {
-        cookie_domain => 'dev.ube-kosan.com',
+        cookie_domain   => 'dev.ube-kosan.com',
+        cookie_secure   => 1,
+        cookie_httponly => 1,
         memcached_new_args => {
             'data'      => ['192.168.122.1:11211'],
             'namespace' => ['eveweb'],
