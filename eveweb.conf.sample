@@ -1,5 +1,9 @@
 name EVEWeb
 
+<Model::DB>
+    datastore eveweb
+</Model::DB>
+
 # Google reCAPTCHA API keys (used for new account registration,
 # among other things)
 # recaptcha_api_key_public  xyz

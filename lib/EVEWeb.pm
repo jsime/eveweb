@@ -62,10 +62,6 @@ __PACKAGE__->config(
         },
     },
 
-    'Model::DB' => {
-        datastore => 'eveweb',
-    },
-
     'Plugin::Authentication' => {
         'default' => {
             'credential' => {
