@@ -1,6 +1,6 @@
 <ul>
 <li><button href="[% c.uri_for('/') %]">Home</button></li>
-<li><button href="[% c.uri_for('/pilot') %]">Pilots</button></li>
+<li><button class="active" href="[% c.uri_for('/pilot') %]">Pilots</button></li>
 <li><button href="[% c.uri_for('/corporation') %]">Corporation</button></li>
 <li><button href="[% c.uri_for('/asset') %]">Assets</button></li>
 <li><button href="[% c.uri_for('/forum') %]">Forums</button></li>
