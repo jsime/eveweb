@@ -144,17 +144,9 @@ create table ccp.implants (
 -- Contains data collected through the EVE API provided by CCP
 create schema eve;
 
-create table eve.accounts (
-    account_id
-    user_id
-    created_at
-    updated_at
-    deleted_at
-);
-
 create table eve.account_api_keys (
     api_key_id
-    account_id
+    user_id
     api_key
     verification_code
     created_at
@@ -164,7 +156,7 @@ create table eve.account_api_keys (
 
 create table eve.pilots (
     pilot_id
-    account_id
+    user_id
     name
     race
     bloodline
@@ -190,7 +182,6 @@ create table eve.pilot_clones (
     clone_type
     name
     notes
-    
 );
 
 create table eve.pilot_clone_implants (
