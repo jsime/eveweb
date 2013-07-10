@@ -1,0 +1,15 @@
+<h1>API Keys</h1>
+<ul>
+[% FOREACH key IN keys %]
+<li><strong>Key ID:</strong> [% key.key_id %] / <strong>Verification Code:</strong> [% key.v_code %]</li>
+[% END %]
+</ul>
+
+<h1>Add Key</h1>
+<form action="[% c.uri_for('/account/api/add') %]" method="post">
+<label for="key_id">Key ID</label>
+<input type="text" name="key_id" id="key_id" />
+<label for="v_code">Verification Code</label>
+<input type="text" name="v_code" id="v_code" />
+<input type="submit" value="Add Key" />
+</form>
