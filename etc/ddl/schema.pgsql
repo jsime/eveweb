@@ -82,23 +82,14 @@ alter table public.sessions add foreign key (user_id) references public.users (u
 -- Static data imported from CCP's EVE data exports
 create schema ccp;
 
-create table ccp.icons (
-    icon_id     integer not null primary key,
-    filename    text not null,
-    description text
-);
-
 create table ccp.attributes (
     attribute_id    integer not null primary key,
-    icon_id         integer not null,
     name            text not null,
     description     text
 );
 
 create index attributes_icon_id_idx on ccp.attributes (icon_id);
 create index attributes_name_idx on ccp.attributes (name);
-
-alter table ccp.attributes add foreign key (icon_id) references ccp.icons (icon_id);
 
 create table ccp.skills (
     skill_id                integer not null primary key,
@@ -127,18 +118,6 @@ create index skill_requirements_required_skill_id_idx on ccp.skill_requirements 
 
 alter table ccp.skill_requirements add foreign key (skill_id) references ccp.skills (skill_id) on update cascade on delete cascade;
 alter table ccp.skill_requirements add foreign key (required_skill_id) references ccp.skills (skill_id) on update cascade on delete cascade;
-
-create table ccp.items (
-    item_id
-    name
-
-);
-
-create table ccp.implants (
-    implant_id
-    item_id
-    slot
-);
 
 -- SCHEMA: eve
 -- Contains data collected through the EVE API provided by CCP
@@ -170,100 +149,30 @@ alter table ccp.api_keys add constraint valid_key_types check (key_type in ('acc
 alter table ccp.api_keys add constraint verified_access_mask check (verified is false or access_mask is not null);
 
 create table eve.pilots (
-    pilot_id
-    user_id
-    name
-    race
-    bloodline
-    ancestry
-    gender
-    birthdate
-    sec_status
+    pilot_id    integer not null primary key,
+    user_id     integer,
+    name        text not null,
+    race        text not null,
+    bloodline   text not null,
+    ancestry    text not null,
+    gender      text not null,
+    birthdate   timestamp with time zone not null,
+    sec_status  numeric(6,4) not null
 );
 
 create table eve.pilot_skills (
-    pilot_id
-    skill_id
-    level
-    skill_points
-    training
-    started_at
-    started_points
-);
-
-create table eve.pilot_clones (
-    pilot_clone_id
-    pilot_id
-    clone_type
-    name
-    notes
-);
-
-create table eve.pilot_clone_implants (
-    pilot_clone_id
-    implant_id
+    pilot_id        integer not null,
+    skill_id        integer not null,
+    level           integer not null,
+    skill_points    integer not null
 );
 
 -- SCHEMA: plans
 -- Skill queue/plan management
 create schema plans;
 
-create table plans.skill_plans (
-    skill_plan_id
-    pilot_id
-    plan_name
-    notes
-    created_at
-    updated_at
-    deleted_at
-);
-
-create table plans.skill_plan_queue (
-    skill_plan_id
-    skill_id
-    level
-    order
-    created_at
-    updated_at
-);
 
 -- SCHEMA: fits
 -- Ship fittings
 create schema fits;
 
-create table fits.ship_fits (
-    ship_fit_id
-    account_id
-    ship_id
-    name
-    description
-    visibility -- personal, corp, alliance, coalition, public
-    created_at
-    updated_at
-    deleted_at
-);
-
-create table fits.ship_fit_subsystems (
-    ship_fit_subsystem_id
-    ship_fit_id
-    subsystem_id
-);
-
-create table fits.ship_fit_modules (
-    ship_fit_module_id
-    ship_fit_id
-    module_id
-);
-
-create table fits.ship_fit_munitions (
-    ship_fit_munition_id
-    ship_fit_module_id
-    munition_id
-);
-
-create table fits.ship_fit_drones (
-    ship_fit_drone_id
-    ship_fit_id
-    drone_id
-    quantity
-);
