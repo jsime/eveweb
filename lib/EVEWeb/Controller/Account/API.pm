@@ -38,7 +38,7 @@ sub add :Local :Args(0) {
     if ($key_id && $v_code) {
         $c->model('DB')->begin;
         $res = $c->model('DB')->do(q{
-            insert into public.api_keys
+            insert into eve.api_keys
                 ( user_id, key_id, v_code, active, verified )
             values
                 ( ?, ?, ?, 'f', 'f' )
@@ -53,7 +53,7 @@ sub add :Local :Args(0) {
 
             $res = $c->model('DB')->do(q{
                 select k.*
-                from public.api_keys k
+                from eve.api_keys k
                 where k.user_id = ?
                     and k.key_id = ?
                     and k.v_code = ?
