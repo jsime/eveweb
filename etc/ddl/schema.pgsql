@@ -167,6 +167,7 @@ create index api_keys_updated_at_idx on ccp.api_keys (updated_at);
 alter table ccp.api_keys add foreign key (user_id) references public.users (user_id) on update cascade on delete cascade;
 
 alter table ccp.api_keys add constraint valid_key_types check (key_type in ('account','character','corporation'));
+alter table ccp.api_keys add constraint verified_access_mask check (verified is false or access_mask is not null);
 
 create table eve.pilots (
     pilot_id
