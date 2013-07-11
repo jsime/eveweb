@@ -144,15 +144,29 @@ create table ccp.implants (
 -- Contains data collected through the EVE API provided by CCP
 create schema eve;
 
-create table eve.account_api_keys (
-    api_key_id
-    user_id
-    api_key
-    verification_code
-    created_at
-    updated_at
-    deleted_at
+create table eve.api_keys (
+    user_id     integer not null,
+    key_id      integer not null,
+    v_code      text not null,
+    key_type    text not null,
+    access_mask integer,
+    active      boolean not null default 'f',
+    verified    boolean not null default 'f',
+    created_at  timestamp with time zone not null default now(),
+    updated_at  timestamp with time zone
 );
+
+alter table ccp.api_keys add primary key (user_id, key_id, v_code);
+create index api_keys_key_id_v_code_idx on ccp.api_keys (key_id, v_code);
+create index api_keys_key_type_idx on ccp.api_keys (key_type);
+create index api_keys_active_idx on ccp.api_keys (active);
+create index api_keys_verified_idx on ccp.api_keys (verified);
+create index api_keys_created_at_idx on ccp.api_keys (created_at);
+create index api_keys_updated_at_idx on ccp.api_keys (updated_at);
+
+alter table ccp.api_keys add foreign key (user_id) references public.users (user_id) on update cascade on delete cascade;
+
+alter table ccp.api_keys add constraint valid_key_types check (key_type in ('account','character','corporation'));
 
 create table eve.pilots (
     pilot_id
