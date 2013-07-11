@@ -135,18 +135,18 @@ create table eve.api_keys (
     updated_at  timestamp with time zone
 );
 
-alter table ccp.api_keys add primary key (user_id, key_id, v_code);
-create index api_keys_key_id_v_code_idx on ccp.api_keys (key_id, v_code);
-create index api_keys_key_type_idx on ccp.api_keys (key_type);
-create index api_keys_active_idx on ccp.api_keys (active);
-create index api_keys_verified_idx on ccp.api_keys (verified);
-create index api_keys_created_at_idx on ccp.api_keys (created_at);
-create index api_keys_updated_at_idx on ccp.api_keys (updated_at);
+alter table eve.api_keys add primary key (user_id, key_id, v_code);
+create index api_keys_key_id_v_code_idx on eve.api_keys (key_id, v_code);
+create index api_keys_key_type_idx on eve.api_keys (key_type);
+create index api_keys_active_idx on eve.api_keys (active);
+create index api_keys_verified_idx on eve.api_keys (verified);
+create index api_keys_created_at_idx on eve.api_keys (created_at);
+create index api_keys_updated_at_idx on eve.api_keys (updated_at);
 
-alter table ccp.api_keys add foreign key (user_id) references public.users (user_id) on update cascade on delete cascade;
+alter table eve.api_keys add foreign key (user_id) references public.users (user_id) on update cascade on delete cascade;
 
-alter table ccp.api_keys add constraint valid_key_types check (key_type in ('account','character','corporation'));
-alter table ccp.api_keys add constraint verified_access_mask check (verified is false or access_mask is not null);
+alter table eve.api_keys add constraint valid_key_types check (key_type in ('account','character','corporation'));
+alter table eve.api_keys add constraint verified_access_mask check (verified is false or access_mask is not null);
 
 create table eve.pilots (
     pilot_id    integer not null primary key,
