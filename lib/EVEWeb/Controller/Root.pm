@@ -3,6 +3,7 @@ use Moose;
 use namespace::autoclean;
 
 use Data::Dumper;
+use Games::EVE::APIv2;
 
 BEGIN { extends 'Catalyst::Controller' }
 
