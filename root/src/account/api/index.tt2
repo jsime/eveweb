@@ -13,3 +13,7 @@
 <input type="text" name="v_code" id="v_code" />
 <input type="submit" value="Add Key" />
 </form>
+
+<p>
+<a href="https://community.eveonline.com/support/api-key/CreatePredefined?accessMask=268435455">Generate Key</a>
+</p>
