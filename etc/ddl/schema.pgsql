@@ -160,12 +160,26 @@ create table eve.pilots (
     sec_status  numeric(6,4) not null
 );
 
+create index pilots_user_id_idx on eve.pilots (user_id);
+create unique index pilots_name_idx on eve.pilots (name);
+
+alter table eve.pilots add foreign key (user_id) references public.users (user_id) on update cascade;
+
 create table eve.pilot_skills (
     pilot_id        integer not null,
     skill_id        integer not null,
     level           integer not null,
     skill_points    integer not null
 );
+
+alter table eve.pilot_skills add primary key (pilot_id, skill_id);
+create index pilot_skills_skill_id_idx on eve.pilot_skills (skill_id);
+create index pilot_skills_level_idx on eve.pilot_skills (level);
+
+alter table eve.pilot_skills add foreign key (pilot_id) references eve.pilots (pilot_id) on update cascade on delete cascade;
+alter table eve.pilot_skills add foreign key (skill_id) references ccp.skills (skill_id) on update cascade on delete cascade;
+
+alter table eve.pilot_skills add constraint valid_skill_level check (level between 0 and 5);
 
 -- SCHEMA: plans
 -- Skill queue/plan management
