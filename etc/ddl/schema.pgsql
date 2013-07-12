@@ -1,3 +1,5 @@
+begin;
+
 -- SCHEMA: public
 -- General account, authorization, configuration data
 
@@ -190,3 +192,6 @@ create schema plans;
 -- Ship fittings
 create schema fits;
 
+
+-- Wonders will never cease if we got here and the transaction hasn't already failed.
+commit;
