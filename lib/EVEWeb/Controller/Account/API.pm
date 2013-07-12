@@ -74,7 +74,33 @@ sub add :Local :Args(0) {
         return;
     }
 
-    # TODO Verify Key
+    # Perform remote key verification against CCP API
+    my $api;
+    eval { $api = Games::EVE::APIv2->new( key_id => $key->{'key_id'}, v_code => $key->{'v_code'} ) };
+
+    if ($@) {
+        push(@{$c->stash->{'errors'}}, 'The API Key you provided could not be verified. Please verify the ID and Verification Code and try again.');
+
+        $c->forward('index');
+        return;
+    }
+
+    $res = $c->model('DB')->do(q{
+        update eve.api_keys
+        set ???
+        where user_id = ? and key_id = ? and v_code = ?
+    }, {    key_type    => $api->key_type,
+            access_mask => $api->access_mask,
+            verified    => 't',
+            updated_at  => 'now',
+    }, $c->stash->{'user'}->{'user_id'}, $key_id, $v_code);
+
+    if (!$res) {
+        push(@{$c->stash->{'errors'}}, 'The API Key you provided could not be verified. Please verify the ID and Verification Code and try again.');
+
+        $c->forward('index');
+        return;
+    }
 
     $c->flash->{'message'} = 'API Key added to your account.';
     $c->response->redirect($c->uri_for('index'));
