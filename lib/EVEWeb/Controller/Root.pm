@@ -69,6 +69,10 @@ sub auto :Private {
 
     $c->stash->{'user'} = { map { $_ => $res->{$_} } $res->columns };
 
+    # Set up a couple common stash keys
+    $c->stash->{'errors'} = [];
+    $c->stash->{'field_errors'} = {};
+
     return 1;
 }
 

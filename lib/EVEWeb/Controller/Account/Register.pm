@@ -51,9 +51,6 @@ On any failures, set flash appropriately and forward to the index method.
 sub do :Local :Args(0) {
     my ($self, $c) = @_;
 
-    $c->stash->{'errors'} = [];
-    $c->stash->{'field_errors'} = {};
-
     foreach my $fld (qw( username email password password_retype )) {
         if (!$c->request->params->{$fld} or $c->request->params->{$fld} !~ m{\w}o) {
             $c->stash->{'field_errors'}{$fld} = 1;
