@@ -114,7 +114,7 @@ sub add :Local :Args(0) {
     }
 
     $c->flash->{'message'} = 'API Key added to your account.';
-    $c->response->redirect($c->uri_for('index'));
+    $c->response->redirect($c->uri_for('/account/api'));
 }
 
 
