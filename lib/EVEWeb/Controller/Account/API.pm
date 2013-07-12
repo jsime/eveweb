@@ -103,6 +103,7 @@ sub add :Local :Args(0) {
     }, {    key_type    => lc($api->key_type),
             access_mask => $api->access_mask,
             verified    => 't',
+            active      => 't',
             updated_at  => 'now',
     }, $c->stash->{'user'}->{'user_id'}, $key_id, $v_code);
 
