@@ -90,7 +90,6 @@ create table ccp.attributes (
     description     text
 );
 
-create index attributes_icon_id_idx on ccp.attributes (icon_id);
 create index attributes_name_idx on ccp.attributes (name);
 
 create table ccp.skills (
