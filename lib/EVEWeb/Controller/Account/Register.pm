@@ -151,7 +151,7 @@ sub do :Local :Args(0) {
     };
     $c->forward($c->view('Email::Template'));
 
-    $c->response->redirect($c->uri_for('/accout/register/verify', $res->{'user_id'}));
+    $c->response->redirect($c->uri_for('/account/register/verify', $res->{'user_id'}));
 }
 
 =head2 verify
