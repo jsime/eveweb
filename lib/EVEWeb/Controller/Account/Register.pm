@@ -33,7 +33,7 @@ sub index :Path :Args(0) {
     $c->stash->{'captcha'} = $captcha->get_html(
         $c->config->{'recaptcha_api_key_public'},
         (exists $c->stash->{'captcha_error'} ? $c->stash->{'captcha_error'} : undef),
-        undef,
+        1,
         { theme => 'white' }
     );
 
