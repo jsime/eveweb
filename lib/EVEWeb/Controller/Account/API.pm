@@ -24,6 +24,17 @@ Catalyst Controller.
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
+    my $res = $c->model('DB')->do(q{
+        select * from eve.api_keys where user_id = ? order by key_id asc
+    }, $c->stash->{'user'}{'user_id'});
+
+    $c->stash->{'keys'} = [];
+    if ($res) {
+        while ($res->next) {
+            push(@{$c->stash->{'keys'}}, { map { $_ => $res->{$_} } $res->columns });
+        }
+    }
+
     $c->stash->{'template'} = 'account/api/index.tt2';
 }
 
