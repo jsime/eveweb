@@ -128,7 +128,7 @@ create table eve.api_keys (
     user_id     integer not null,
     key_id      integer not null,
     v_code      text not null,
-    key_type    text not null,
+    key_type    text,
     access_mask integer,
     active      boolean not null default 'f',
     verified    boolean not null default 'f',
@@ -146,7 +146,8 @@ create index api_keys_updated_at_idx on eve.api_keys (updated_at);
 
 alter table eve.api_keys add foreign key (user_id) references public.users (user_id) on update cascade on delete cascade;
 
-alter table eve.api_keys add constraint valid_key_types check (key_type in ('account','character','corporation'));
+alter table eve.api_keys add constraint verified_key_type check (verified is false or key_type is not null);
+alter table eve.api_keys add constraint valid_key_types check (key_type is null or key_type in ('account','character','corporation'));
 alter table eve.api_keys add constraint verified_access_mask check (verified is false or access_mask is not null);
 
 create table eve.pilots (
