@@ -100,7 +100,7 @@ sub add :Local :Args(0) {
         update eve.api_keys
         set ???
         where user_id = ? and key_id = ? and v_code = ?
-    }, {    key_type    => $api->key_type,
+    }, {    key_type    => lc($api->key_type),
             access_mask => $api->access_mask,
             verified    => 't',
             updated_at  => 'now',
