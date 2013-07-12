@@ -3,19 +3,19 @@
 <fieldset>
 <div>
 <label for="username">Username
-<input type="text" id="username" name="username" /></label>
+<input type="text" id="username" name="username" value="[% username | html %]" /></label>
 </div>
 <div>
 <label for="email">Email
-<input type="text" id="email" name="email" /></label>
+<input type="text" id="email" name="email" value="[% email | html %]" /></label>
 </div>
 <div>
 <label for="password">Password
-<input type="password" id="password" name="password" /></label>
+<input type="password" id="password" name="password" value="" /></label>
 </div>
 <div>
 <label for="password_retype">Retype Password
-<input type="password" id="password_retype" name="password_retype" /></label>
+<input type="password" id="password_retype" name="password_retype" value="" /></label>
 </div>
 </fieldset>
 [% captcha %]
