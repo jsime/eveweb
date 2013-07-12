@@ -1,9 +1,25 @@
 <h1>API Keys</h1>
-<ul>
+
+<table>
+    <thead>
+        <tr>
+            <td>Type</td>
+            <td>Key ID</td>
+            <td>Verification Code</td>
+            <td>Verified</td>
+            <td>Access Mask</td>
+        </tr>
+    </thead>
 [% FOREACH key IN keys %]
-<li><strong>Key ID:</strong> [% key.key_id %] / <strong>Verification Code:</strong> [% key.v_code %]</li>
+    <tr>
+        <td>[% key.key_type || '-' %]</td>
+        <td>[% key.key_id %]</td>
+        <td>[% key.v_code %]</td>
+        <td>[% key.verified ? 'Yes' : '' %]</td>
+        <td>[% key.access_mask || '-' %]</td>
+    </tr>
 [% END %]
-</ul>
+</table>
 
 <h1>Add Key</h1>
 <form action="[% c.uri_for('/account/api/add') %]" method="post">
