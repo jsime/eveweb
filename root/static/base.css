@@ -176,6 +176,22 @@ a.hover-link {
     display: inline-block;
 }
 
+/* Tables */
+td {
+    padding: 0.4em;
+    font-family:"Proxima Nova Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif !important;
+    font-size-adjust:0.488 !important;
+    font-weight:normal;
+    font-style:normal;
+}
+thead {
+    background-color: #666;
+    color: #ddd;
+}
+table tbody tr:hover {
+    background-color: #ddd;
+}
+
 /* Form elements */
 label {
     display: inline-block;
