@@ -1,7 +1,7 @@
 <ul>
-<li><button href="[% c.uri_for('/') %]">Home</button></li>
-<li><button class="active" href="[% c.uri_for('/pilot') %]">Pilots</button></li>
-<li><button href="[% c.uri_for('/corporation') %]">Corporation</button></li>
-<li><button href="[% c.uri_for('/asset') %]">Assets</button></li>
-<li><button href="[% c.uri_for('/forum') %]">Forums</button></li>
+<li><a href="[% c.uri_for('/') %]">Home</a></li>
+<li><a class="active" href="[% c.uri_for('/pilot') %]">Pilots</a></li>
+<li><a href="[% c.uri_for('/corporation') %]">Corporation</a></li>
+<li><a href="[% c.uri_for('/asset') %]">Assets</a></li>
+<li><a href="[% c.uri_for('/forum') %]">Forums</a></li>
 </ul>
