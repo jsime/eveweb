@@ -132,6 +132,7 @@ create table eve.api_keys (
     access_mask integer,
     active      boolean not null default 'f',
     verified    boolean not null default 'f',
+    expires_at  timestamp with time zone,
     created_at  timestamp with time zone not null default now(),
     updated_at  timestamp with time zone
 );
@@ -141,6 +142,7 @@ create index api_keys_key_id_v_code_idx on eve.api_keys (key_id, v_code);
 create index api_keys_key_type_idx on eve.api_keys (key_type);
 create index api_keys_active_idx on eve.api_keys (active);
 create index api_keys_verified_idx on eve.api_keys (verified);
+create index api_keys_expires_at_idx on eve.api_keys (expires_at);
 create index api_keys_created_at_idx on eve.api_keys (created_at);
 create index api_keys_updated_at_idx on eve.api_keys (updated_at);
 
