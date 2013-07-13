@@ -153,21 +153,31 @@ alter table eve.api_keys add constraint valid_key_types check (key_type is null 
 alter table eve.api_keys add constraint verified_access_mask check (verified is false or access_mask is not null);
 
 create table eve.pilots (
-    pilot_id    integer not null primary key,
-    user_id     integer,
-    name        text not null,
-    race        text not null,
-    bloodline   text not null,
-    ancestry    text not null,
-    gender      text not null,
-    birthdate   timestamp with time zone not null,
-    sec_status  numeric(6,4) not null
+    pilot_id     integer not null primary key,
+    name         text not null,
+    race         text not null,
+    bloodline    text not null,
+    ancestry     text not null,
+    gender       text not null,
+    birthdate    timestamp with time zone not null,
+    sec_status   numeric(6,4) not null,
+    cached_until timestamp with time zone not null
 );
 
 create index pilots_user_id_idx on eve.pilots (user_id);
 create unique index pilots_name_idx on eve.pilots (name);
+create index pilots_cached_until_idx on eve.pilots (cached_until);
 
-alter table eve.pilots add foreign key (user_id) references public.users (user_id) on update cascade;
+create table eve.pilot_api_keys (
+    pilot_id    integer not null,
+    key_id      integer not null,
+);
+
+alter table eve.pilot_api_keys add primary key (pilot_id, key_id);
+create index pilot_api_keys_key_id_idx on eve.pilot_api_keys (key_id);
+
+alter table eve.pilot_api_keys add foreign key (pilot_id) references eve.pilots (pilot_id) on update cascade on delete cascade;
+alter table eve.pilot_api_keys add foreign key (key_id) references eve.pilots (key_id) on update cascade on delete cascade;
 
 create table eve.pilot_skills (
     pilot_id        integer not null,
