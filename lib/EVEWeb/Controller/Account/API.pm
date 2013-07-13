@@ -168,6 +168,38 @@ sub deactivate :Local {
         $c->response->redirect($c->uri_for('/account/api'));
         return;
     }
+
+    my $key = $c->model('DB')->do(q{
+        select k.*
+        from eve.api_keys k
+        where k.user_id = ?
+            and k.key_id = ?
+            and k.v_code = ?
+    }, $c->stash->{'user'}{'user_id'}, $key_id, $v_code);
+
+    if ($key && $key->next) {
+        push(@{$c->stash->{'errors'}}, 'This key is already inactive.')
+            unless $key->{'active'};
+    } else {
+        push(@{$c->stash->{'errors'}}, 'The specified key could not be located.');
+    }
+
+    if (@{$c->stash->{'errors'}} > 0) {
+        $c->forward('index');
+        return;
+    }
+
+    my $res = $c->model('DB')->do(q{
+        update eve.api_keys
+        set ???
+        where key_id = ?
+    }, {
+        active     => 'f',
+        updated_at => 'now',
+    }, $key->{'key_id'});
+
+    $c->flash->{'message'} = 'Your API Key has been de-activated.';
+    $c->response->redirect($c->uri_for('/account/api'));
 }
 
 sub verify :Local {
