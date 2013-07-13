@@ -176,6 +176,16 @@ a.hover-link {
 /* Content Area */
 #content {
     display: inline-block;
+    padding: 0.5em;
+}
+
+#content h1 {
+    font-family:"Proxima Nova Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif !important;
+    font-size-adjust:0.488 !important;
+    font-weight:normal;
+    font-style:normal;
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
 }
 
 /* Tables */
