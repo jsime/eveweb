@@ -69,6 +69,13 @@ sub auto :Private {
 
     $c->stash->{'user'} = { map { $_ => $res->{$_} } $res->columns };
 
+    # Hardcode a user settings for timezone, datetime and date formats. These
+    # will simply become defaults later, overridable by users.
+    $c->stash->{'user'}{'timezone'} = 'UTC';
+    $c->stash->{'user'}{'format_date'} = 'YYYY-MM-DD';
+    $c->stash->{'user'}{'format_time'} = 'HH24:MI:SS';
+    $c->stash->{'user'}{'format_datetime'} = 'YYYY-MM-DD HH24:MI:SS';
+
     # Set up a couple common stash keys
     $c->stash->{'errors'} = [];
     $c->stash->{'field_errors'} = {};
