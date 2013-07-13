@@ -52,6 +52,9 @@ sub add :Local :Args(0) {
     my $key_id = $c->request->params->{'key_id'} || undef;
     my $v_code = $c->request->params->{'v_code'} || undef;
 
+    $key_id =~ s{(^\s+|\s+$)}{}ogs if $key_id;
+    $v_code =~ s{(^\s+|\s+$)}{}ogs if $v_code;
+
     my ($res, $key);
 
     if ($key_id && $v_code) {
