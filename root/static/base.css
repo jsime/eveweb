@@ -137,7 +137,9 @@ a.hover-link {
 
 /* Site Navigation */
 #nav {
-    display: inline-block;
+    display: block;
+    vertical-align: top;
+    float: left;
 }
 #nav ul {
     list-style-type: none;
