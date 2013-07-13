@@ -96,6 +96,8 @@ sub add :Local :Args(0) {
         return;
     }
 
+    my $key_expires = $api->expires->is_infinite ? 'infinity' : $api->expires . '+0000';
+
     $res = $c->model('DB')->do(q{
         update eve.api_keys
         set ???
@@ -104,6 +106,7 @@ sub add :Local :Args(0) {
             access_mask => $api->access_mask,
             verified    => 't',
             active      => 't',
+            expires_at  => $key_expires,
             updated_at  => 'now',
     }, $c->stash->{'user'}->{'user_id'}, $key_id, $v_code);
 
@@ -220,6 +223,8 @@ sub verify :Local {
         return;
     }
 
+    my $key_expires = $api->expires->is_infinite ? 'infinity' : $api->expires . '+0000';
+
     my $res = $c->model('DB')->do(q{
         update eve.api_keys
         set ???
@@ -228,6 +233,7 @@ sub verify :Local {
             access_mask => $api->access_mask,
             verified    => 't',
             active      => 't',
+            expires_at  => $key_expires,
             updated_at  => 'now',
     }, $c->stash->{'user'}->{'user_id'}, $key_id, $v_code);
 
