@@ -8,6 +8,7 @@
             <td>Verification Code</td>
             <td>Verified</td>
             <td>Access Mask</td>
+            <td>Expires</td>
             <td>Actions</td>
         </tr>
     </thead>
@@ -18,6 +19,7 @@
         <td>[% key.v_code %]</td>
         <td>[% key.verified ? 'Yes' : '' %]</td>
         <td>[% key.access_mask || '-' %]</td>
+        <td>[% key.expires_at || 'Never' %]</td>
         <td>
             [% IF key.active %]
                 <a href="[% c.uri_for('/account/api/deactivate', key.key_id, key.v_code) %]">Deactivate</a>

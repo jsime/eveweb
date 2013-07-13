@@ -25,8 +25,16 @@ sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
     my $res = $c->model('DB')->do(q{
-        select * from eve.api_keys where user_id = ? order by key_id asc
-    }, $c->stash->{'user'}{'user_id'});
+        select k.user_id, k.key_id, k.v_code, k.access_mask,
+            k.key_type, k.active, k.verified,
+            to_char(k.created_at at time zone ?, ?) as created_at,
+            to_char(k.updated_at at time zone ?, ?) as updated_at,
+            to_char(k.expires_at at time zone ?, ?) as expires_at
+        from eve.api_keys k
+        where k.user_id = ?
+        order by k.key_id asc
+    }, ($c->stash->{'user'}{'timezone'}, $c->stash->{'user'}{'format_datetime'}) x 3,
+        $c->stash->{'user'}{'user_id'});
 
     $c->stash->{'keys'} = [];
     if ($res) {
