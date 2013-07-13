@@ -118,6 +118,66 @@ sub add :Local :Args(0) {
     $c->response->redirect($c->uri_for('/account/api'));
 }
 
+sub activate :Local {
+    my ($self, $c, $key_id, $v_code) = @_;
+
+    unless ($key_id && $v_code) {
+        $c->response->redirect($c->uri_for('/account/api'));
+        return;
+    }
+
+    my $key = $c->model('DB')->do(q{
+        select k.*
+        from eve.api_keys k
+        where k.user_id = ?
+            and k.key_id = ?
+            and k.v_code = ?
+    }, $c->stash->{'user'}{'user_id'}, $key_id, $v_code);
+
+    if ($key && $key->next) {
+        push(@{$c->stash->{'errors'}}, 'This key has already been activated.')
+            if $key->{'active'};
+        push(@{$c->stash->{'errors'}}, 'This key has not been verified.')
+            unless $key->{'verified'};
+    } else {
+        push(@{$c->stash->{'errors'}}, 'The specified key could not be located.');
+    }
+
+    if (@{$c->stash->{'errors'}} > 0) {
+        $c->forward('index');
+        return;
+    }
+
+    my $res = $c->model('DB')->do(q{
+        update eve.api_keys
+        set ???
+        where key_id = ?
+    }, {
+        active     => 't',
+        updated_at => 'now',
+    }, $key->{'key_id'});
+
+    $c->flash->{'message'} = 'Your API Key has been activated.';
+    $c->response->redirect($c->uri_for('/account/api'));
+}
+
+sub deactivate :Local {
+    my ($self, $c, $key_id, $v_code) = @_;
+
+    unless ($key_id && $v_code) {
+        $c->response->redirect($c->uri_for('/account/api'));
+        return;
+    }
+}
+
+sub verify :Local {
+    my ($self, $c, $key_id, $v_code) = @_;
+
+    unless ($key_id && $v_code) {
+        $c->response->redirect($c->uri_for('/account/api'));
+        return;
+    }
+}
 
 =head1 AUTHOR
 
