@@ -209,6 +209,37 @@ sub verify :Local {
         $c->response->redirect($c->uri_for('/account/api'));
         return;
     }
+
+    my $api;
+    eval { $api = Games::EVE::APIv2->new( key_id => $key_id, v_code => $v_code ) };
+
+    if ($@) {
+        push(@{$c->stash->{'errors'}}, 'The API Key you provided could not be verified. Please verify the ID and Verification Code and try again.');
+
+        $c->forward('index');
+        return;
+    }
+
+    my $res = $c->model('DB')->do(q{
+        update eve.api_keys
+        set ???
+        where user_id = ? and key_id = ? and v_code = ?
+    }, {    key_type    => lc($api->key_type),
+            access_mask => $api->access_mask,
+            verified    => 't',
+            active      => 't',
+            updated_at  => 'now',
+    }, $c->stash->{'user'}->{'user_id'}, $key_id, $v_code);
+
+    if (!$res) {
+        push(@{$c->stash->{'errors'}}, 'The API Key you provided could not be verified. Please verify the ID and Verification Code and try again.');
+
+        $c->forward('index');
+        return;
+    }
+
+    $c->flash->{'message'} = 'The API Key has been verified and activated.';
+    $c->response->redirect($c->uri_for('/account/api'));
 }
 
 =head1 AUTHOR
