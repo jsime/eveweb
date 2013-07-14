@@ -125,6 +125,7 @@ alter table ccp.skill_requirements add foreign key (required_skill_id) reference
 create schema eve;
 
 create table eve.api_keys (
+    api_key_id  serial not null primary key,
     user_id     integer not null,
     key_id      integer not null,
     v_code      text not null,
@@ -137,7 +138,7 @@ create table eve.api_keys (
     updated_at  timestamp with time zone
 );
 
-alter table eve.api_keys add primary key (user_id, key_id, v_code);
+create unique index api_keys_user_key_vcode_idx on eve.api_keys (user_id, key_id, v_code);
 create index api_keys_key_id_v_code_idx on eve.api_keys (key_id, v_code);
 create index api_keys_key_type_idx on eve.api_keys (key_type);
 create index api_keys_active_idx on eve.api_keys (active);
@@ -164,20 +165,19 @@ create table eve.pilots (
     cached_until timestamp with time zone not null
 );
 
-create index pilots_user_id_idx on eve.pilots (user_id);
 create unique index pilots_name_idx on eve.pilots (name);
 create index pilots_cached_until_idx on eve.pilots (cached_until);
 
 create table eve.pilot_api_keys (
     pilot_id    integer not null,
-    key_id      integer not null,
+    api_key_id  integer not null
 );
 
-alter table eve.pilot_api_keys add primary key (pilot_id, key_id);
-create index pilot_api_keys_key_id_idx on eve.pilot_api_keys (key_id);
+alter table eve.pilot_api_keys add primary key (pilot_id, api_key_id);
+create index pilot_api_keys_key_id_idx on eve.pilot_api_keys (api_key_id);
 
 alter table eve.pilot_api_keys add foreign key (pilot_id) references eve.pilots (pilot_id) on update cascade on delete cascade;
-alter table eve.pilot_api_keys add foreign key (key_id) references eve.pilots (key_id) on update cascade on delete cascade;
+alter table eve.pilot_api_keys add foreign key (api_key_id) references eve.api_keys (api_key_id) on update cascade on delete cascade;
 
 create table eve.pilot_skills (
     pilot_id        integer not null,
