@@ -130,7 +130,7 @@ sub do :Local :Args(0) {
     }, $c->stash->{'user'});
 
     if (!$res or !$res->next) {
-        push(@{$c->stash->{'error'}}, 'An error occurred while creating your account. You may try again, but if this persists, please contact site administrators.');
+        push(@{$c->stash->{'errors'}}, 'An error occurred while creating your account. You may try again, but if this persists, please contact site administrators.');
     }
 
     if (@{$c->stash->{'errors'}} > 0) {
