@@ -84,7 +84,7 @@ sub add :Local :Args(0) {
             if ($res && $res->next) {
                 push(@{$c->stash->{'errors'}}, 'That key has already been added to your account.');
             } else {
-                push(@{$c->stash->{'errors'}}, 'An error prevented that key from being added to your account. You may try again or contact site administrators.');
+                push(@{$c->stash->{'errors'}}, 'An error prevented that key from being added to your account.');
             }
         }
     } else {
@@ -101,7 +101,7 @@ sub add :Local :Args(0) {
     eval { $api = Games::EVE::APIv2->new( key_id => $key->{'key_id'}, v_code => $key->{'v_code'} ) };
 
     if ($@) {
-        push(@{$c->stash->{'errors'}}, 'The API Key you provided could not be verified. Please verify the ID and Verification Code and try again.');
+        push(@{$c->stash->{'errors'}}, 'The API Key you provided could not be verified.');
 
         $c->forward('index');
         return;
@@ -112,17 +112,17 @@ sub add :Local :Args(0) {
     $res = $c->model('DB')->do(q{
         update eve.api_keys
         set ???
-        where user_id = ? and key_id = ? and v_code = ?
+        where key_id = ?
     }, {    key_type    => lc($api->key_type),
             access_mask => $api->access_mask,
             verified    => 't',
             active      => 't',
             expires_at  => $key_expires,
             updated_at  => 'now',
-    }, $c->stash->{'user'}->{'user_id'}, $key_id, $v_code);
+    }, $key_id);
 
     if (!$res) {
-        push(@{$c->stash->{'errors'}}, 'The API Key you provided could not be verified. Please verify the ID and Verification Code and try again.');
+        push(@{$c->stash->{'errors'}}, 'The API Key you provided could not be verified.');
 
         $c->forward('index');
         return;
@@ -241,17 +241,17 @@ sub verify :Local {
     my $res = $c->model('DB')->do(q{
         update eve.api_keys
         set ???
-        where user_id = ? and key_id = ? and v_code = ?
+        where key_id = ?
     }, {    key_type    => lc($api->key_type),
             access_mask => $api->access_mask,
             verified    => 't',
             active      => 't',
             expires_at  => $key_expires,
             updated_at  => 'now',
-    }, $c->stash->{'user'}->{'user_id'}, $key_id, $v_code);
+    }, $key_id);
 
     if (!$res) {
-        push(@{$c->stash->{'errors'}}, 'The API Key you provided could not be verified. Please verify the ID and Verification Code and try again.');
+        push(@{$c->stash->{'errors'}}, 'The API Key you provided could not be verified.');
 
         $c->forward('index');
         return;
