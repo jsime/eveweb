@@ -315,7 +315,7 @@ sub import_characters :Private {
             gender       => $char->gender,
             birthdate    => $char->dob,
             sec_status   => 0.0, # TODO replace once attribute added to API library
-            cached_until => $char->cached_until,
+            cached_until => $char->cached_until '+0000',
         });
 
         if ($pilot && $pilot->next) {
