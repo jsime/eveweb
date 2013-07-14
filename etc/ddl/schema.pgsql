@@ -158,6 +158,7 @@ create table eve.pilots (
     ancestry     text not null,
     gender       text not null,
     birthdate    timestamp with time zone not null,
+    balance      numeric,
     sec_status   numeric(6,4) not null,
     cached_until timestamp with time zone not null
 );
