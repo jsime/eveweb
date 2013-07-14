@@ -128,6 +128,8 @@ sub add :Local :Args(0) {
         return;
     }
 
+    $self->import_characters($c, $api);
+
     $c->flash->{'message'} = 'API Key added to your account.';
     $c->response->redirect($c->uri_for('/account/api'));
 }
@@ -255,8 +257,81 @@ sub verify :Local {
         return;
     }
 
+    $self->import_characters($c, $api);
+
     $c->flash->{'message'} = 'The API Key has been verified and activated.';
     $c->response->redirect($c->uri_for('/account/api'));
+}
+
+sub import_characters :Private {
+    my ($self, $c, $api) = @_;
+
+    my ($res);
+
+    CHARACTER:
+    foreach my $char ($api->characters) {
+        my $pilot = $c->model('DB')->do(q{
+            select p.*
+            from eve.pilots p
+            where p.pilot_id = ?
+        }, $char->character_id);
+
+        if ($pilot && $pilot->next) {
+            $res = $c->model('DB')->do(q{
+                select k.api_key_id
+                from eve.api_keys k
+                    join eve.pilot_api_keys pk on (pk.api_key_id = k.api_key_id)
+                where p.pilot_id = ?
+                    and k.user_id = ?
+                    and k.key_id = ?
+                    and k.v_code = ?
+            }, $pilot->{'pilot_id'}, $c->stash->{'user'}{'user_id'}, $api->key_id, $api->v_code);
+
+            next CHARACTER if $res && $res->next;
+
+            $res = $c->model('DB')->do(q{
+                insert into eve.pilot_api_keys
+                    ( pilot_id, api_key_id )
+                values
+                    ( ?, ( select k.api_key_id
+                           from eve.api_keys k
+                           where k.user_id = ?
+                               and k.key_id = ?
+                               and k.v_code = ?
+                         ))
+            }, $pilot->{'pilot_id'}, $c->stash->{'user'}{'user_id'}, $api->key_id, $api->v_code);
+
+            next CHARACTER;
+        }
+
+        $pilot = $c->model('DB')->do(q{
+            insert into eve.pilots ??? returning pilot_id
+        }, {
+            pilot_id     => $char->character_id,
+            name         => $char->name,
+            race         => $char->race,
+            bloodline    => $char->bloodline,
+            ancestry     => $char->ancestry,
+            gender       => $char->gender,
+            birthdate    => $char->dob,
+            sec_status   => 0.0, # TODO replace once attribute added to API library
+            cached_until => $char->cached_until,
+        });
+
+        if ($pilot && $pilot->next) {
+            $res = $c->model('DB')->do(q{
+                insert into eve.pilot_api_keys
+                    ( pilot_id, api_key_id )
+                values
+                    ( ?, ( select k.api_key_id
+                           from eve.api_keys k
+                           where k.user_id = ?
+                               and k.key_id = ?
+                               and k.v_code = ?
+                         ))
+            }, $pilot->{'pilot_id'}, $c->stash->{'user'}{'user_id'}, $api->key_id, $api->v_code);
+        }
+    }
 }
 
 =head1 AUTHOR
