@@ -280,7 +280,7 @@ sub import_characters :Private {
             $res = $c->model('DB')->do(q{
                 select k.api_key_id
                 from eve.api_keys k
-                    join eve.pilot_api_keys pk on (pk.api_key_id = k.api_key_id)
+                    join eve.pilot_api_keys pk on (pk.key_id = k.key_id)
                 where p.pilot_id = ?
                     and k.user_id = ?
                     and k.key_id = ?
@@ -291,15 +291,10 @@ sub import_characters :Private {
 
             $res = $c->model('DB')->do(q{
                 insert into eve.pilot_api_keys
-                    ( pilot_id, api_key_id )
+                    ( pilot_id, key_id )
                 values
-                    ( ?, ( select k.api_key_id
-                           from eve.api_keys k
-                           where k.user_id = ?
-                               and k.key_id = ?
-                               and k.v_code = ?
-                         ))
-            }, $pilot->{'pilot_id'}, $c->stash->{'user'}{'user_id'}, $api->key_id, $api->v_code);
+                    ( ?, ? )
+            }, $pilot->{'pilot_id'}, $api->key_id);
 
             next CHARACTER;
         }
@@ -321,15 +316,10 @@ sub import_characters :Private {
         if ($pilot && $pilot->next) {
             $res = $c->model('DB')->do(q{
                 insert into eve.pilot_api_keys
-                    ( pilot_id, api_key_id )
+                    ( pilot_id, key_id )
                 values
-                    ( ?, ( select k.api_key_id
-                           from eve.api_keys k
-                           where k.user_id = ?
-                               and k.key_id = ?
-                               and k.v_code = ?
-                         ))
-            }, $pilot->{'pilot_id'}, $c->stash->{'user'}{'user_id'}, $api->key_id, $api->v_code);
+                    ( ?, ? )
+            }, $pilot->{'pilot_id'}, $api->key_id);
         }
     }
 }
