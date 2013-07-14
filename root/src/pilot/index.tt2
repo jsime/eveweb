@@ -1,2 +1,8 @@
 <h1>Pilots</h1>
 
+[% FOREACH pilot IN pilots %]
+<div>
+    <img src="https://image.eveonline.com/Character/[% pilot.pilot_id %]_256.jpg" />
+    <h2>[% pilot.name %]</h2>
+</div>
+[% END %]
