@@ -51,6 +51,10 @@ sub auto :Private {
         account/register/verify
     );
 
+    # Set up a couple common stash keys
+    $c->stash->{'errors'} = [];
+    $c->stash->{'field_errors'} = {};
+
     # Paths for which access is permitted to visitors not logged in
     foreach my $path (@noauth_paths) {
         return 1 if $c->request->path =~ m{^$path};
@@ -75,10 +79,6 @@ sub auto :Private {
     $c->stash->{'user'}{'format_date'} = 'YYYY-MM-DD';
     $c->stash->{'user'}{'format_time'} = 'HH24:MI:SS';
     $c->stash->{'user'}{'format_datetime'} = 'YYYY-MM-DD HH24:MI:SS';
-
-    # Set up a couple common stash keys
-    $c->stash->{'errors'} = [];
-    $c->stash->{'field_errors'} = {};
 
     return 1;
 }
