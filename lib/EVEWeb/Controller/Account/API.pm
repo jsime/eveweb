@@ -313,9 +313,9 @@ sub import_characters :Private {
             bloodline    => $char->bloodline,
             ancestry     => $char->ancestry,
             gender       => $char->gender,
-            birthdate    => $char->dob,
+            birthdate    => $char->dob . '+0000',
             sec_status   => 0.0, # TODO replace once attribute added to API library
-            cached_until => $char->cached_until '+0000',
+            cached_until => $char->cached_until . '+0000',
         });
 
         if ($pilot && $pilot->next) {
