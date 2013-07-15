@@ -208,6 +208,17 @@ create unique index corporations_name_idx on eve.corporations (name);
 create unique index corporations_ticker_idx on eve.corporations (ticker);
 create index corporations_cached_until_idx on eve.corporations (cached_until);
 
+create table eve.corporation_api_keys (
+    corporation_id  bigint not null,
+    key_id          integer not null,
+);
+
+alter table eve.corporation_api_keys add primary key (corporation_id, key_id);
+create index corporation_api_keys_key_id_idx on eve.corporation_api_keys (key_id);
+
+alter table eve.corporation_api_keys add foreign key (corporation_id) references eve.corporations (corporation_id) on update cascade on delete cascade;
+alter table eve.corporation_api_keys add foreign key (key_id) references eve.api_keys (key_id) on update cascade on delete cascade;
+
 -- SCHEMA: plans
 -- Skill queue/plan management
 create schema plans;
