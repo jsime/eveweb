@@ -193,6 +193,21 @@ alter table eve.pilot_skills add foreign key (skill_id) references ccp.skills (s
 
 alter table eve.pilot_skills add constraint valid_skill_level check (level between 0 and 5);
 
+create table eve.corporations (
+    corporation_id  bigint not null primary key,
+    name            text not null,
+    ticker          text not null,
+    description     text,
+    tax_rate        numeric(6,2) not null,
+    members         integer not null,
+    shares          bigint not null,
+    cached_until    timestamp with time zone not null
+);
+
+create unique index corporations_name_idx on eve.corporations (name);
+create unique index corporations_ticker_idx on eve.corporations (ticker);
+create index corporations_cached_until_idx on eve.corporations (cached_until);
+
 -- SCHEMA: plans
 -- Skill queue/plan management
 create schema plans;
