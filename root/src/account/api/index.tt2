@@ -16,7 +16,7 @@
     <tr>
         <td>[% key.key_type || '-' %]</td>
         <td>[% key.key_id %]</td>
-        <td>[% key.v_code %]</td>
+        <td>[% key.v_code.substr(0,6) _ '&nbsp;...&nbsp;' _ key.v_code.substr(-10) %]</td>
         <td>[% key.verified ? 'Yes' : '' %]</td>
         <td>[% key.access_mask || '-' %]</td>
         <td>[% key.expires_at || 'Never' %]</td>
