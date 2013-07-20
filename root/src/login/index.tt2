@@ -6,7 +6,7 @@
 </div>
 [% END %]
 
-<div class="large-6 offset-4 columns">
+<div class="large-6 large-offset-2 columns">
 <form method="post" action="[% c.uri_for('/login') %]">
     <fieldset>
         <legend>Log In</legend>
