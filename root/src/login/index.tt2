@@ -6,49 +6,31 @@
 </div>
 [% END %]
 
-<div id="dlg-login" title="Authorization Required">
-    <form id="form-login" method="post" action="[% c.uri_for('/login') %]">
-        <fieldset>
-            <div>
-            <label for="username">Username
-            <input id="username" type="text" name="username" value="[% username %]" /></label>
-            </div>
-            <div>
-            <label for="password">Password
-            <input id="password" type="password" name="password" value="" /></label>
-            </div>
-        </fieldset>
-        <p>
-            <a href="[% c.uri_for('/account/register') %]">Register New Account</a>
-        </p>
-        <p>
-            <a href="[% c.uri_for('/account/recover') %]">Forgot Your Password?</a>
-        </p>
-    </form>
-</div>
+<div class="large-6 offset-4 columns">
+<form method="post" action="[% c.uri_for('/login') %]">
+    <fieldset>
+        <legend>Log In</legend>
 
-<script>
-$(function() {
-    $("#dlg-login").dialog({
-        dialogClass: "no-close",
-        draggable: false,
-        resizable: false,
-        minWidth: 350,
-        buttons: {
-            Login: function() {
-                $("#form-login").submit();
-            }
-        }
-    });
-});
-$('#username').bind('keypress', function(e) {
-    if(e.keyCode==13){
-        $('#password').focus();
-    }
-});
-$('#password').bind('keypress', function(e) {
-    if(e.keyCode==13){
-        $("#form-login").submit();
-    }
-});
-</script>
+        <div class="row">
+            <div class="large-12 columns">
+                <input type="text" name="username" placeholder="Username" value="[% username %]" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <input type="password" name="password" placeholder="Password" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="large-8 columns">
+                <p><a href="[% c.uri_for('/account/register') %]">Register New Account</a></p>
+                <p><a href="[% c.uri_for('/account/recover') %]">Forgot Your Password?</a></p>
+            </div>
+            <div class="large-4 columns">
+                <input type="submit" value="Log In" />
+            </div>
+        </div>
+    </fieldset>
+</form>
+</div>
