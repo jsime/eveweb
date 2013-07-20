@@ -12,7 +12,7 @@
             [% content %]
         </div>
         [% IF c.user_exists %]
-        <div id="nav">[% PROCESS site/navigation %]</div>
+            [% PROCESS site/navigation %]
         [% END %]
     </div>
 </section>
