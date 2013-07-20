@@ -107,14 +107,14 @@ sub add :Local :Args(0) {
         return;
     }
 
-    my $key_expires = $api->expires->is_infinite ? 'infinity' : $api->expires . '+0000';
+    my $key_expires = $api->key->expires->is_infinite ? 'infinity' : $api->key->expires . '+0000';
 
     $res = $c->model('DB')->do(q{
         update eve.api_keys
         set ???
         where key_id = ?
-    }, {    key_type    => lc($api->key_type),
-            access_mask => $api->access_mask,
+    }, {    key_type    => lc($api->key->type),
+            access_mask => $api->key->mask,
             verified    => 't',
             active      => 't',
             expires_at  => $key_expires,
@@ -236,14 +236,14 @@ sub verify :Local {
         return;
     }
 
-    my $key_expires = $api->expires->is_infinite ? 'infinity' : $api->expires . '+0000';
+    my $key_expires = $api->key->expires->is_infinite ? 'infinity' : $api->key->expires . '+0000';
 
     my $res = $c->model('DB')->do(q{
         update eve.api_keys
         set ???
         where key_id = ?
-    }, {    key_type    => lc($api->key_type),
-            access_mask => $api->access_mask,
+    }, {    key_type    => lc($api->key->type),
+            access_mask => $api->key->mask,
             verified    => 't',
             active      => 't',
             expires_at  => $key_expires,
@@ -285,7 +285,7 @@ sub import_characters :Private {
                     and k.user_id = ?
                     and k.key_id = ?
                     and k.v_code = ?
-            }, $pilot->{'pilot_id'}, $c->stash->{'user'}{'user_id'}, $api->key_id, $api->v_code);
+            }, $pilot->{'pilot_id'}, $c->stash->{'user'}{'user_id'}, $api->key->key_id, $api->key->v_code);
 
             next CHARACTER if $res && $res->next;
 
@@ -294,7 +294,7 @@ sub import_characters :Private {
                     ( pilot_id, key_id )
                 values
                     ( ?, ? )
-            }, $pilot->{'pilot_id'}, $api->key_id);
+            }, $pilot->{'pilot_id'}, $api->key->key_id);
 
             next CHARACTER;
         }
@@ -320,7 +320,7 @@ sub import_characters :Private {
                     ( pilot_id, key_id )
                 values
                     ( ?, ? )
-            }, $pilot->{'pilot_id'}, $api->key_id);
+            }, $pilot->{'pilot_id'}, $api->key->key_id);
         }
     }
 }
