@@ -1,21 +1,34 @@
 <div id="header">[% PROCESS site/header %]</div>
-[% IF c.user_exists %]
-<div id="nav">[% PROCESS site/navigation %]</div>
-[% END %]
-<div id="content">
-    [% IF errors %]
-    <div class="error">
-        [% FOREACH error IN errors %]
-        <p>[% error %]</p>
+<section class="main">
+    <div class="row">
+        <div class="large-10 push-2 columns">
+            [% IF errors %]
+                [% FOREACH error IN errors %]
+                [% END %]
+            [% END %]
+            [% IF c.flash.message %]
+
+            [% END %]
+            [% content %]
+        </div>
+        [% IF c.user_exists %]
+        <div id="nav">[% PROCESS site/navigation %]</div>
         [% END %]
     </div>
-    [% IF c.flash.message %]
-    <div class="flash">
-        <p>
-        [% c.flash.message %]
-        </p>
+</section>
+
+[% IF c.user_exists %]
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-2 columns">
+                <img src="images/logo-eveweb-large.png" width="128" height="128" />
+            </div>
+            <div class="large-10 columns">
+                <p>Let me out that Queen. Second-of-ly, I know you're the big marriage expert. Oh I'm sorry, I forgot, your wife is dead.</p>
+            </div>
+        </div>
     </div>
-    [% END %]
-    [% END %]
-    [% content %]
-</div>
+</footer>
+[% END %]

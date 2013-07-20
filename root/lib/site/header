@@ -1,29 +1,29 @@
-<!-- BEGIN site/header -->
-<!--<h1><a href="[% c.uri_for('/') %]">[% template.title or site.title %]</a></h1>-->
-[% IF c.user_exists %]
-<ul>
-    <li>
-        <div class="menu">
-            <a class="hover-link">[% c.user.get('username') %]'s Account</a>
-            <div class="sub">
-                <ul class="sub-options">
-                    <li><a href="[% c.uri_for('/account') %]">Profile</a></li>
-                    <li><a href="[% c.uri_for('/account/api') %]">API Keys</a></li>
-                    <li class="blank"></li>
-                    <li><a href="[% c.uri_for('/logout') %]">Log Out</a></li>
+<nav class="top-bar">
+    <ul class="title-area">
+        <li class="name"><h1><a href="/">Ube Kosan</a></h1></li>
+    </ul>
+    [% IF c.user_exists %]
+    <section class="top-bar-section">
+        <ul class="right">
+            <li class="has-dropdown">
+                <a href="/messages">Messages (72)</a>
+                <ul class="dropdown">
+                    <li><a href="/messages/evemail">EVE Mail (58)</a></li>
+                    <li><a href="/messages/notifications">Notifications (10)</a></li>
+                    <li><a href="/messages/private">Private Messages (4)</a><li>
                 </ul>
-            </div>
-        </div>
-    </li>
-</ul>
-<script type="text/javascript">
-    $(document).ready(function(){
-        $(".menu").hover(
-            function(){$(".sub").fadeToggle(200);},
-            function(){$(".sub").fadeToggle(200);}
-        );
-    });
-</script>
-[% END %]
-<h1><a href="[% c.uri_for('/') %]">UBE KOSAN</a></h1>
-<!-- END site/header -->
+            </li>
+            <li class="has-dropdown">
+                <a href="/account">stopbit</a>
+                <ul class="dropdown">
+                    <li><label>Account</label></li>
+                    <li><a href="/account">Account Settings</a></li>
+                    <li><a href="/account/api">API Keys</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/logout">Log Out</a></li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+    [% END %]
+</nav>

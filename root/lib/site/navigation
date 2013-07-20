@@ -1,7 +1,25 @@
-<ul>
-<li><a href="[% c.uri_for('/') %]">Home</a></li>
-<li><a class="active" href="[% c.uri_for('/pilot') %]">Pilots</a></li>
-<li><a href="[% c.uri_for('/corporation') %]">Corporation</a></li>
-<li><a href="[% c.uri_for('/asset') %]">Assets</a></li>
-<li><a href="[% c.uri_for('/forum') %]">Forums</a></li>
-</ul>
+<div class="large-2 pull-10 columns">
+    <ul class="side-nav">
+        <li><label>Personal</label></li>
+        <li><a href="/">Dashboard</a></li>
+        <li><a href="/pilot">Pilots</a></li>
+        <li><a href="/skill">Skills</a></li>
+        <li><a href="/certificate">Certificates</a></li>
+        <li><a href="/wallet">Wallet</a></li>
+        <li class="divider"></li>
+        <li><label>Community</label></li>
+        <li><a href="/corporation">Corporation</a></li>
+        <li><a href="/alliance">Alliance</a></li>
+        <li><a href="/forum">Forums</a></li>
+        <li><a href="/killboard">Killboard</a></li>
+        <li class="divider"></li>
+        <li><label>Inventory</label></li>
+        <li><a href="/asset">Assets</a></li>
+        <li><a href="/ship">Ships</a></li>
+        <li><a href="/structure">Structures</a></li>
+        <li class="divider"></li>
+        <li><label>Strategic</label></li>
+        <li><a href="/fitting">Fitting</a></li>
+        <li><a href="/fleet">Fleets</a></li>
+    </ul>
+</div>
