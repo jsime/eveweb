@@ -1,0 +1,27 @@
+body {
+}
+p, label, input, select, li, a {
+    font-family: "Source Sans Pro";
+}
+nav, nav > section > ul > li > a {
+    background-color: #263545 !important;
+}
+nav ul.title-area li.name h1 a {
+    font-size: 175%;
+    font-weight: 200 !important;
+    text-transform: uppercase;
+}
+nav section.top-bar-section ul li a {
+    font-size: 90%;
+    font-weight: 400 !important;
+}
+nav section.top-bar-section ul.dropdown li a:hover {
+    background-color: #60A6C2;
+}
+ul.side-nav li a {
+    font-weight: 400 !important;
+    font-size: 1.2em;
+}
+ul.side-nav li label {
+    color: #999;
+}
