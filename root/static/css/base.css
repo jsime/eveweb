@@ -1,7 +1,19 @@
 body {
 }
-p, label, input, select, li, a {
-    font-family: "Source Sans Pro";
+p, label, input, select, li, a, h1, h2, h3 {
+    font-family: "Source Sans Pro" !important;
+}
+h1, h2, h3 {
+    font-weight: 200;
+}
+h1 {
+    font-size: 200%;
+}
+h2 {
+    font-size: 160%;
+}
+h3 {
+    font-size: 125%;
 }
 nav, nav > section > ul > li > a {
     background-color: #263545 !important;
