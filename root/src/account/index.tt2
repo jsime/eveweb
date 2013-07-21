@@ -1,10 +1,44 @@
 <h1>Profile</h1>
 
-<form>
-<fieldset>
-<div>
-<label>Username
-<input type="text" value="[% user.username %]" /></label>
+<form method="post" action="[% c.uri_for('/account/update') %]">
+
+<div class="row">
+    <div class="large-6 columns">
+        <fieldset>
+            <legend>Account Settings</legend>
+
+            <div class="row">
+                <div class="large-12 columns">
+                    <input type="text" name="username" value="[% user.username | html %]" placeholder="Username" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    <input type="text" name="email" value="[% user.email | html %]" placeholder="Email Address" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    <input type="password" name="password" placeholder="New Password" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    <input type="password" name="password_retype" placeholder="Retype New Password" />
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="large-6 columns">
+        <fieldset>
+            <legend>Location Settings</legend>
+
+            <select name="timezone">
+
+            </select>
+        </fieldset>
+    </div>
 </div>
-</fieldset>
+
 </form>
