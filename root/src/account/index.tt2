@@ -34,13 +34,39 @@
         <fieldset>
             <legend>Timezone</legend>
 
-            <select name="timezone">
-            [% FOREACH timezone IN timezones %]
-                <option value="[% timezone.name %]"[% timezone.name == user.timezone ? ' selected' : '' %]>
-                    [% timezone.name %] ([% timezone.offset %])
-                </option>
-            [% END %]
-            </select>
+            <div class="row">
+                <div class="large-12 columns">
+                    <select name="timezone">
+                    [% FOREACH timezone IN timezones %]
+                        <option value="[% timezone.name %]"[% timezone.name == user.timezone ? ' selected' : '' %]>
+                            [% timezone.name %] ([% timezone.offset %])
+                        </option>
+                    [% END %]
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    <select name="date_format">
+                    [% FOREACH format IN date_formats %]
+                        <option value="[% format.format %]"[% format.format == user.format_date ? ' selected' : '' %]>
+                            [% format.example %]
+                        </option>
+                    [% END %]
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    <select name="time_format">
+                    [% FOREACH format IN time_formats %]
+                        <option value="[% format.format %]"[% format.format == user.format_time ? ' selected' : '' %]>
+                            [% format.example %]
+                        </option>
+                    [% END %]
+                    </select>
+                </div>
+            </div>
 
             <p>All dates and times across the website will be adjusted to your timezone selection,
             including in-game events. EVE time is equivalent to UTC. Adjustments are made automatically
