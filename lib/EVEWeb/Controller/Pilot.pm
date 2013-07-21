@@ -29,7 +29,7 @@ sub index :Path :Args(0) {
         from eve.pilots p
         where p.pilot_id in ( select pk.pilot_id
                               from eve.pilot_api_keys pk
-                                  join eve.api_keys k on (k.api_key_id = pk.api_key_id)
+                                  join eve.api_keys k on (k.key_id = pk.key_id)
                               where k.user_id = ?
                             )
         order by p.name asc
