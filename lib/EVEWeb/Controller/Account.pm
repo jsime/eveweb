@@ -42,9 +42,50 @@ sub index :Path :Args(0) {
             });
     }
 
+    $c->stash->{'time_formats'} = [];
+    $c->stash->{'date_formats'} = [];
+
+    my %format_examples;
+
+    $res = $c->model('DB')->do(q{
+        select f.format, to_char(now(), f.format) as example
+        from ( select unnest(ARRAY[???])
+            ) f(format)
+    }, [@{$c->config->{'datetime_formats'}{'time'}}, @{$c->config->{'datetime_formats'}{'date'}}]);
+
+    while ($res->next) {
+        $format_examples{$res->{'format'}} = $res->{'example'};
+    }
+
+    push(@{$c->stash->{'time_formats'}}, { format => $_, example => $format_examples{$_} })
+        for @{$c->config->{'datetime_formats'}{'time'}};
+    push(@{$c->stash->{'date_formats'}}, { format => $_, example => $format_examples{$_} })
+        for @{$c->config->{'datetime_formats'}{'date'}};
+
     $c->stash->{'template'} = 'account/index.tt2';
 }
 
+sub update :Local {
+    my ($self, $c) = @_;
+
+    my %changes;
+
+    if ($c->params->{'username'}) {
+        $c->params->{'username'} =~ s{(^\s+|\s+$)}{}ogs;
+        $changes{'username'} = lc($c->params->{'username'})
+            if lc($c->params->{'username'}) ne lc($c->stash->{'user'}{'username'});
+    }
+
+    if ($c->params->{'email'}) {
+        $c->params->{'email'} =~ s{(^\s+|\s+$)}{}ogs;
+        $changes{'email'} = lc($c->params->{'email'})
+            if lc($c->params->{'email'}) ne lc($c->stash->{'user'}{'email'});
+    }
+
+    my $timezone = $c->params->{'timezone'}
+        if $c->params->{'timezone'}
+        && $c->params->{'timezone'} ne $c->stash->{'user'}{'timezone'};
+}
 
 =head1 AUTHOR
 
