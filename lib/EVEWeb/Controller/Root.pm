@@ -89,12 +89,21 @@ sub auto :Private {
 
     $c->stash->{'user'} = { map { $_ => $res->{$_} } $res->columns };
 
-    # Hardcode a user settings for timezone, datetime and date formats. These
-    # will simply become defaults later, overridable by users.
+    # Hardcode a user settings for timezone, datetime and date formats.
     $c->stash->{'user'}{'timezone'} = 'UTC';
     $c->stash->{'user'}{'format_date'} = 'YYYY-MM-DD';
     $c->stash->{'user'}{'format_time'} = 'HH24:MI:SS';
     $c->stash->{'user'}{'format_datetime'} = 'YYYY-MM-DD HH24:MI:SS';
+
+    $res = $c->model('DB')->do(q{
+        select pr.pref_name, pr.pref_value
+        from user_prefs pr
+        where pr.user_id = ?
+    }, $c->stash->{'user'}{'user_id'});
+
+    while ($res->next) {
+        $c->stash->{'user'}{$res->{'pref_name'}} = $res->{'pref_value'};
+    }
 
     return 1;
 }
