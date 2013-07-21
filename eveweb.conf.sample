@@ -8,3 +8,30 @@ name EVEWeb
 # among other things)
 # recaptcha_api_key_public  xyz
 # recaptcha_api_key_private abc
+
+# Date and Time formats available for user preferences. The format
+# strings must be supported by the version of PostgreSQL you run.
+# They will be displayed to the user in their settings page in the
+# order you list them here.
+<datetime_formats>
+    time HH24:MI:SS
+    time HH:MI:SS AM
+    time HH:MI:SS A.M.
+    time HH24:MI
+    time FMHH:MI AM
+    time FMHH:MI A.M.
+
+    date YYYY-MM-DD
+    date YYYY/MM/DD
+    date DD-MM-YYYY
+    date FMDD/MM/YYYY
+    date MM/DD/YYYY
+    date MM/DD/YY
+    date FMDD Month YYYY
+    date FMDD-Mon-YYYY
+    date Day, FMDD Month YYYY
+    date Dy, FMDD Mon YYYY
+    date Month FMDDth, YYYY
+    date Mon FMDDth, YYYY
+    date YYYYDDD
+</formats>
