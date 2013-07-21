@@ -1,1 +1,18 @@
-[% META title = 'EVEWeb' %]
+[% META title = 'Dashboard' %]
+
+<h1>Pilots</h1>
+
+[% FOREACH pilot IN pilots %]
+[% IF loop.first || loop.count % 12 == 1 %]
+<div class="row">
+[% END %]
+<a href="[% c.uri_for('/pilot', pilot.pilot_id) %]">
+<div class="large-1 columns">
+    <img src="https://image.eveonline.com/Character/[% pilot.pilot_id %]_128.jpg" />
+</div>
+</a>
+[% IF loop.last || loop.count % 12 == 0 %]
+</div>
+<br />
+[% END %]
+[% END %]
