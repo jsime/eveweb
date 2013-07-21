@@ -48,7 +48,7 @@ sub index :Path :Args(0) {
     my %format_examples;
 
     $res = $c->model('DB')->do(q{
-        select f.format, to_char(now(), f.format) as example
+        select f.format, to_char('2003-05-06 16:17:18+0000'::timestamptz at time zone 'UTC', f.format) as example
         from ( select unnest(ARRAY[???])
             ) f(format)
     }, [@{$c->config->{'datetime_formats'}{'time'}}, @{$c->config->{'datetime_formats'}{'date'}}]);
