@@ -11,6 +11,11 @@
         </div>
         <div class="large-7 columns">
             <h2>[% pilot.name %]</h2>
+            <p>
+                [% pilot.race %] ([% pilot.bloodline %])
+                <br />
+                [% pilot.balance %] ISK
+            </p>
         </div>
     </div>
 </div>
