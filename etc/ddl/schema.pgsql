@@ -23,11 +23,11 @@ create index users_updated_at_idx on public.users (updated_at);
 create index users_deleted_at_idx on public.users (deleted_at);
 
 create table public.user_prefs (
-    user_id     integer not null,
-    pref_name   text not null,
-    pref_value  text,
-    created_at  timestamp with time zone not null default now(),
-    updated_at  timestamp with time zone
+    user_id    integer not null,
+    pref_name  text not null,
+    pref_value text,
+    created_at timestamp with time zone not null default now(),
+    updated_at timestamp with time zone
 );
 
 alter table public.user_prefs add primary key (user_id, pref_name);
