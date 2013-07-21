@@ -1,8 +1,21 @@
 <h1>Pilots</h1>
 
 [% FOREACH pilot IN pilots %]
-<div>
-    <img src="https://image.eveonline.com/Character/[% pilot.pilot_id %]_256.jpg" />
-    <h2>[% pilot.name %]</h2>
+[% IF loop.first || loop.count % 2 == 1 %]
+<div class="row">
+[% END %]
+<div class="large-6 columns">
+    <div class="row">
+        <div class="large-5 columns">
+            <img src="https://image.eveonline.com/Character/[% pilot.pilot_id %]_256.jpg" />
+        </div>
+        <div class="large-7 columns">
+            <h2>[% pilot.name %]</h2>
+        </div>
+    </div>
 </div>
+[% IF loop.last || loop.count % 2 == 0 %]
+</div>
+<br />
+[% END %]
 [% END %]
