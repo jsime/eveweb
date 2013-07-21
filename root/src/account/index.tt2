@@ -36,7 +36,9 @@
 
             <select name="timezone">
             [% FOREACH timezone IN timezones %]
-                <option value="[% timezone.name %]">[% timezone.name %] ([% timezone.offset %])</option>
+                <option value="[% timezone.name %]"[% timezone.name == user.timezone ? ' selected' : '' %]>
+                    [% timezone.name %] ([% timezone.offset %])
+                </option>
             [% END %]
             </select>
         </fieldset>
