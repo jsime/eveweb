@@ -1,3 +1,5 @@
+
+[% USE Number.Format %]
 <h1>Pilots</h1>
 
 [% FOREACH pilot IN pilots %]
@@ -14,7 +16,7 @@
             <p>
                 [% pilot.race %] ([% pilot.bloodline %])
                 <br />
-                [% pilot.balance %] ISK
+                [% pilot.balance | format_number %] ISK
             </p>
         </div>
     </div>
