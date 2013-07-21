@@ -32,6 +32,24 @@ sub index :Path :Args(0) {
 
     $c->stash->{'user'} = { map { $_ => $res->{$_} } $res->columns };
 
+    $res = $c->model('DB')->do(q{
+        select name, abbrev, utc_offset
+        from pg_timezone_names
+        where name not like 'posix/%'
+        order by name asc
+    });
+
+    $c->stash->{'timezones'} = [];
+    while ($res->next) {
+        $res->{'utc_offset'} =~ m{(^-?\d+:\d+)}o;
+
+        push(@{$c->stash->{'timezones'}},
+            {   name    => $res->{'name'},
+                abbrev  => $res->{'abbrev'},
+                offset  => $1,
+            });
+    }
+
     $c->stash->{'template'} = 'account/index.tt2';
 }
 
