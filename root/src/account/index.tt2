@@ -47,7 +47,7 @@
             </div>
             <div class="row">
                 <div class="large-6 columns">
-                    <select name="date_format">
+                    <select name="format_date">
                     [% FOREACH format IN date_formats %]
                         <option value="[% format.format %]"[% format.format == user.format_date ? ' selected' : '' %]>
                             [% format.example %]
@@ -56,7 +56,7 @@
                     </select>
                 </div>
                 <div class="large-6 columns">
-                    <select name="time_format">
+                    <select name="format_time">
                     [% FOREACH format IN time_formats %]
                         <option value="[% format.format %]"[% format.format == user.format_time ? ' selected' : '' %]>
                             [% format.example %]
