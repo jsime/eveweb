@@ -68,23 +68,112 @@ sub index :Path :Args(0) {
 sub update :Local {
     my ($self, $c) = @_;
 
-    my %changes;
+    my ($res, %changes);
 
-    if ($c->params->{'username'}) {
-        $c->params->{'username'} =~ s{(^\s+|\s+$)}{}ogs;
-        $changes{'username'} = lc($c->params->{'username'})
-            if lc($c->params->{'username'}) ne lc($c->stash->{'user'}{'username'});
+    $c->model('DB')->begin;
+
+    if ($c->request->params->{'username'}) {
+        $c->request->params->{'username'} =~ s{(^\s+|\s+$)}{}ogs;
+        $changes{'username'} = lc($c->request->params->{'username'})
+            if lc($c->request->params->{'username'}) ne lc($c->stash->{'user'}{'username'});
     }
 
-    if ($c->params->{'email'}) {
-        $c->params->{'email'} =~ s{(^\s+|\s+$)}{}ogs;
-        $changes{'email'} = lc($c->params->{'email'})
-            if lc($c->params->{'email'}) ne lc($c->stash->{'user'}{'email'});
+    if ($c->request->params->{'email'}) {
+        $c->request->params->{'email'} =~ s{(^\s+|\s+$)}{}ogs;
+        $changes{'email'} = lc($c->request->params->{'email'})
+            if lc($c->request->params->{'email'}) ne lc($c->stash->{'user'}{'email'});
     }
 
-    my $timezone = $c->params->{'timezone'}
-        if $c->params->{'timezone'}
-        && $c->params->{'timezone'} ne $c->stash->{'user'}{'timezone'};
+    if (keys %changes > 0) {
+        if (exists $changes{'username'}) {
+            $res = $c->model('DB')->do(q{
+                select u.user_id
+                from public.users u
+                where lc(u.username) = lc(?)
+                    and u.user_id != ?
+            }, $changes{'username'}, $c->stash->{'user'}{'user_id'});
+
+            if ($res && $res->next) {
+                push(@{$c->stash->{'errors'}}, 'That username is already taken by somebody else.');
+            }
+        }
+
+        if (exists $changes{'email'}) {
+            $res = $c->model('DB')->do(q{
+                select u.user_id
+                from public.users u
+                where lc(u.email) = lc(?)
+                    and u.user_id != ?
+            }, $changes{'email'}, $c->stash->{'user'}{'user_id'});
+
+            if ($res && $res->next) {
+                push(@{$c->stash->{'errors'}}, 'That email address is already associated with another account.');
+            }
+        }
+
+        if (@{$c->stash->{'errors'}} > 0) {
+            $c->model('DB')->rollback;
+            $c->forward('index');
+        }
+
+        $res = $c->model('DB')->do(q{
+            update public.users
+            set ???
+            where user_id = ?
+        }, { %changes, updated_at => 'now' }, $c->stash->{'user'}{'user_id'});
+
+        unless ($res) {
+            push(@{$c->stash->{'errors'}}, 'An error occurred while updating your account.');
+            $c->model('DB')->rollback;
+            $c->forward('index');
+        }
+    }
+
+    foreach my $pref (qw( timezone format_date format_time )) {
+        $changes{$pref} = $c->request->params->{$pref}
+            if $c->request->params->{$pref} && $c->request->params->{$pref} ne $c->stash->{'user'}{$pref};
+    }
+
+    if (exists $changes{'format_date'} || exists $changes{'format_time'}) {
+        $changes{'format_datetime'} = sprintf('%s %s',
+            $c->request->params->{'format_date'} || $c->stash->{'user'}{'format_date'},
+            $c->request->params->{'format_time'} || $c->stash->{'user'}{'format_time'}
+        );
+    }
+
+    foreach my $pref (qw( timezone format_date format_time format_datetime )) {
+        next unless exists $changes{$pref};
+
+        $res = $c->model('DB')->do(q{
+            select * from public.user_prefs where user_id = ? and pref_name = ?
+        }, $c->stash->{'user'}{'user_id'}, $pref);
+
+        if ($res && $res->next) {
+            $res = $c->model('DB')->do(q{
+                update public.user_prefs
+                set ???
+                where user_id = ? and pref_name = ?
+            }, { pref_value => $changes{$pref}, updated_at => 'now' }, $c->stash->{'user'}{'user_id'}, $pref);
+        } else {
+            $res = $c->model('DB')->do(q{
+                insert into public.user_prefs ???
+            }, {
+                user_id    => $c->stash->{'user'}{'user_id'},
+                pref_name  => $pref,
+                pref_value => $changes{$pref},
+            });
+        }
+
+        unless ($res) {
+            push(@{$c->stash->{'errors'}}, 'An error occurred while updating your date/time preferences.');
+            $c->model('DB')->rollback;
+            $c->forward('index');
+        }
+    }
+
+    $c->model('DB')->commit;
+    $c->flash->{'message'} = 'Your changes have been successfully saved.';
+    $c->response->redirect($c->uri_for('/account'));
 }
 
 =head1 AUTHOR
