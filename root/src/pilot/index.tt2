@@ -6,6 +6,7 @@
 [% IF loop.first || loop.count % 2 == 1 %]
 <div class="row">
 [% END %]
+<a href="[% c.uri_for('/pilot', pilot.pilot_id) %]">
 <div class="large-6 columns">
     <div class="row">
         <div class="large-5 columns">
@@ -23,6 +24,7 @@
         </div>
     </div>
 </div>
+</a>
 [% IF loop.last || loop.count % 2 == 0 %]
 </div>
 <br />
