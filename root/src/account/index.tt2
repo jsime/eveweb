@@ -67,10 +67,6 @@
                     </select>
                 </div>
             </div>
-
-            <p>All dates and times across the website will be adjusted to your timezone selection,
-            including in-game events. EVE time is equivalent to UTC. Adjustments are made automatically
-            for all regions with DST rules.</p>
         </fieldset>
     </div>
 </div>
