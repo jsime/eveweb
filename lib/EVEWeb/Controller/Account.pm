@@ -89,7 +89,7 @@ sub update :Local {
             $res = $c->model('DB')->do(q{
                 select u.user_id
                 from public.users u
-                where lc(u.username) = lc(?)
+                where lower(u.username) = lower(?)
                     and u.user_id != ?
             }, $changes{'username'}, $c->stash->{'user'}{'user_id'});
 
@@ -102,7 +102,7 @@ sub update :Local {
             $res = $c->model('DB')->do(q{
                 select u.user_id
                 from public.users u
-                where lc(u.email) = lc(?)
+                where lower(u.email) = lower(?)
                     and u.user_id != ?
             }, $changes{'email'}, $c->stash->{'user'}{'user_id'});
 
