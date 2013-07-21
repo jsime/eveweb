@@ -1,6 +1,6 @@
 <h1>Profile</h1>
 
-<form method="post" action="[% c.uri_for('/account/update') %]">
+<form class="custom" method="post" action="[% c.uri_for('/account/update') %]">
 
 <div class="row">
     <div class="large-6 columns">
