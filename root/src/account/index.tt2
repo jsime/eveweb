@@ -35,7 +35,9 @@
             <legend>Location Settings</legend>
 
             <select name="timezone">
-
+            [% FOREACH timezone IN timezones %]
+                <option value="[% timezone.name %]">[% timezone.name %] ([% timezone.offset %])</option>
+            [% END %]
             </select>
         </fieldset>
     </div>
