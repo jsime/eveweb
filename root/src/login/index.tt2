@@ -28,7 +28,7 @@
                 <p><a href="[% c.uri_for('/account/recover') %]">Forgot Your Password?</a></p>
             </div>
             <div class="large-4 columns">
-                <input type="submit" value="Log In" />
+                <button class="right" type="submit">Log In</button>
             </div>
         </div>
     </fieldset>
