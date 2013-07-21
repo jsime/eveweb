@@ -1,6 +1,6 @@
 body {
 }
-p, label, input, select, li, a, h1, h2, h3 {
+p, label, input, legend, select, li, a, h1, h2, h3 {
     font-family: "Source Sans Pro" !important;
 }
 h1, h2, h3 {
@@ -14,6 +14,10 @@ h2 {
 }
 h3 {
     font-size: 125%;
+}
+form fieldset legend {
+    font-size: 125%;
+    font-weight: 200;
 }
 nav, nav > section > ul > li > a {
     background-color: #263545 !important;
