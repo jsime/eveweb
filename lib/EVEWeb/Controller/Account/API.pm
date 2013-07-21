@@ -310,7 +310,7 @@ sub import_characters :Private {
             gender       => $char->gender,
             birthdate    => $char->dob . '+0000',
             balance      => $char->balance,
-            sec_status   => 0.0, # TODO replace once attribute added to API library
+            sec_status   => $char->security_status,
             cached_until => $char->cached_until . '+0000',
         });
 
