@@ -7,6 +7,7 @@ use Moose;
 use namespace::autoclean;
 
 use DateTime;
+use JSON;
 
 has 'job_id' => (
     is  => 'ro',
@@ -76,14 +77,28 @@ sub claim {
 
 sub start {
     my ($self) = @_;
+
+    die sprintf('Job %d has already finished. It cannot be started again.', $self->job_id)
+        if $self->finished;
+
+    $self->started(DateTime->now());
 }
 
 sub finish {
     my ($self) = @_;
+
+    die sprintf('Job %d has not yet been started. It cannot be finished yet.', $self->job_id)
+        if !$self->started;
+    die sprintf('Job %d has already finished. It cannot be finished a second time.', $self->job_id)
+        if $self->finished;
+
+    $self->finished(DateTime->now());
 }
 
 sub save {
     my ($self) = @_;
+
+    
 }
 
 =head1 INTERNAL FUNCTIONS
