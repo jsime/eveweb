@@ -8,6 +8,7 @@ use namespace::autoclean;
 
 use DateTime;
 use JSON;
+use Sys::Hostname;
 
 has 'job_id' => (
     is        => 'ro',
@@ -71,6 +72,49 @@ has 'pid' => (
 
 sub claim {
     my ($class, $db, $type) = @_;
+
+    my $host = hostname;
+    my $pid = $$;
+
+    $db->begin;
+
+    my $res = $db->do(q{
+        select for update *
+        from public.jobs
+        where job_type = ? and started_at is null
+    }, $type);
+
+    unless ($res && $res->next) {
+        $db->rollback;
+        return;
+    }
+
+    my $job = EVEWeb::Job->new(
+        db     => $db,
+        job_id => $res->{'job_id'},
+        type   => $res->{'job_type'},
+        key    => $res->{'job_key;'},
+        stash  => from_json($res->{'stash'}, { utf8 => 1 }),
+    );
+
+    $res = $db->do(q{
+        update public.jobs
+        set ???
+        where job_id = ?
+    }, {
+        run_host   => $host,
+        run_pid    => $pid,
+        started_at => 'now',
+    }, $job->job_id);
+
+    unless ($res) {
+        $db->rollback;
+        return;
+    }
+
+    $db->commit;
+
+    return $job;
 }
 
 =head1 METHODS
