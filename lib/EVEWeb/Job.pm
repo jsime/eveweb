@@ -100,8 +100,53 @@ sub finish {
 sub save {
     my ($self) = @_;
 
+    my ($res);
+
     if (!$self->has_job_id) {
         $self->key($self->make_key) unless $self->has_key;
+
+        $res = $self->db->do(q{
+            select job_id
+            from public.jobs
+            where job_key = ?
+                and (started_at is null or finished_at is null)
+        }, $self->key);
+
+        # do not save a new job if there is already an unfinished one of the same key
+        return if $res && $res->next;
+
+        die "Must specify a time at which to run this job before it can be saved."
+            unless $self->run_at;
+
+        $res = $self->db->do(q{
+            insert into public.jobs ??? returning job_id
+        }, {
+            job_type => $self->type,
+            job_key  => $self->key,
+            stash    => to_json($self->stash, { utf8 => 1, pretty => 0 }),
+            run_at   => $self->run_at . '',
+        });
+
+        return unless $res && $res->next;
+
+        $self->job_id($res->{'job_id'});
+        return 1;
+    } else {
+        $res = $self->db->do(q{
+            update public.jobs
+            set ???
+            where job_id = ? and finished_at is null
+            returning job_id
+        }, {
+            stash       => to_json($self->stash, { utf8 => 1, pretty => 0 }),
+            run_host    => $self->host,
+            run_pid     => $self->pid,
+            started_at  => $self->started,
+            finished_at => $self->finished,
+        });
+
+        return unless $res && $res->next;
+        return 1;
     }
 }
 
