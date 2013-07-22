@@ -10,8 +10,9 @@ use DateTime;
 use JSON;
 
 has 'job_id' => (
-    is  => 'ro',
-    isa => 'Num',
+    is        => 'ro',
+    isa       => 'Num',
+    predicate => 'has_job_id',
 );
 
 has 'type' => (
@@ -21,8 +22,9 @@ has 'type' => (
 );
 
 has 'key' => (
-    is  => 'ro',
-    isa => 'Str',
+    is        => 'ro',
+    isa       => 'Str',
+    predicate => 'has_key',
 );
 
 has 'db' => (
@@ -98,12 +100,23 @@ sub finish {
 sub save {
     my ($self) = @_;
 
-    
+    if (!$self->has_job_id) {
+        $self->key($self->make_key) unless $self->has_key;
+    }
 }
 
-=head1 INTERNAL FUNCTIONS
+=head1 INTERNAL METHODS
 
 =cut
+
+sub make_key {
+    my ($self) = @_;
+
+    return sprintf('%s-%d', $self->type, $self->stash->{$self->type . '_id'})
+        if $self->type && exists $self->stash->{$self->type . '_id'};
+
+    die "Could not generate a sufficient job key.";
+}
 
 __PACKAGE__->meta->make_immutable;
 
