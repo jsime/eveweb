@@ -91,6 +91,26 @@ create index sessions_last_used_idx on public.sessions (last_used);
 
 alter table public.sessions add foreign key (user_id) references public.users (user_id) on update cascade on delete cascade;
 
+create table public.jobs (
+    job_id      bigserial not null primary key,
+    job_type    text not null,
+    job_key     text not null,
+    stash       json not null,
+    run_host    text,
+    run_pid     integer,
+    run_at      timestamp with time zone not null,
+    started_at  timestamp with time zone,
+    finished_at timestamp with time zone,
+    created_at  timestamp with time zone not null default now()
+);
+
+create index jobs_type_idx on public.jobs (type);
+create index jobs_key_idx on public.jobs (key);
+create index jobs_run_at_idx on public.jobs (run_at);
+create index jobs_started_at_idx on public.jobs (started_at);
+create index jobs_finished_at_idx on public.jobs (finished_at);
+create index jobs_created_at_idx on public.jobs (created_at);
+
 -- SCHEMA: ccp
 -- Static data imported from CCP's EVE data exports
 create schema ccp;
