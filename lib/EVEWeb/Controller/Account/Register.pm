@@ -168,6 +168,8 @@ sub verify :Local {
     $user_id = $user_id || $c->request->params->{'user_id'};
     $token   = $token   || $c->request->params->{'token'};
 
+    $token =~ s{(^\s+|\s+$)}{}ogs if $token;
+
     if (!$user_id || $user_id !~ m{^\d+$}o) {
         # Keeping it simple for now. Just redirect to / if we don't at least
         # have a User ID.
