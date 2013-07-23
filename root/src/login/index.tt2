@@ -1,11 +1,5 @@
 [% META title = 'Login' %]
 
-[% IF error_msg %]
-<div class="error">
-<p>[% error_msg %]</p>
-</div>
-[% END %]
-
 <div class="large-6 large-offset-2 columns">
 <form method="post" action="[% c.uri_for('/login') %]">
     <fieldset>
