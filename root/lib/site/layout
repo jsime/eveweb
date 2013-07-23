@@ -1,14 +1,23 @@
 <div id="header">[% PROCESS site/header %]</div>
 <section class="main">
+    [% IF c.stash.errors && c.stash.errors.size > 0 %]
+    <div class="row">
+        <div class="large-12 columns alert-box alert">
+        [% FOREACH error IN c.stash.errors %]
+            <p>[% error %]</p>
+        [% END %]
+        </div>
+    </div>
+    [% END %]
+    [% IF c.flash.message %]
+    <div class="row">
+        <div class="large-12 columns alert-box">
+            <p>[% c.flash.message %]</p>
+        </div>
+    </div>
+    [% END %]
     <div class="row">
         <div class="large-10 push-2 columns">
-            [% IF errors %]
-                [% FOREACH error IN errors %]
-                [% END %]
-            [% END %]
-            [% IF c.flash.message %]
-
-            [% END %]
             [% content %]
         </div>
         [% IF c.user_exists %]
