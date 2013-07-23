@@ -72,12 +72,12 @@ sub auto :Private {
     $c->stash->{'field_errors'} = {};
     $c->stash->{'breadcrumbs'} = [];
 
-    # Paths for which access is permitted to visitors not logged in
-    foreach my $path (@noauth_paths) {
-        return 1 if $c->request->path =~ m{^$path};
-    }
-
     if (!$c->user_exists) {
+        # Paths for which access is permitted to visitors not logged in
+        foreach my $path (@noauth_paths) {
+            return 1 if $c->request->path =~ m{^$path};
+        }
+
         $c->response->redirect($c->uri_for('/login'));
         return 0;
     }
