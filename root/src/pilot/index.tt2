@@ -1,7 +1,7 @@
 [% META title = 'Pilots' %]
-
 [% USE Number.Format %]
-<h1>Pilots</h1>
+
+[% PROCESS site/breadcrumbs %]
 
 [% FOREACH pilot IN pilots %]
 [% IF loop.first || loop.count % 2 == 1 %]
