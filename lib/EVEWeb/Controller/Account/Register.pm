@@ -192,10 +192,14 @@ sub verify :Local {
 
         # Reaching this point means we received a User ID and a token, but they didn't
         # match an unverified account for any number of reasons.
-        $c->stash->{'errors'} = ['There was an error verifying the specified account'];
+        push(@{$c->stash->{'errors'}}, 'There was an error verifying the specified account.');
+    } elsif ($token && length($token) > 0) {
+        push(@{$c->stash->{'errors'}}, 'You have supplied an invalid verification token.');
     }
 
-    $c->stash->{'user_id'} = $user_id;
+    $c->stash->{'user_id'} = $user_id if $user_id;
+
+    $c->stash->{'template'} = 'account/register/verify.tt2';
 }
 
 =head1 AUTHOR
