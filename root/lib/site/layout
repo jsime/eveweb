@@ -32,7 +32,6 @@
     [% END %]
 </section>
 
-[% IF c.user_exists %]
 <footer class="row">
     <div class="large-12 columns">
         <hr />
@@ -50,4 +49,3 @@
         </div>
     </div>
 </footer>
-[% END %]
