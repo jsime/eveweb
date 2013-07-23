@@ -1,0 +1,11 @@
+[% IF breadcrumbs %]
+<ul class="breadcrumbs">
+[% FOREACH crumb IN breadcrumbs %]
+    [% IF crumb.link -%]
+    <li><a href="[% crumb.link %]">[% crumb.name %]</a></li>
+    [% ELSE -%]
+    <li>[% crumb.name %]</li>
+    [% END -%]
+[% END %]
+</ul>
+[% END %]
