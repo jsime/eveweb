@@ -16,14 +16,20 @@
         </div>
     </div>
     [% END %]
+    [% IF c.user_exists %]
     <div class="row">
         <div class="large-10 push-2 columns">
             [% content %]
         </div>
-        [% IF c.user_exists %]
-            [% PROCESS site/navigation %]
-        [% END %]
+        [% PROCESS site/navigation %]
     </div>
+    [% ELSE %]
+    <div class="row">
+        <div class="large-12 columns">
+            [% content %]
+        </div>
+    </div>
+    [% END %]
 </section>
 
 [% IF c.user_exists %]
