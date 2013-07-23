@@ -1,3 +1,5 @@
+[% META title = 'Profile' %]
+
 <h1>Profile</h1>
 
 <form class="custom" method="post" action="[% c.uri_for('/account/update') %]">

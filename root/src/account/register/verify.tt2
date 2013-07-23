@@ -1,3 +1,5 @@
+[% META title = 'Verify Your Account' %]
+
 <p>
 Please check your e-mail for a verification message. That message will contain a
 link for you to click to verify your account before it may be used. Alternatively,
