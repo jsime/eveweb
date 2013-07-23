@@ -1,7 +1,7 @@
 [% IF breadcrumbs %]
 <ul class="breadcrumbs">
 [% FOREACH crumb IN breadcrumbs %]
-    [% IF crumb.link -%]
+    [% IF crumb.link && !loop.last -%]
     <li><a href="[% crumb.link %]">[% crumb.name %]</a></li>
     [% ELSE -%]
     <li>[% crumb.name %]</li>
