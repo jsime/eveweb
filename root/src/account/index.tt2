@@ -1,6 +1,6 @@
 [% META title = 'Profile' %]
 
-<h1>Profile</h1>
+[% PROCESS site/breadcrumbs %]
 
 <form class="custom" method="post" action="[% c.uri_for('/account/update') %]">
 

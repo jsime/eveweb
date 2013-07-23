@@ -16,6 +16,11 @@ Catalyst Controller.
 
 =cut
 
+sub auto :Private {
+    my ($self, $c) = @_;
+
+    push(@{$c->stash->{'breadcrumbs'}}, { name => 'API Keys', link => $c->uri_for('/account/api') });
+}
 
 =head2 index
 

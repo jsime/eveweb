@@ -1,6 +1,6 @@
 [% META title = 'API Keys' %]
 
-<h1>API Keys</h1>
+[% PROCESS site/breadcrumbs %]
 
 <table>
     <thead>
