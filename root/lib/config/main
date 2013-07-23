@@ -12,8 +12,7 @@
 
    # define a data structure to hold sitewide data
    site = {
-     title     => 'Catalyst::View::TTSite Example Page',
-     copyright => '2013 Your Name Here',
+     title     => 'EVEWeb',
    };
 
    # load up any other configuration items
