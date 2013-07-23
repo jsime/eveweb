@@ -1,7 +1,7 @@
 [% META title = 'Registration' %]
 
 <form method="post" action="[% c.uri_for('/account/register/do') %]" autocomplete="off">
-<div class="large-6 large-offset-2 columns">
+<div class="large-5 large-centered columns">
 
     <fieldset>
         <legend>Register Account</legend>
