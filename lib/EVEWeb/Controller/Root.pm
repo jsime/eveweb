@@ -70,6 +70,7 @@ sub auto :Private {
     # Set up a couple common stash keys
     $c->stash->{'errors'} = [];
     $c->stash->{'field_errors'} = {};
+    $c->stash->{'breadcrumbs'} = [];
 
     # Paths for which access is permitted to visitors not logged in
     foreach my $path (@noauth_paths) {
