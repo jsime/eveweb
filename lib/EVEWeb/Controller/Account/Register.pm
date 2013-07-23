@@ -166,7 +166,7 @@ sub verify :Local {
     # Support both path style passing as well as POST arguments from the
     # form in case the user copies & pastes the verification token.
     $user_id = $user_id || $c->request->params->{'user_id'};
-    $token   = $token   || $c->request->params->{'token'};
+    $token   = $token   || $c->request->params->{'verify_token'};
 
     $token =~ s{(^\s+|\s+$)}{}ogs if $token;
 
