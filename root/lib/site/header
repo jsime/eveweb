@@ -14,7 +14,7 @@
                 </ul>
             </li>
             <li class="has-dropdown">
-                <a href="/account">stopbit</a>
+                <a href="/account">[% c.stash.user.username %]</a>
                 <ul class="dropdown">
                     <li><label>Account</label></li>
                     <li><a href="/account">Account Settings</a></li>
