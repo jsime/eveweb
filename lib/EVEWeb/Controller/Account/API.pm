@@ -264,6 +264,14 @@ sub verify :Local {
 
     $self->import_characters($c, $api);
 
+    my $job = EVEWeb::Job->new(
+        db     => $c->model('DB'),
+        type   => 'key',
+        stash  => { key_id => $api->key->key_id },
+        run_at => DateTime->now()->add( minutes => 30 ),
+    );
+    $job->save;
+
     $c->flash->{'message'} = 'The API Key has been verified and activated.';
     $c->response->redirect($c->uri_for('/account/api'));
 }
@@ -275,6 +283,15 @@ sub import_characters :Private {
 
     CHARACTER:
     foreach my $char ($api->characters) {
+        $c->model('DB')->begin;
+
+        my $job = EVEWeb::Job->new(
+            db     => $c->model('DB'),
+            type   => 'pilot',
+            stash  => { pilot_id => $char->character_id },
+            run_at => $char->cached_until,
+        );
+
         my $pilot = $c->model('DB')->do(q{
             select p.*
             from eve.pilots p
@@ -292,7 +309,10 @@ sub import_characters :Private {
                     and k.v_code = ?
             }, $pilot->{'pilot_id'}, $c->stash->{'user'}{'user_id'}, $api->key->key_id, $api->key->v_code);
 
-            next CHARACTER if $res && $res->next;
+            if ($res && $res->next) {
+                $c->model('DB')->rollback;
+                next CHARACTER;
+            }
 
             $res = $c->model('DB')->do(q{
                 insert into eve.pilot_api_keys
@@ -300,6 +320,13 @@ sub import_characters :Private {
                 values
                     ( ?, ? )
             }, $pilot->{'pilot_id'}, $api->key->key_id);
+
+            if ($res) {
+                $job->save;
+                $c->model('DB')->commit;
+            } else {
+                $c->model('DB')->rollback;
+            }
 
             next CHARACTER;
         }
@@ -326,6 +353,11 @@ sub import_characters :Private {
                 values
                     ( ?, ? )
             }, $pilot->{'pilot_id'}, $api->key->key_id);
+
+            $job->save;
+            $c->model('DB')->commit;
+        } else {
+            $c->model('DB')->rollback;
         }
     }
 }
