@@ -1,4 +1,7 @@
 package EVEWeb;
+
+use EVEWeb::Job;
+
 use Moose;
 use namespace::autoclean;
 
