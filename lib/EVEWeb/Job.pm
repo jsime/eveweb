@@ -4,6 +4,7 @@ use strict;
 use warnings FATAL => 'all';
 
 use Moose;
+use MooseX::SetOnce;
 use namespace::autoclean;
 
 use DateTime;
@@ -11,8 +12,9 @@ use JSON;
 use Sys::Hostname;
 
 has 'job_id' => (
-    is        => 'ro',
+    is        => 'rw',
     isa       => 'Num',
+    traits    => [qw( SetOnce )],
     predicate => 'has_job_id',
 );
 
@@ -23,8 +25,9 @@ has 'type' => (
 );
 
 has 'key' => (
-    is        => 'ro',
+    is        => 'rw',
     isa       => 'Str',
+    traits    => [qw( SetOnce )],
     predicate => 'has_key',
 );
 
