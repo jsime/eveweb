@@ -1,4 +1,4 @@
-package EVEWeb::Controller::Pilot;
+package EVEWeb::Controller::Pilots;
 use Moose;
 use namespace::autoclean;
 
@@ -19,7 +19,7 @@ Catalyst Controller.
 sub auto :Private {
     my ($self, $c) = @_;
 
-    push(@{$c->stash->{'breadcrumbs'}}, { name => 'Pilots', link => $c->uri_for('/pilot') });
+    push(@{$c->stash->{'breadcrumbs'}}, { name => 'Pilots', link => $c->uri_for('/pilots') });
 }
 
 
@@ -46,7 +46,7 @@ sub index :Path :Args(0) {
         push(@{$c->stash->{'pilots'}}, { map { $_ => $res->{$_} } $res->columns });
     }
 
-    $c->stash->{'template'} = 'pilot/index.tt2';
+    $c->stash->{'template'} = 'pilots/index.tt2';
 }
 
 

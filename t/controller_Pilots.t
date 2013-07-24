@@ -4,7 +4,7 @@ use Test::More;
 
 
 use Catalyst::Test 'EVEWeb';
-use EVEWeb::Controller::Pilot;
+use EVEWeb::Controller::Pilots;
 
-ok( request('/pilot')->is_success, 'Request should succeed' );
+ok( request('/pilots')->is_success, 'Request should succeed' );
 done_testing();

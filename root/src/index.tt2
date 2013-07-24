@@ -6,7 +6,7 @@
 [% IF loop.first || loop.count % 12 == 1 %]
 <div class="row">
 [% END %]
-<a href="[% c.uri_for('/pilot', pilot.pilot_id) %]">
+<a href="[% c.uri_for('/pilots', pilot.pilot_id) %]">
 <div class="large-1 columns">
     <img src="https://image.eveonline.com/Character/[% pilot.pilot_id %]_128.jpg" />
 </div>
