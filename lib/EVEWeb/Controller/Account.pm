@@ -32,7 +32,7 @@ sub index :Path :Args(0) {
     my $res = $c->model('DB')->do(q{
         select name, abbrev, utc_offset
         from pg_timezone_names
-        where name not like 'posix/%'
+        where name !~ '^(posix|Etc|GMT.+|SystemV|localtime)'
         order by name asc
     });
 
