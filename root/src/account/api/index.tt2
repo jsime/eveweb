@@ -62,7 +62,7 @@
                 </p>
             </div>
             <div class="large-4 columns">
-                <input type="submit" value="Add Key" />
+                <button class="right" type="submit">Add Key</button>
             </div>
         </div>
     </fieldset>
