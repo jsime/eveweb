@@ -27,7 +27,7 @@ sub auto :Private {
 
 =cut
 
-sub index :Path :Args(0) {
+sub index :Path Args(0) {
     my ( $self, $c ) = @_;
 
     my $res = $c->model('DB')->do(q{
@@ -49,6 +49,26 @@ sub index :Path :Args(0) {
     $c->stash->{'template'} = 'pilots/index.tt2';
 }
 
+sub pilots : PathPath Chained('/') Args(1) {
+    my ($self, $c, $pilot_id) = @_;
+
+    my $res = $c->model('DB')->do(q{
+        select p.*
+        from eve.pilots p
+        where p.pilot_id = ?
+    }, $pilot_id);
+
+    unless ($res && $res->next) {
+        $c->response->redirect($c->uri_for('/pilots'));
+        return;
+    }
+
+    $c->stash->{'pilot'} = { map { $_ => $res->{$_} } $res->columns };
+
+    push(@{$c->stash->{'breadcrumbs'}}, { name => $res->{'name'}, link => $c->uri_for('/pilots', $pilot_id) });
+
+    $c->stash->{'template'} = 'pilots/detail.tt2';
+}
 
 =head1 AUTHOR
 
