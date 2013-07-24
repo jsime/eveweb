@@ -301,12 +301,20 @@ sub import_characters :Private {
     foreach my $char ($api->characters) {
         $c->model('DB')->begin;
 
-        my $job = EVEWeb::Job->new(
-            db     => $c->model('DB'),
-            type   => 'pilot',
-            stash  => { pilot_id => $char->character_id },
-            run_at => $char->cached_until,
-        );
+        my $job;
+        eval {
+            $job = EVEWeb::Job->new(
+                db     => $c->model('DB'),
+                type   => 'pilot',
+                stash  => { pilot_id => $char->character_id },
+                run_at => $char->cached_until || DateTime->now->add( minutes => 30 ),
+            );
+        };
+
+        if ($@) {
+            $c->model('DB')->rollback;
+            next CHARACTER;
+        }
 
         my $pilot = $c->model('DB')->do(q{
             select p.*
@@ -338,8 +346,13 @@ sub import_characters :Private {
             }, $pilot->{'pilot_id'}, $api->key->key_id);
 
             if ($res) {
-                $job->save;
-                $c->model('DB')->commit;
+                eval { $job->save };
+
+                if ($@) {
+                    $c->model('DB')->rollback;
+                } else {
+                    $c->model('DB')->commit;
+                }
             } else {
                 $c->model('DB')->rollback;
             }
@@ -370,8 +383,13 @@ sub import_characters :Private {
                     ( ?, ? )
             }, $pilot->{'pilot_id'}, $api->key->key_id);
 
-            $job->save;
-            $c->model('DB')->commit;
+            eval { $job->save };
+
+            if ($@) {
+                $c->model('DB')->rollback;
+            } else {
+                $c->model('DB')->commit;
+            }
         } else {
             $c->model('DB')->rollback;
         }
