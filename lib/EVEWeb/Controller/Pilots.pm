@@ -6,7 +6,7 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
-EVEWeb::Controller::Pilot - Catalyst Controller
+EVEWeb::Controller::Pilots - Catalyst Controller
 
 =head1 DESCRIPTION
 
