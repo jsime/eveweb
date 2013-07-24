@@ -171,7 +171,7 @@ sub save {
             job_type => $self->type,
             job_key  => $self->key,
             stash    => to_json($self->stash, { utf8 => 1, pretty => 0 }),
-            run_at   => $self->run_at . '',
+            run_at   => $self->run_at . '+0000',
         });
 
         return unless $res && $res->next;
