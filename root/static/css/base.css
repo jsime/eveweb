@@ -41,6 +41,9 @@ ul.side-nav li a {
 ul.side-nav li label {
     color: #999;
 }
+table.full-width {
+    width: 100%;
+}
 table thead tr td {
     font-family: "Source Sans Pro";
     font-weight: 600;
