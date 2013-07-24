@@ -186,6 +186,14 @@ sub activate :Local {
         updated_at => 'now',
     }, $key->{'key_id'});
 
+    my $job = EVEWeb::Job->new(
+        db     => $c->model('DB'),
+        type   => 'key',
+        stash  => { key_id => $key->{'key_id'} },
+        run_at => DateTime->now(),
+    );
+    $job->save;
+
     $c->flash->{'message'} = 'Your API Key has been activated.';
     $c->response->redirect($c->uri_for('/account/api'));
 }
