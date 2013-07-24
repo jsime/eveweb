@@ -2,38 +2,42 @@
 
 [% PROCESS site/breadcrumbs %]
 
-<table>
-    <thead>
-        <tr>
-            <td>Type</td>
-            <td>Key ID</td>
-            <td>Verification Code</td>
-            <td>Verified</td>
-            <td>Access Mask</td>
-            <td>Expires</td>
-            <td>Actions</td>
-        </tr>
-    </thead>
-[% FOREACH key IN keys %]
-    <tr>
-        <td>[% key.key_type || '-' %]</td>
-        <td>[% key.key_id %]</td>
-        <td>[% key.v_code.substr(0,6) _ '&nbsp;...&nbsp;' _ key.v_code.substr(-10) %]</td>
-        <td>[% key.verified ? 'Yes' : '' %]</td>
-        <td>[% key.access_mask || '-' %]</td>
-        <td>[% key.expires_at || 'Never' %]</td>
-        <td>
-            [% IF key.active %]
-                <a href="[% c.uri_for('/account/api/deactivate', key.key_id, key.v_code) %]">Deactivate</a>
-            [% ELSIF key.verified %]
-                <a href="[% c.uri_for('/account/api/activate', key.key_id, key.v_code) %]">Activate</a>
-            [% ELSE %]
-                <a href="[% c.uri_for('/account/api/verify', key.key_id, key.v_code) %]">Verify</a>
-            [% END %]
-        </td>
-    </tr>
-[% END %]
-</table>
+<div class="row">
+    <div class="large-12 columns">
+        <table class="full-width">
+            <thead>
+                <tr>
+                    <td>Type</td>
+                    <td>Key ID</td>
+                    <td>Verification Code</td>
+                    <td>Verified</td>
+                    <td>Access Mask</td>
+                    <td>Expires</td>
+                    <td>Actions</td>
+                </tr>
+            </thead>
+        [% FOREACH key IN keys %]
+            <tr>
+                <td>[% key.key_type || '-' %]</td>
+                <td>[% key.key_id %]</td>
+                <td>[% key.v_code.substr(0,6) _ '&nbsp;...&nbsp;' _ key.v_code.substr(-10) %]</td>
+                <td>[% key.verified ? 'Yes' : '' %]</td>
+                <td>[% key.access_mask || '-' %]</td>
+                <td>[% key.expires_at || 'Never' %]</td>
+                <td>
+                    [% IF key.active %]
+                        <a href="[% c.uri_for('/account/api/deactivate', key.key_id, key.v_code) %]">Deactivate</a>
+                    [% ELSIF key.verified %]
+                        <a href="[% c.uri_for('/account/api/activate', key.key_id, key.v_code) %]">Activate</a>
+                    [% ELSE %]
+                        <a href="[% c.uri_for('/account/api/verify', key.key_id, key.v_code) %]">Verify</a>
+                    [% END %]
+                </td>
+            </tr>
+        [% END %]
+        </table>
+    </div>
+</div>
 
 <div class="row">
 <div class="large-6 columns">
