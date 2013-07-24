@@ -1,0 +1,6 @@
+[% META title = 'Pilot' %]
+[% USE Number.Format %]
+
+[% PROCESS site/breadcrumbs %]
+
+<h1>[% pilot.name %]</h1>
