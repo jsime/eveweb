@@ -135,6 +135,14 @@ sub add :Local :Args(0) {
 
     $self->import_characters($c, $api);
 
+    my $job = EVEWeb::Job->new(
+        db     => $c->model('DB'),
+        type   => 'key',
+        stash  => { key_id => $api->key->key_id },
+        run_at => DateTime->now()->add( minutes => 30 ),
+    );
+    $job->save;
+
     $c->flash->{'message'} = 'API Key added to your account.';
     $c->response->redirect($c->uri_for('/account/api'));
 }
