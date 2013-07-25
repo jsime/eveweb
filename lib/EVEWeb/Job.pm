@@ -97,7 +97,7 @@ sub claim {
         db     => $db,
         job_id => $res->{'job_id'},
         type   => $res->{'job_type'},
-        key    => $res->{'job_key;'},
+        key    => $res->{'job_key'},
         stash  => from_json($res->{'stash'}, { utf8 => 1 }),
     );
 
