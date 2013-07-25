@@ -82,9 +82,10 @@ sub claim {
     $db->begin;
 
     my $res = $db->do(q{
-        select for update *
+        select *
         from public.jobs
         where job_type = ? and started_at is null
+        for update
     }, $type);
 
     unless ($res && $res->next) {
