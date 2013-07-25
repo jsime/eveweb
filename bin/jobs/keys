@@ -27,6 +27,30 @@ $cfg = $cfg->{(keys %{$cfg})[0]};
 
 my $db = DBIx::DataStore->new($cfg->{'Model::DB'}{'datastore'});
 
+JOB:
 while (my $job = EVEWeb::Job->claim($db, 'key')) {
-    printf("Claimed Job %d (key: %s)\n", $job->job_id, $job->key);
+    my $res = $db->do(q{
+        select k.*
+        from eve.api_keys k
+        where k.key_id = ?
+    }, $job->stash->{'key_id'});
+
+    unless ($res && $res->next) {
+        $job->finish;
+        $job->save;
+
+        next JOB;
+    }
+
+    my $api = Games::EVE::APIv2->new(
+        key_id => $res->{'key_id'},
+        v_code => $res->{'v_code'},
+    );
+
+    if (!$api || $api->key->expired) {
+        $job->finish;
+        $job->save;
+
+        next JOB;
+    }
 }
