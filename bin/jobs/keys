@@ -87,6 +87,7 @@ sub check_characters {
         }, $char->character_id, $api->key->key_id);
 
         next CHARACTER if !$res;
+        $char->name; # Force an API call
 
         if ($res->next) {
             unless ($res->{'key_id'}) {
