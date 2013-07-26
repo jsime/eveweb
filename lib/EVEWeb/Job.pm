@@ -191,7 +191,7 @@ sub save {
             run_pid     => $self->pid,
             started_at  => $self->started,
             finished_at => $self->finished,
-        });
+        }, $self->job_id);
 
         return unless $res && $res->next;
         return 1;
