@@ -29,6 +29,8 @@ my $db = DBIx::DataStore->new($cfg->{'Model::DB'}{'datastore'});
 
 JOB:
 while (my $job = EVEWeb::Job->claim($db, 'key')) {
+    $job->start;
+
     my $res = $db->do(q{
         select k.*
         from eve.api_keys k
@@ -53,4 +55,95 @@ while (my $job = EVEWeb::Job->claim($db, 'key')) {
 
         next JOB;
     }
+
+    if (lc($api->key->type) eq 'corporation') {
+        check_corporations($api);
+    } else {
+        check_characters($api);
+    }
+
+    $job->finish;
+    $job->save;
+
+    EVEWeb::Job->new(
+        db     => $db,
+        type   => 'key',
+        stash  => { key_id => $api->key->key_id },
+        run_at => DateTime->now->add( minutes => 30 ),
+    )->save;
 }
+
+sub check_characters {
+    my ($api) = @_;
+
+    CHARACTER:
+    foreach my $char ($api->characters) {
+        my $res = $db->do(q{
+            select p.pilot_id, pk.key_id
+            from eve.pilots p
+                left join eve.pilot_api_keys pk on (pk.pilot_id = p.pilot_id)
+            where p.pilot_id = ?
+                and pk.key_id = ?
+        }, $char->character_id, $api->key->key_id);
+
+        next CHARACTER if !$res;
+
+        if ($res->next) {
+            unless ($res->{'key_id'}) {
+                $res = $db->do(q{
+                    insert into eve.pilot_api_keys ???
+                }, { pilot_id => $char->character_id, key_id => $api->key->key_id });
+            }
+
+            update_character($char);
+        } else {
+            add_character($char);
+        }
+
+        EVEWeb::Job->new(
+            db     => $db,
+            type   => 'pilot',
+            stash  => { pilot_id => $char->character_id },
+            run_at => $char->cached_until || DateTime->now->add( hours => 1),
+        )->save;
+    }
+}
+
+sub add_character {
+    my ($char) = @_;
+
+    
+}
+
+sub add_corporation {
+    my ($corp) = @_;
+}
+
+sub check_corporations {
+    my ($api) = @_;
+}
+
+sub update_character {
+    my ($char) = @_;
+
+    my %updates;
+
+    $updates{'balance'} = $char->balance            if $char->has_balance;
+    $updates{'sec_status'} = $char->security_status if $char->has_security_status;
+
+    return 0 unless keys %updates > 0;
+
+    $updates{'cached_until'} = $char->cached_until . '+0000';
+
+print Dumper(\%updates);
+    my $res = $db->do(q{
+        update eve.pilots set ??? where pilot_id = ?
+    }, \%updates, $char->character_id);
+
+    return 1;
+}
+
+sub update_corporation {
+    my ($corp) = @_;
+}
+
