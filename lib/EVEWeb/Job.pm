@@ -84,7 +84,9 @@ sub claim {
     my $res = $db->do(q{
         select *
         from public.jobs
-        where job_type = ? and started_at is null
+        where job_type = ?
+            and run_at <= now()
+            and started_at is null
         for update
     }, $type);
 
