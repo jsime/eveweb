@@ -113,7 +113,29 @@ sub check_characters {
 sub add_character {
     my ($char) = @_;
 
-    
+    my %pilot = (
+        pilot_id     => $char->character_id,
+        name         => $char->name,
+        race         => $char->race,
+        sec_status   => $char->security_status,
+        cached_until => $char->cached_until,
+    );
+
+    $pilot{'bloodline'} = $char->bloodline     if $char->has_bloodline;
+    $pilot{'ancestry'}  = $char->ancestry      if $char->has_ancestry;
+    $pilot{'gender'}    = $char->gender        if $char->has_gender;
+    $pilot{'birthdate'} = $char->dob . '+0000' if $char->has_dob;
+    $pilot{'balance'}   = $char->balance       if $char->has_balance;
+
+    my $res = $db->do(q{
+        insert into eve.pilots ??? returning pilot_id
+    }, \%pilot);
+
+    return 0 unless $res && $res->next;
+
+    $res = $db->do(q{
+        insert into eve.pilot_api_keys ???
+    }, { pilot_id => $char->character_id, key_id => $char->key->key_id });
 }
 
 sub add_corporation {
