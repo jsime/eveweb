@@ -1,0 +1,100 @@
+#!/usr/bin/env perl
+
+use v5.10;
+use strict;
+use warnings FATAL => 'all';
+
+use Config::Any;
+use Data::Dumper;
+use DBIx::DataStore ( config => 'yaml' );
+use File::Basename;
+use Games::EVE::APIv2;
+
+my ($SCRIPT, $BASEDIR) = fileparse(__FILE__);
+eval <<EOV;
+    use lib '$BASEDIR/../../lib';
+
+    use EVEWeb::Job;
+EOV
+die "Could not set up environment properly.\n" if $@;
+
+my $cfg = Config::Any->load_files({
+    files => ["$BASEDIR/../../eveweb.conf"],
+    use_ext => 1,
+    flatten_to_hash => 1,
+});
+$cfg = $cfg->{(keys %{$cfg})[0]};
+
+my $db = DBIx::DataStore->new($cfg->{'Model::DB'}{'datastore'});
+
+JOB:
+while (my $job = EVEWeb::Job->claim($db, 'pilot')) {
+    $job->start;
+
+    my @keys = get_pilot_keys($job->stash->{'pilot_id'});
+    my $pilot;
+
+    if (@keys > 0) {
+        $pilot = Games::EVE::APIv2::Character->new(
+            key          => $keys[0],
+            character_id => $job->stash->{'pilot_id'}
+        );
+    } else {
+        $pilot = Games::EVE::APIv2::Character->new(
+            character_id => $job->stash->{'pilot_id'}
+        );
+    }
+
+    update_pilot($pilot);
+
+    $job->finish;
+
+    EVEWeb::Job->new(
+        db     => $db,
+        type   => 'pilot',
+        stash  => { pilot_id => $pilot->character_id },
+        run_at => $pilot->cached_until || DateTime->now->add( hours => 1 ),
+    )->save;
+}
+
+sub get_pilot_keys {
+    my ($pilot_id) = @_;
+
+    my $res = $db->do(q{
+        select k.key_id, k.v_code, k.access_mask
+        from eve.api_keys k
+            join eve.pilot_api_keys pk on (pk.key_id = k.key_id)
+        where pk.pilot_id = ?
+            and k.active
+            and k.expires_at > now()
+    }, $pilot_id);
+
+    return unless $res;
+
+    my @keys;
+    push(@keys, Games::EVE::APIv2::Key->new(
+                    key_id => $res->{'key_id'},
+                    v_code => $res->{'v_code'},
+                    mask   => $res->{'access_mask'}
+                )) while $res->next;
+}
+
+sub update_pilot {
+    my ($pilot) = @_;
+
+    my %updates;
+
+    $updates{'balance'} =    $pilot->balance         if $pilot->has_balance;
+    $updates{'sec_status'} = $pilot->security_status if $pilot->has_security_status;
+
+    return 0 unless keys %updates > 0;
+
+    $updates{'cached_until'} = $pilot->cached_until . '+0000';
+
+    my $res = $db->do(q{
+        update eve.pilots set ??? where pilot_id = ?
+    }, \%updates, $pilot->character_id);
+
+    return 1;
+}
+
