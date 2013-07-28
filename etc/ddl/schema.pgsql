@@ -241,7 +241,7 @@ create index corporations_cached_until_idx on eve.corporations (cached_until);
 
 create table eve.corporation_api_keys (
     corporation_id  bigint not null,
-    key_id          integer not null,
+    key_id          integer not null
 );
 
 alter table eve.corporation_api_keys add primary key (corporation_id, key_id);
