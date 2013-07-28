@@ -250,6 +250,21 @@ create index corporation_api_keys_key_id_idx on eve.corporation_api_keys (key_id
 alter table eve.corporation_api_keys add foreign key (corporation_id) references eve.corporations (corporation_id) on update cascade on delete cascade;
 alter table eve.corporation_api_keys add foreign key (key_id) references eve.api_keys (key_id) on update cascade on delete cascade;
 
+create table eve.pilot_corporations (
+    pilot_id       integer not null,
+    corporation_id integer not null,
+    from_datetime  timestamp with time zone not null,
+    to_datetime    timestamp with time zone
+);
+
+alter table eve.pilot_corporations add primary key (pilot_id, corporation_id, from_datetime);
+create index pilot_corporations_corporation_id_idx on eve.pilot_corporations (corporation_id);
+create index pilot_corporations_from_datetime_idx on eve.pilot_corporations (from_datetime);
+create index pilot_corporations_to_datetime_idx on eve.pilot_corporations (to_datetime);
+
+alter table eve.pilot_corporations add foreign key (pilot_id) references eve.pilots (pilot_id) on update cascade on delete cascade;
+alter table eve.pilot_corporations add foreign key (corporation_id) references eve.corporations (corporation_id) on update cascade on delete cascade;
+
 -- SCHEMA: plans
 -- Skill queue/plan management
 create schema plans;
