@@ -134,6 +134,7 @@ sub start {
         if $self->finished;
 
     $self->started(DateTime->now());
+    $self->save;
 }
 
 sub finish {
@@ -145,6 +146,7 @@ sub finish {
         if $self->finished;
 
     $self->finished(DateTime->now());
+    $self->save;
 }
 
 sub save {
