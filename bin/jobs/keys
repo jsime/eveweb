@@ -39,7 +39,6 @@ while (my $job = EVEWeb::Job->claim($db, 'key')) {
 
     unless ($res && $res->next) {
         $job->finish;
-        $job->save;
 
         next JOB;
     }
@@ -51,7 +50,6 @@ while (my $job = EVEWeb::Job->claim($db, 'key')) {
 
     if (!$api || $api->key->expired) {
         $job->finish;
-        $job->save;
 
         next JOB;
     }
@@ -63,7 +61,6 @@ while (my $job = EVEWeb::Job->claim($db, 'key')) {
     }
 
     $job->finish;
-    $job->save;
 
     EVEWeb::Job->new(
         db     => $db,
