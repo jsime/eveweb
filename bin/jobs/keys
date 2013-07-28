@@ -155,7 +155,6 @@ sub update_character {
 
     $updates{'cached_until'} = $char->cached_until . '+0000';
 
-print Dumper(\%updates);
     my $res = $db->do(q{
         update eve.pilots set ??? where pilot_id = ?
     }, \%updates, $char->character_id);
