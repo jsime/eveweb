@@ -77,6 +77,8 @@ sub get_pilot_keys {
                     v_code => $res->{'v_code'},
                     mask   => $res->{'access_mask'}
                 )) while $res->next;
+
+    return @keys;
 }
 
 sub update_pilot {
