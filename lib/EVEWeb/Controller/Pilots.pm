@@ -31,7 +31,8 @@ sub index :Path Args(0) {
     my ( $self, $c ) = @_;
 
     my $res = $c->model('DB')->do(q{
-        select p.*, c.corporation_id, c.name as corporation_name
+        select p.*,
+            c.corporation_id, c.name as corporation_name, c.ticker
         from eve.pilots p
             left join eve.pilot_corporations pc on (pc.pilot_id = p.pilot_id)
             left join eve.corporations c on (c.corporation_id = pc.corporation_id)
