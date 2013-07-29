@@ -16,6 +16,9 @@
         <div class="large-7 columns">
             <h2>[% pilot.name %]</h2>
             <p>
+                [% IF pilot.corporation_id %]
+                [% pilot.corporation_name %] ([% pilot.ticker %])<br />
+                [% END %]
                 Security Status: [% pilot.sec_status %]
                 <br />
                 [% pilot.race %] ([% pilot.bloodline %])
