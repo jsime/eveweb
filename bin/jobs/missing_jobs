@@ -1,0 +1,49 @@
+#!/usr/bin/env perl
+
+use v5.10;
+use strict;
+use warnings FATAL => 'all';
+
+use Config::Any;
+use Data::Dumper;
+use DBIx::DataStore ( config => 'yaml' );
+use File::Basename;
+
+my ($SCRIPT, $BASEDIR) = fileparse(__FILE__);
+eval <<EOV;
+    use lib '$BASEDIR/../../lib';
+
+    use EVEWeb::Job;
+EOV
+die "Could not set up environment properly.\n" if $@;
+
+my $cfg = Config::Any->load_files({
+    files => ["$BASEDIR/../../eveweb.conf"],
+    use_ext => 1,
+    flatten_to_hash => 1,
+});
+$cfg = $cfg->{(keys %{$cfg})[0]};
+
+my $db = DBIx::DataStore->new($cfg->{'Model::DB'}{'datastore'});
+
+# Find active characters that are missing 'pilot' jobs
+# (for now this is a little janky, until pg9.3 adds more JSON operators)
+my $res = $db->do(q{
+    select p.pilot_id
+    from eve.pilots p
+        left join public.jobs j on (j.job_type = 'pilot' and j.job_key = 'pilot-' || p.pilot_id)
+    where j.job_id is null
+});
+
+die $res->error unless $res;
+
+while ($res->next) {
+    printf("Queuing pilot job for %d.\n", $res->{'pilot_id'});
+
+    EVEWeb::Job->new(
+        db     => $db,
+        type   => 'pilot',
+        stash  => { pilot_id => $res->{'pilot_id'} },
+        run_at => DateTime->now->add( minutes => 5 ),
+    )->save;
+}
