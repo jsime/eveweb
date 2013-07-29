@@ -84,7 +84,6 @@ sub get_pilot_keys {
 sub update_pilot {
     my ($pilot) = @_;
 
-print "Updating Pilot: " . $pilot->name . "\n";
     my %updates;
 
     $updates{'balance'} =    $pilot->balance         if $pilot->has_balance;
@@ -119,7 +118,6 @@ sub update_corporation {
     return 0 unless $res;
 
     if ($res->next) {
-print STDERR "Updating existing corporation: " . $corp->name . "\n";
         $res = $db->do(q{
             update eve.corporations set ??? where corporation_id = ?
         }, {
@@ -131,7 +129,6 @@ print STDERR "Updating existing corporation: " . $corp->name . "\n";
             cached_until => $corp->cached_until ? $corp->cached_until . '+0000' : DateTime->now->add( hours => 1 ),
         }, $corp->corporation_id);
     } else {
-print STDERR "Creating new corporation: " . $corp->name . "\n";
         $res = $db->do(q{
             insert into eve.corporations ???
         }, {
