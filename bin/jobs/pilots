@@ -97,6 +97,54 @@ sub update_pilot {
         update eve.pilots set ??? where pilot_id = ?
     }, \%updates, $pilot->character_id);
 
+    foreach my $corp ($pilot->corporations) {
+        if (update_corporation($corp)) {
+
+        }
+    }
+
+    return 1;
+}
+
+sub update_corporation {
+    my ($corp) = @_;
+
+    my $res = $db->do(q{
+        select c.*
+        from eve.corporations c
+        where c.corporation_id = ?
+    }, $corp->corporation_id);
+
+    return 0 unless $res;
+
+    if ($res->next) {
+        $res = $db->do(q{
+            update eve.corporations set ??? where corporation_id = ?
+        }, {
+            name         => $corp->name,
+            ticker       => $corp->ticker,
+            description  => $corp->description || undef,
+            tax_rate     => $corp->tax_rate,
+            members      => $corp->member_count,
+            shares       => $corp->shares,
+            cached_until => $corp->cached_until . '+0000',
+        }, $corp->corporation_id);
+    } else {
+        $res = $db->do(q{
+            insert into eve.corporations ???
+        }, {
+            corporation_id => $corp->corporation_id,
+            name           => $corp->name,
+            ticker         => $corp->ticker,
+            description    => $corp->description || undef,
+            tax_rate       => $corp->tax_rate,
+            members        => $corp->member_count,
+            shares         => $corp->shares,
+            cached_until   => $corp->cached_until . '+0000',
+        });
+    }
+
+    return 0 unless $res;
     return 1;
 }
 
