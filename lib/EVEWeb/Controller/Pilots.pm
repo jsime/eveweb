@@ -31,13 +31,16 @@ sub index :Path Args(0) {
     my ( $self, $c ) = @_;
 
     my $res = $c->model('DB')->do(q{
-        select p.*
+        select p.*, c.corporation_id, c.name as corporation_name
         from eve.pilots p
+            left join eve.pilot_corporations pc on (pc.pilot_id = p.pilot_id)
+            left join eve.corporations c on (c.corporation_id = pc.corporation_id)
         where p.pilot_id in ( select pk.pilot_id
                               from eve.pilot_api_keys pk
                                   join eve.api_keys k on (k.key_id = pk.key_id)
                               where k.user_id = ?
                             )
+            and pc.to_datetime is null
         order by p.name asc
     }, $c->stash->{'user'}{'user_id'});
 
