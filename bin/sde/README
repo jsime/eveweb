@@ -1,0 +1,15 @@
+The scripts in this directory are used to extract a variety of static
+data from CCP's database dumps (SDE; Static Data Exports). They rely
+on a PostgreSQL instance running with a fully loaded copy of the PG
+conversion of CCP's SDE (since CCP only provides SQL Server, MySQL,
+and flat files).
+
+The scripts should be run in the numerical order of their names, as
+some depend on the existence of data loaded by previous scripts.
+
+They are safe to run against an existing EVEWeb database with static
+data already loaded. This is useful in cases of SDE updates from CCP
+add new items, skills, etc.
+
+For your convenience, a run_import.sh shell script is provided here
+that will run all the scripts in order for you.
