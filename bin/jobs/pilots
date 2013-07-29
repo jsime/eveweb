@@ -110,7 +110,7 @@ sub update_corporation {
     my ($corp) = @_;
 
     my $res = $db->do(q{
-        select c.*
+        select c.*, case when c.cached_until <= now() then 0 else 1 end as cached
         from eve.corporations c
         where c.corporation_id = ?
     }, $corp->corporation_id);
@@ -118,6 +118,8 @@ sub update_corporation {
     return 0 unless $res;
 
     if ($res->next) {
+        return 1 if $res->{'cached'};
+
         $res = $db->do(q{
             update eve.corporations set ??? where corporation_id = ?
         }, {
