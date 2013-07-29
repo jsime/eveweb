@@ -128,7 +128,7 @@ print STDERR "Updating existing corporation: " . $corp->name . "\n";
             tax_rate     => $corp->tax_rate,
             members      => $corp->member_count,
             shares       => $corp->shares,
-            cached_until => $corp->cached_until . '+0000',
+            cached_until => $corp->cached_until ? $corp->cached_until . '+0000' : DateTime->now->add( hours => 1 ),
         }, $corp->corporation_id);
     } else {
 print STDERR "Creating new corporation: " . $corp->name . "\n";
@@ -141,7 +141,7 @@ print STDERR "Creating new corporation: " . $corp->name . "\n";
             tax_rate       => $corp->tax_rate,
             members        => $corp->member_count,
             shares         => $corp->shares,
-            cached_until   => $corp->cached_until . '+0000',
+            cached_until   => $corp->cached_until ? $corp->cached_until . '+0000' : DateTime->now->add( hours => 1 ),
         });
     }
 
