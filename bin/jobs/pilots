@@ -89,17 +89,17 @@ sub update_pilot {
     $updates{'balance'} =    $pilot->balance         if $pilot->has_balance;
     $updates{'sec_status'} = $pilot->security_status if $pilot->has_security_status;
 
-    return 0 unless keys %updates > 0;
+    if (keys %updates > 0) {
+        $updates{'cached_until'} = $pilot->cached_until . '+0000';
 
-    $updates{'cached_until'} = $pilot->cached_until . '+0000';
-
-    my $res = $db->do(q{
-        update eve.pilots set ??? where pilot_id = ?
-    }, \%updates, $pilot->character_id);
+        my $res = $db->do(q{
+            update eve.pilots set ??? where pilot_id = ?
+        }, \%updates, $pilot->character_id);
+    }
 
     foreach my $corp ($pilot->corporations) {
         if (update_corporation($corp)) {
-
+            update_membership($pilot, $corp);
         }
     }
 
@@ -145,6 +145,42 @@ sub update_corporation {
     }
 
     return 0 unless $res;
+    return 1;
+}
+
+sub update_membership {
+    my ($pilot, $corp) = @_;
+
+    my $res = $db->do(q{
+        select pc.*
+        from eve.pilot_corporations pc
+        where pc.pilot_id = ?
+            and pc.corporation_id = ?
+            and pc.from_datetime = ?
+    }, $pilot->character_id, $corp->corporation_id, $corp->start_date . '+0000');
+
+    return 0 unless $res;
+
+    if ($res->next) {
+        $res = $db->do(q{
+            update eve.pilot_corporations
+            set
+                to_datetime = ?
+            where pilot_id = ?
+                and corporation_id = ?
+                and from_datetime = ?
+        }, $corp->end_date || undef, $pilot->character_id, $corp->corporation_id, $corp->start_date)
+    } else {
+        $res = $db->do(q{
+            insert into eve.pilot_corporations ???
+        }, {
+            pilot_id       => $pilot->character_id,
+            corporation_id => $corp->corporation_id,
+            from_datetime  => $corp->start_date,
+            to_datetime    => $corp->end_date || undef,
+        });
+    }
+
     return 1;
 }
 
