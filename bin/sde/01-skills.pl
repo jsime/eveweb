@@ -74,13 +74,10 @@ while ($res->next) {
 
 printf("Created: %d / Updated: %d\n", $created, $updated);
 
-exit;
-
 ###########
 #### SKILLS
 $res = $sde_db->do(q{
-    select "typeID", "groupID", "typeName", "basePrice",
-        "portionSize", published, "marketGroupID"
+    select *
     from "invTypes"
     where "groupID" IN (select "groupID" from "invGroups" where "categoryID" = 16)
 });
@@ -89,6 +86,51 @@ die $res->error unless $res;
 
 print "\nSkills";
 print "\n------\n";
+
+($created, $updated) = (0,0);
+SKILL:
 while ($res->next) {
-    printf("%10d -> %s (Group %d)\n", $res->{'typeID'}, $res->{'typeName'}, $res->{'groupID'})
+    printf("%10d -> %s (Group %d)\n", $res->{'typeID'}, $res->{'typeName'}, $res->{'groupID'});
+
+    my $update = $db->do(q{
+        update ccp.skills
+        set ???
+        where skill_id = ?
+    }, {
+        skill_group_id => $res->{'groupID'},
+        name           => $res->{'typeName'},
+        description    => $res->{'description'},
+        rank           => 1, # TODO get the real rank
+        primary_attribute_id   => 1, # TODO
+        secondary_attribute_id => 1, # TODO
+        published      => ($res->{'published'} ? 1 : 0)
+    }, $res->{'typeID'});
+
+    if ($update->count > 0) {
+        $updated++;
+        next SKILL;
+    } else {
+        my $insert = $db->do(q{
+            insert into ccp.skills ???
+        }, {
+            skill_id       => $res->{'typeID'},
+            skill_group_id => $res->{'groupID'},
+            name           => $res->{'typeName'},
+            description    => $res->{'description'},
+            rank           => 1, # TODO get the real rank
+            primary_attribute_id   => 1, # TODO
+            secondary_attribute_id => 1, # TODO
+            published      => ($res->{'published'} ? 1 : 0)
+        });
+
+        if ($insert->count > 0) {
+            $created++;
+            next SKILL;
+        }
+    }
+
+    die sprintf("Couldn't update or insert skill %s (%d).\n", $res->{'typeName'}, $res->{'typeID'});
 }
+
+printf("Created: %d / Updated: %d\n", $created, $updated);
+
