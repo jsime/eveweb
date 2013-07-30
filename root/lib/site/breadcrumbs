@@ -1,4 +1,4 @@
-[% IF breadcrumbs %]
+[% IF breadcrumbs || layouts %]
 <ul class="breadcrumbs">
 [% FOREACH crumb IN breadcrumbs %]
     [% IF crumb.link && !loop.last -%]
@@ -6,6 +6,15 @@
     [% ELSE -%]
     <li>[% crumb.name %]</li>
     [% END -%]
+[% END %]
+[% FOREACH layout IN layouts.reverse %]
+    <li class="right[% IF loop.last %] first[% END %]">
+        [% IF layout.link %]
+        <a href="[% layout.link %]">[% layout.name %]</a>
+        [% ELSE %]
+        [% layout.name %]
+        [% END %]
+    </li>
 [% END %]
 </ul>
 [% END %]
