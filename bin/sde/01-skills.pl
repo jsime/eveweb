@@ -99,7 +99,7 @@ while ($res->next) {
     }, {
         skill_group_id => $res->{'groupID'},
         name           => $res->{'typeName'},
-        description    => $res->{'description'},
+        description    => $res->{'description'} || '',
         rank           => 1, # TODO get the real rank
         primary_attribute_id   => 1, # TODO
         secondary_attribute_id => 1, # TODO
@@ -116,7 +116,7 @@ while ($res->next) {
             skill_id       => $res->{'typeID'},
             skill_group_id => $res->{'groupID'},
             name           => $res->{'typeName'},
-            description    => $res->{'description'},
+            description    => $res->{'description'} || '',
             rank           => 1, # TODO get the real rank
             primary_attribute_id   => 1, # TODO
             secondary_attribute_id => 1, # TODO
