@@ -103,6 +103,8 @@ sub update_pilot {
         }
     }
 
+    update_skill_queue($pilot);
+
     return 1;
 }
 
@@ -184,3 +186,44 @@ sub update_membership {
     return 1;
 }
 
+sub update_skill_queue {
+    my ($pilot) = @_;
+
+    $db->begin;
+
+    my $res = $db->do(q{
+        delete from plans.skill_queues where pilot_id = ?
+    }, $pilot->character_id);
+
+    unless ($res) {
+        warn $res->error;
+        $db->rollback;
+        return 0;
+    }
+
+    foreach my $skill ($pilot->skill_queue) {
+        next unless $skill->end_time; # skip if the queue is paused (no end time)
+
+        $res = $db->do(q{
+            insert into plans.skill_queues ???
+        }, {
+            pilot_id     => $pilot->character_id,
+            position     => $skill->position,
+            skill_id     => $skill->skill_id,
+            level        => $skill->level,
+            start_points => $skill->start_sp,
+            end_points   => $skill->end_sp,
+            start_time   => $skill->start_time . '+0000',
+            end_time     => $skill->end_time . '+0000',
+        });
+
+        unless ($res) {
+            warn $res->error;
+            $db->rollback;
+            return 0;
+        }
+    }
+
+    $db->commit;
+    return 1;
+}
