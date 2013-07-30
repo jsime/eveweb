@@ -21,7 +21,7 @@ $cfg = $cfg->{(keys %{$cfg})[0]};
 my $sde_db = DBIx::DataStore->new($cfg->{'SDE'}{'datastore'});
 my $db = DBIx::DataStore->new($cfg->{'Model::DB'}{'datastore'});
 
-my ($res);
+my ($res, $created, $updated);
 
 #################
 #### SKILL GROUPS
@@ -34,6 +34,48 @@ $res = $sde_db->do(q{
 
 die $res->error unless $res;
 
+print "\nSkill Groups";
+print "\n------------\n";
+
+($created, $updated) = (0,0);
+GROUP:
+while ($res->next) {
+    printf("%10d -> %s\n        ", $res->{'groupID'}, $res->{'groupName'});
+
+    my $update = $db->do(q{
+        update ccp.skill_groups
+        set ???
+        where skill_group_id = ?
+    }, {
+        name      => $res->{'groupName'},
+        published => ($res->{'published'} ? 1 : 0)
+    }, $res->{'groupID'});
+
+    if ($update->count > 0) {
+        $updated++;
+        next GROUP;
+    } else {
+        my $insert = $db->do(q{
+            insert into ccp.skill_groups ???
+        }, {
+            skill_group_id => $res->{'groupID'},
+            name           => $res->{'groupName'},
+            published      => ($res->{'published'} ? 1 : 0)
+        });
+
+        if ($insert->count > 0) {
+            $created++;
+            next GROUP;
+        }
+    }
+
+    die sprintf("Couldn't update or insert skill group %s (%d).\n", $res->{'groupName'}, $res->{'groupID'});
+}
+
+printf("Created: %d / Updated: %d\n", $created, $updated);
+
+exit;
+
 ###########
 #### SKILLS
 $res = $sde_db->do(q{
@@ -45,6 +87,8 @@ $res = $sde_db->do(q{
 
 die $res->error unless $res;
 
+print "\nSkills";
+print "\n------\n";
 while ($res->next) {
-    printf("%10d -> %s\n", $res->{'typeID'}, $res->{'typeName'})
+    printf("%10d -> %s (Group %d)\n", $res->{'typeID'}, $res->{'typeName'}, $res->{'groupID'})
 }
