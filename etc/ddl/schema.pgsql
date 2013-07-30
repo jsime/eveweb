@@ -123,8 +123,16 @@ create table ccp.attributes (
 
 create index attributes_name_idx on ccp.attributes (name);
 
+create table ccp.skill_groups (
+    skill_group_id  integer not null primary key,
+    name            text not null
+);
+
+create unique index skill_groups_name_idx on ccp.skill_groups (name);
+
 create table ccp.skills (
     skill_id                integer not null primary key,
+    skill_group_id          integer not null,
     name                    text not null,
     description             text not null,
     rank                    integer not null,
@@ -133,9 +141,11 @@ create table ccp.skills (
 );
 
 create unique index skills_name_idx on ccp.skills (name);
+create index skills_skill_group_id_idx on ccp.skills (skill_group_id);
 create index skills_primary_attribute_id_idx on ccp.skills (primary_attribute_id);
 create index skills_secondary_attribute_id_idx on ccp.skills (secondary_attribute_id);
 
+alter table ccp.skills add foreign key (skill_group_id) references ccp.skill_groups (skill_group_id);
 alter table ccp.skills add foreign key (primary_attribute_id) references ccp.attributes (attribute_id);
 alter table ccp.skills add foreign key (secondary_attribute_id) references ccp.attributes (attribute_id);
 
