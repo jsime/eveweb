@@ -1,6 +1,5 @@
 <div class="large-2 pull-10 columns">
     <ul class="side-nav">
-        <li><label>Personal</label></li>
         <li><a href="[% c.uri_for('/') %]">Dashboard</a></li>
         <li><a href="[% c.uri_for('/pilots') %]">Pilots</a></li>
         <li><a href="[% c.uri_for('/skill') %]">Skills</a></li>
