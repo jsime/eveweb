@@ -125,10 +125,12 @@ create index attributes_name_idx on ccp.attributes (name);
 
 create table ccp.skill_groups (
     skill_group_id  integer not null primary key,
-    name            text not null
+    name            text not null,
+    published       boolean not null default 't'
 );
 
 create unique index skill_groups_name_idx on ccp.skill_groups (name);
+create index skill_groups_published_idx on ccp.skill_groups (published);
 
 create table ccp.skills (
     skill_id                integer not null primary key,
@@ -137,13 +139,15 @@ create table ccp.skills (
     description             text not null,
     rank                    integer not null,
     primary_attribute_id    integer not null,
-    secondary_attribute_id  integer not null
+    secondary_attribute_id  integer not null,
+    published               boolean not null default 't'
 );
 
 create unique index skills_name_idx on ccp.skills (name);
 create index skills_skill_group_id_idx on ccp.skills (skill_group_id);
 create index skills_primary_attribute_id_idx on ccp.skills (primary_attribute_id);
 create index skills_secondary_attribute_id_idx on ccp.skills (secondary_attribute_id);
+create index skills_published_idx on ccp.skills (published);
 
 alter table ccp.skills add foreign key (skill_group_id) references ccp.skill_groups (skill_group_id);
 alter table ccp.skills add foreign key (primary_attribute_id) references ccp.attributes (attribute_id);
