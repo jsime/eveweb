@@ -20,6 +20,12 @@ sub auto :Private {
     my ($self, $c) = @_;
 
     push(@{$c->stash->{'breadcrumbs'}}, { name => 'Pilots', link => $c->uri_for('/pilots') });
+
+    $c->stash->{'layouts'} = [
+        { name => 'List', link => $c->uri_for('/pilots', { layout => 'list' }) },
+        { name => 'Small', link => $c->uri_for('/pilots', { layout => 'small' }) },
+        { name => 'Large', link => $c->uri_for('/pilots', { layout => 'large' }) },
+    ];
 }
 
 
