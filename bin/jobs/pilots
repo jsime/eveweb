@@ -171,15 +171,17 @@ sub update_membership {
             where pilot_id = ?
                 and corporation_id = ?
                 and from_datetime = ?
-        }, $corp->end_date || undef, $pilot->character_id, $corp->corporation_id, $corp->start_date)
+        }, ($corp->end_date ? $corp->end_date . '+0000' : undef),
+            $pilot->character_id, $corp->corporation_id, $corp->start_date . '+0000'
+        );
     } else {
         $res = $db->do(q{
             insert into eve.pilot_corporations ???
         }, {
             pilot_id       => $pilot->character_id,
             corporation_id => $corp->corporation_id,
-            from_datetime  => $corp->start_date,
-            to_datetime    => $corp->end_date || undef,
+            from_datetime  => $corp->start_date . '+0000',
+            to_datetime    => ($corp->end_date ? $corp->end_date . '+0000' : undef),
         });
     }
 
