@@ -283,6 +283,24 @@ alter table eve.pilot_corporations add foreign key (corporation_id) references e
 -- Skill queue/plan management
 create schema plans;
 
+create table plans.skill_queues (
+    pilot_id     integer not null,
+    position     integer not null,
+    skill_id     integer not null,
+    level        integer not null,
+    start_points integer not null,
+    end_points   integer not null,
+    start_time   timestamp with time zone not null,
+    end_time     timestamp with time zone not null
+);
+
+alter table plans.skill_queues add primary key (pilot_id, position);
+create index skill_queues_position_idx on plans.skill_queues (position);
+create index skill_queues_skill_id_idx on plans.skill_queues (skill_id);
+create index skill_queues_start_time_idx on plans.skill_queues (start_time);
+
+alter table plans.skill_queues add foreign key (pilot_id) references eve.pilots (pilot_id) on update cascade on delete cascade;
+alter table plans.skill_queues add foreign key (skill_id) references ccp.skills (skill_id) on update cascade on delete cascade;
 
 -- SCHEMA: fits
 -- Ship fittings
