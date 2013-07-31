@@ -61,8 +61,9 @@ __PACKAGE__->config(
         cookie_httponly => 1,
         cookie_expires  => 86_400 * 7,
         memcached_new_args => {
-            'data'      => { servers => ['192.168.122.1:11211'], debug => 0 },
-            'namespace' => 'eveweb',
+            'data'       => { servers => ['192.168.122.1:11211'], debug => 0 },
+            'namespace'  => 'eveweb',
+            'expiration' => '7D',
         },
     },
 
