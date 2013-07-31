@@ -31,7 +31,9 @@ my $db = DBIx::DataStore->new($cfg->{'Model::DB'}{'datastore'});
 my $res = $db->do(q{
     select p.pilot_id
     from eve.pilots p
-        left join public.jobs j on (j.job_type = 'pilot' and j.job_key = 'pilot-' || p.pilot_id)
+        left join public.jobs j on (j.job_type = 'pilot'
+                                    and j.job_key = 'pilot-' || p.pilot_id
+                                    and j.started_at is null)
     where j.job_id is null
 });
 
