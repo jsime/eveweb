@@ -21,9 +21,11 @@
                 [% END %]
                 Security Status: [% pilot.sec_status %]
                 <br />
-                [% pilot.race %] ([% pilot.bloodline %])
-                <br />
                 [% pilot.balance | format_number %] ISK
+                [% IF pilot.skill_id %]
+                <br />
+                [% pilot.skill_name %] until [% pilot.skill_end_time %]
+                [% END %]
             </p>
         </div>
     </div>

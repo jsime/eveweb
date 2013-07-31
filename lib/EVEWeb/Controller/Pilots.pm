@@ -38,10 +38,14 @@ sub index :Path Args(0) {
 
     my $res = $c->model('DB')->do(q{
         select p.*,
-            c.corporation_id, c.name as corporation_name, c.ticker
+            c.corporation_id, c.name as corporation_name, c.ticker,
+            s.skill_id, s.name as skill_name, sq.level as skill_level,
+            to_char(sq.end_time at time zone ?, ?) as skill_end_time
         from eve.pilots p
             left join eve.pilot_corporations pc on (pc.pilot_id = p.pilot_id)
             left join eve.corporations c on (c.corporation_id = pc.corporation_id)
+            left join plans.skill_queues sq on (sq.pilot_id = p.pilot_id and sq.position = 0)
+            left join ccp.skills s on (s.skill_id = sq.skill_id)
         where p.pilot_id in ( select pk.pilot_id
                               from eve.pilot_api_keys pk
                                   join eve.api_keys k on (k.key_id = pk.key_id)
@@ -49,7 +53,7 @@ sub index :Path Args(0) {
                             )
             and pc.to_datetime is null
         order by p.name asc
-    }, $c->stash->{'user'}{'user_id'});
+    }, $c->stash->{'user'}{'timezone'}, $c->stash->{'user'}{'format_datetime'}, $c->stash->{'user'}{'user_id'});
 
     $c->stash->{'pilots'} = [];
     while ($res->next) {
