@@ -36,7 +36,34 @@ sub auto :Private {
 sub index :Path Args(0) {
     my ( $self, $c ) = @_;
 
-    my $res = $c->model('DB')->do(q{
+    my ($res);
+
+    if (exists $c->request->params->{'layout'}) {
+        my $layout = lc($c->request->params->{'layout'});
+
+        if ($layout =~ m{^(list|small|large)$}o) {
+            $c->stash->{'user'}{'pilot.list.layout'} = $layout;
+
+            $res = $c->model('DB')->do(q{
+                update public.user_prefs
+                set pref_value = ?,
+                    updated_at = ?
+                where user_id = ? and pref_name = 'pilot.list.layout'
+            }, $layout, $c->stash->{'user'}{'user_id'});
+
+            if ($res && $res->count < 1) {
+                $res = $c->model('DB')->do(q{
+                    insert into public.user_prefs ???
+                }, {
+                    user_id    => $c->stash->{'user'}{'user_id'},
+                    pref_name  => 'pilot.list.layout',
+                    pref_value => $layout,
+                });
+            }
+        }
+    }
+
+    $res = $c->model('DB')->do(q{
         select p.*,
             c.corporation_id, c.name as corporation_name, c.ticker,
             s.skill_id, s.name as skill_name, sq.level as skill_level,
