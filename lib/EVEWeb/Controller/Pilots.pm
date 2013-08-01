@@ -49,7 +49,7 @@ sub index :Path Args(0) {
             $res = $c->model('DB')->do(q{
                 update public.user_prefs
                 set pref_value = ?,
-                    updated_at = ?
+                    updated_at = now()
                 where user_id = ? and pref_name = 'pilot.list.layout'
             }, $layout, $c->stash->{'user'}{'user_id'});
 
