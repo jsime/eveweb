@@ -1,5 +1,6 @@
 [% META title = 'Pilots' %]
 [% USE Number.Format %]
+[% USE Roman %]
 
 [% PROCESS site/breadcrumbs %]
 
@@ -22,7 +23,7 @@
                 [% pilot.balance | format_number %] ISK
                 [% IF pilot.skill_id %]
                 <br />
-                [% pilot.skill_name %]<br />
+                [% pilot.skill_name %] [% pilot.skill_level | roman %]<br />
                 <span class="countdown" data="[% pilot.skill_end_time_js %]"></span>
                 [% END %]
             </p>
