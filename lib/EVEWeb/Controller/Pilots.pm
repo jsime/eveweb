@@ -69,7 +69,8 @@ sub index :Path Args(0) {
         select p.*,
             c.corporation_id, c.name as corporation_name, c.ticker,
             s.skill_id, s.name as skill_name, sq.level as skill_level,
-            to_char(sq.end_time at time zone ?, ?) as skill_end_time
+            to_char(sq.end_time at time zone ?, ?) as skill_end_time,
+            sq.end_time as skill_end_time_js
         from eve.pilots p
             left join eve.pilot_corporations pc on (pc.pilot_id = p.pilot_id)
             left join eve.corporations c on (c.corporation_id = pc.corporation_id)
