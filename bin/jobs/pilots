@@ -213,7 +213,7 @@ sub update_skill_queue {
             position     => $skill->position,
             skill_id     => $skill->skill_id,
             level        => $skill->level,
-            start_points => $skill->start_sp,
+            start_points => $skill->start_sp || 0,
             end_points   => $skill->end_sp,
             start_time   => $skill->start_time . '+0000',
             end_time     => $skill->end_time . '+0000',
