@@ -19,12 +19,11 @@
                 [% IF pilot.corporation_id %]
                 [% pilot.corporation_name %] ([% pilot.ticker %])<br />
                 [% END %]
-                Security Status: [% pilot.sec_status %]
-                <br />
                 [% pilot.balance | format_number %] ISK
                 [% IF pilot.skill_id %]
                 <br />
-                [% pilot.skill_name %] until [% pilot.skill_end_time %]
+                [% pilot.skill_name %]<br />
+                <span class="countdown" data="[% pilot.skill_end_time_js %]"></span>
                 [% END %]
             </p>
         </div>
