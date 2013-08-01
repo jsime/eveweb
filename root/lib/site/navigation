@@ -7,7 +7,7 @@
         <li><a href="[% c.uri_for('/wallet') %]">Wallet</a></li>
         <li class="divider"></li>
         <li><label>Community</label></li>
-        <li><a href="[% c.uri_for('/corporation') %]">Corporation</a></li>
+        <li><a href="[% c.uri_for('/corporations') %]">Corporations</a></li>
         <li><a href="[% c.uri_for('/alliance') %]">Alliance</a></li>
         <li><a href="[% c.uri_for('/forum') %]">Forums</a></li>
         <li><a href="[% c.uri_for('/killboard') %]">Killboard</a></li>
