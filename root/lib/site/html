@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/static/css/base.css" />
     <script src="/static/js/modernizr.min.js"></script>
     <script src="/static/js/moment.min.js"></script>
+    <script src="/static/js/eveweb.js"></script>
   </head>
   <body>
 [% content %]
