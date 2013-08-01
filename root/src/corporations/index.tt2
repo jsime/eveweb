@@ -1,0 +1,28 @@
+[% META title = 'Corporations' %]
+[% USE Number.Format %]
+
+[% PROCESS site/breadcrumbs %]
+
+[% FOREACH corp IN corporations %]
+[% IF loop.first || loop.count % 2 == 1 %]
+<div class="row">
+[% END %]
+<a href="[% c.uri_for('/corporations', corp.corporation_id) %]">
+<div class="large-6 columns">
+    <div class="row">
+        <div class="large-5 columns">
+            <img src="https://image.eveonline.com/Corporation/[% corp.corporation_id %]_256.png" />
+        </div>
+        <div class="large-7 columns">
+            <h2>[% corp.name %]</h2>
+            <p>
+            </p>
+        </div>
+    </div>
+</div>
+</a>
+[% IF loop.last || loop.count % 2 == 0 %]
+</div>
+<br />
+[% END %]
+[% END %]
