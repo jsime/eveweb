@@ -4,35 +4,75 @@
 
 [% PROCESS site/breadcrumbs %]
 
-[% FOREACH pilot IN pilots %]
-[% IF loop.first || loop.count % 2 == 1 %]
-<div class="row">
-[% END %]
-<a href="[% c.uri_for('/pilots', pilot.pilot_id) %]">
-<div class="large-6 columns">
+[% IF user.pilot_list_layout == 'list' %]
+    [% FOREACH pilot IN pilots %]
+    <a href="[% c.uri_for('/pilots', pilot.pilot_id) %]">
     <div class="row">
-        <div class="large-5 columns">
+        <div class="large-2 columns">
             <img src="https://image.eveonline.com/Character/[% pilot.pilot_id %]_256.jpg" />
         </div>
-        <div class="large-7 columns">
-            <h2>[% pilot.name %]</h2>
-            <p>
-                [% IF pilot.corporation_id %]
-                [% pilot.corporation_name %] ([% pilot.ticker %])<br />
-                [% END %]
-                [% pilot.balance | format_number %] ISK
-                [% IF pilot.skill_id %]
-                <br />
-                [% pilot.skill_name %] [% pilot.skill_level | roman %]<br />
-                <span class="countdown" data="[% pilot.skill_end_time_js %]"></span>
-                [% END %]
-            </p>
+        <div class="large-10 columns">
+            <div class="row">
+                <div class="large-5 columns">
+                    <h2>[% pilot.name %]</h2>
+                </div>
+                <div class="large-5 columns">
+                    <h3>[% pilot.corporation_name %]</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    [% pilot.balance | format_number %] ISK<br />
+                    Security: [% pilot.security_status %]
+                </div>
+                <div class="large-4 columns">
+                    Foo bar baz Blah<br />
+                    Lipsum dolem masur sit.
+                </div>
+                <div class="large-4 columns">
+                    [% IF pilot.skill_id %]
+                    [% pilot.skill_name %] [% pilot.skill_level | roman %]<br />
+                    <span class="countdown" data="[% pilot.skill_end_time_js %]"></span>
+                    [% END %]
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</a>
-[% IF loop.last || loop.count % 2 == 0 %]
-</div>
-<br />
-[% END %]
+    </a><br />
+    [% END %]
+[% ELSIF user.pilot_list_layout == 'small' %]
+<p>You've selected the small layout.</p>
+[% ELSE %]
+    [% FOREACH pilot IN pilots %]
+    [% IF loop.first || loop.count % 2 == 1 %]
+    <div class="row">
+    [% END %]
+    <a href="[% c.uri_for('/pilots', pilot.pilot_id) %]">
+    <div class="large-6 columns">
+        <div class="row">
+            <div class="large-5 columns">
+                <img src="https://image.eveonline.com/Character/[% pilot.pilot_id %]_256.jpg" />
+            </div>
+            <div class="large-7 columns">
+                <h2>[% pilot.name %]</h2>
+                <p>
+                    [% IF pilot.corporation_id %]
+                    [% pilot.corporation_name %] ([% pilot.ticker %])<br />
+                    [% END %]
+                    [% pilot.balance | format_number %] ISK
+                    [% IF pilot.skill_id %]
+                    <br />
+                    [% pilot.skill_name %] [% pilot.skill_level | roman %]<br />
+                    <span class="countdown short" data="[% pilot.skill_end_time_js %]"></span>
+                    [% END %]
+                </p>
+            </div>
+        </div>
+    </div>
+    </a>
+    [% IF loop.last || loop.count % 2 == 0 %]
+    </div>
+    <br />
+    [% END %]
+    [% END %]
 [% END %]
