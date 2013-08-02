@@ -1,9 +1,9 @@
 body {
 }
-p, label, input, legend, select, li, a, h1, h2, h3 {
+p, label, input, legend, select, li, a, h1, h2, h3, h4 {
     font-family: "Source Sans Pro" !important;
 }
-h1, h2, h3 {
+h1, h2, h3, h4 {
     font-weight: 200;
 }
 h1 {
@@ -13,7 +13,10 @@ h2 {
     font-size: 160%;
 }
 h3 {
-    font-size: 125%;
+    font-size: 135%;
+}
+h4 {
+    font-size: 120%;
 }
 form fieldset legend {
     font-size: 125%;
