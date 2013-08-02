@@ -20,7 +20,7 @@
             <div class="row">
                 <div class="large-6 columns">
                     [% pilot.balance | format_number %] ISK<br />
-                    Security: [% pilot.security_status %]
+                    Security: [% pilot.sec_status %]
                 </div>
                 <div class="large-6 columns">
                     [% IF pilot.skill_id %]
