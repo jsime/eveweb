@@ -19,7 +19,7 @@ Catalyst Controller.
 sub auto :Private {
     my ($self, $c) = @_;
 
-    $c->stash->{'user'}{'pilot.list.layout'} = 'large' unless exists $c->stash->{'user'}{'pilot.list.layout'};
+    $c->stash->{'user'}{'pilot_list_layout'} = 'large' unless exists $c->stash->{'user'}{'pilot_list_layout'};
 
     push(@{$c->stash->{'breadcrumbs'}}, { name => 'Pilots', link => $c->uri_for('/pilots') });
 
@@ -44,13 +44,13 @@ sub index :Path Args(0) {
         my $layout = lc($c->request->params->{'layout'});
 
         if ($layout =~ m{^(list|small|large)$}o) {
-            $c->stash->{'user'}{'pilot.list.layout'} = $layout;
+            $c->stash->{'user'}{'pilot_list_layout'} = $layout;
 
             $res = $c->model('DB')->do(q{
                 update public.user_prefs
                 set pref_value = ?,
                     updated_at = now()
-                where user_id = ? and pref_name = 'pilot.list.layout'
+                where user_id = ? and pref_name = 'pilot_list_layout'
             }, $layout, $c->stash->{'user'}{'user_id'});
 
             if ($res && $res->count < 1) {
@@ -58,7 +58,7 @@ sub index :Path Args(0) {
                     insert into public.user_prefs ???
                 }, {
                     user_id    => $c->stash->{'user'}{'user_id'},
-                    pref_name  => 'pilot.list.layout',
+                    pref_name  => 'pilot_list_layout',
                     pref_value => $layout,
                 });
             }
