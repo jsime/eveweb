@@ -85,9 +85,14 @@ sub index :Path Args(0) {
         order by p.name asc
     }, $c->stash->{'user'}{'timezone'}, $c->stash->{'user'}{'format_datetime'}, $c->stash->{'user'}{'user_id'});
 
-    $c->stash->{'pilots'} = [];
+    $c->stash->{'all_pilots'}      = [];
+    $c->stash->{'active_pilots'}   = [];
+    $c->stash->{'inactive_pilots'} = [];
     while ($res->next) {
-        push(@{$c->stash->{'pilots'}}, { map { $_ => $res->{$_} } $res->columns });
+        push(@{$c->stash->{'all_pilots'}}, { map { $_ => $res->{$_} } $res->columns });
+
+        push(@{$c->stash->{'active_pilots'}},   $c->stash->{'all_pilots'}[-1]) if  $res->{'active'};
+        push(@{$c->stash->{'inactive_pilots'}}, $c->stash->{'all_pilots'}[-1]) if !$res->{'active'};
     }
 
     $c->stash->{'template'} = 'pilots/index.tt2';
