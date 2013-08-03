@@ -93,7 +93,7 @@ sub index :Path Args(0) {
     $c->stash->{'template'} = 'pilots/index.tt2';
 }
 
-sub pilots : PathPath Chained('/') Args(1) {
+sub pilots : PathPart Chained('/') Args(1) {
     my ($self, $c, $pilot_id) = @_;
 
     my $res = $c->model('DB')->do(q{
