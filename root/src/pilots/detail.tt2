@@ -4,10 +4,14 @@
 [% PROCESS site/breadcrumbs %]
 
 <div class="row">
-    <div class="large-10 columns">
+    <div class="large-9 columns">
         <h1>[% pilot.name %]</h1>
     </div>
-    <div class="large-2 columns">
-        <a href="[% c.uri_for('/pilots/toggle_active', { pilot_id => pilot.pilot_id }) %]" class="small button success right">Active</a>
+    <div class="large-3 columns">
+        [% IF pilot.active %]
+        <a href="[% c.uri_for('/pilots/toggle_active', { pilot_id => pilot.pilot_id }) %]" class="right button success">Active</a>
+        [% ELSE %]
+        <a href="[% c.uri_for('/pilots/toggle_active', { pilot_id => pilot.pilot_id }) %]" class="right button secondary">Inactive</a>
+        [% END %]
     </div>
 </div>
