@@ -1,5 +1,6 @@
 [% META title = 'Pilot' %]
 [% USE Number.Format %]
+[% USE Roman %]
 
 [% PROCESS site/breadcrumbs %]
 
@@ -21,3 +22,23 @@
         [% END %]
     </div>
 </div>
+<br />
+
+<h2>Skill Queue</h2>
+<table>
+<thead>
+<tr>
+<td>Skill</td>
+<td>Rank</td>
+<td colspan="2">Finishes</td>
+</tr>
+</thead>
+[% FOREACH skill IN skill_queue %]
+<tr>
+<td>[% skill.name %] [% skill.level | roman %]</td>
+<td>[% skill.rank %]</td>
+<td>[% skill.end_time %]</td>
+<td><span class="countdown short" data="[% skill.end_time_js %]"></span></td>
+</tr>
+[% END %]
+</table>
