@@ -205,11 +205,13 @@ create table eve.pilots (
     birthdate    timestamp with time zone not null,
     balance      numeric,
     sec_status   numeric(6,4) not null,
-    cached_until timestamp with time zone not null
+    cached_until timestamp with time zone not null,
+    active       boolean not null default 't'
 );
 
 create unique index pilots_name_idx on eve.pilots (name);
 create index pilots_cached_until_idx on eve.pilots (cached_until);
+create index pilots_active_idx on eve.pilots (active);
 
 create table eve.pilot_api_keys (
     pilot_id integer not null,
