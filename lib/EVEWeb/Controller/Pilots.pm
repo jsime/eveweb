@@ -114,6 +114,40 @@ sub pilots : PathPart Chained('/') Args(1) {
     $c->stash->{'template'} = 'pilots/detail.tt2';
 }
 
+sub toggle_active {
+    my ($self, $c) = @_;
+
+    my $pilot_id = $c->request->params->{'pilot_id'};
+
+    unless ($pilot_id) {
+        $c->response->redirect($c->uri_for('/pilots'));
+        return;
+    }
+
+    my $res = $c->model('DB')->do(q{
+        select p.active
+        from eve.pilots p
+            join eve.pilot_api_keys pk on (pk.pilot_id = p.pilot_id)
+            join eve.api_keys k on (k.key_id = pk.key_id)
+        where p.pilot_id = ?
+            and k.user_id = ?
+    }, $pilot_id, $c->stash->{'user'}{'user_id'});
+
+    unless ($res && $res->next) {
+        $c->response->redirect($c->uri_for('/pilots', $pilot_id));
+        return;
+    }
+
+    $res = $c->model('DB')->do(q{
+        update eve.pilots
+        set active = ?
+        where pilot_id = ?
+    }, ($res->{'active'} ? 'f' : 't'), $pilot_id);
+
+    $c->response->redirect($c->uri_for('/pilots', $pilot_id));
+}
+
+
 =head1 AUTHOR
 
 Jon Sime,,,
