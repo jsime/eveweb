@@ -19,7 +19,7 @@ Catalyst Controller.
 sub auto :Private {
     my ($self, $c) = @_;
 
-    $c->stash->{'user'}{'pilot_list_layout'} = 'large' unless exists $c->stash->{'user'}{'pilot_list_layout'};
+    $c->stash->{'user'}{'pilot_list_layout'} = 'grid' unless exists $c->stash->{'user'}{'pilot_list_layout'};
 
     push(@{$c->stash->{'breadcrumbs'}}, { name => 'Pilots', link => $c->uri_for('/pilots') });
 }
