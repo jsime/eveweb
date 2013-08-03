@@ -42,7 +42,7 @@ sub index :Path Args(0) {
     if (exists $c->request->params->{'layout'}) {
         my $layout = lc($c->request->params->{'layout'});
 
-        if ($layout =~ m{^(list|small|large)$}o) {
+        if ($layout =~ m{^(list|grid)$}o) {
             $c->stash->{'user'}{'pilot_list_layout'} = $layout;
 
             $res = $c->model('DB')->do(q{
