@@ -25,20 +25,26 @@
 <br />
 
 <h2>Skill Queue</h2>
-<table>
-<thead>
-<tr>
-<td>Skill</td>
-<td>Rank</td>
-<td colspan="2">Finishes</td>
-</tr>
-</thead>
+<table class="full-width">
+    <thead>
+        <tr>
+            <td>Skill</td>
+            <td>Rank</td>
+            <td>Progress</td>
+            <td colspan="2">Finishes</td>
+        </tr>
+    </thead>
 [% FOREACH skill IN skill_queue %]
-<tr>
-<td>[% skill.name %] [% skill.level | roman %]</td>
-<td>[% skill.rank %]</td>
-<td>[% skill.end_time %]</td>
-<td><span class="countdown short" data="[% skill.end_time_js %]"></span></td>
-</tr>
+    <tr>
+        <td>[% skill.name %] [% skill.level | roman %]</td>
+        <td>[% skill.rank %]</td>
+        <td>
+            <div class="progress">
+                <span class="meter" style="width:[% 32 %]%;"></span>
+            </div>
+        </td>
+        <td>[% skill.end_time %]</td>
+        <td><span class="countdown short" data="[% skill.end_time_js %]"></span></td>
+    </tr>
 [% END %]
 </table>
