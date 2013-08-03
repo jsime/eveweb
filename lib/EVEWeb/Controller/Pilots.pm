@@ -119,14 +119,18 @@ sub pilots : PathPart Chained('/') Args(1) {
     $res = $c->model('DB')->do(q{
         select s.skill_id, s.name, s.rank, s.description, sg.name as group_name,
             sq.position, sq.level, sq.start_points, sq.end_points,
-            sq.start_time,
-            sq.end_time
+            to_char(sq.start_time at time zone ?, ?) as start_time,
+            to_char(sq.end_time at time zone ?, ?) as end_time,
+            sq.start_time as start_time_js,
+            sq.end_time as end_time_js
         from plans.skill_queues sq
             join ccp.skills s on (s.skill_id = sq.skill_id)
             join ccp.skill_groups sg on (sg.skill_group_id = s.skill_group_id)
         where sq.pilot_id = ?
         order by sq.position asc
-    }, $pilot_id);
+    }, $c->stash->{'user'}{'timezone'}, $c->stash->{'user'}{'format_datetime'},
+       $c->stash->{'user'}{'timezone'}, $c->stash->{'user'}{'format_datetime'},
+       $pilot_id);
 
     $c->stash->{'skill_queue'} = [];
 
