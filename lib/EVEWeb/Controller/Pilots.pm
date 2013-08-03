@@ -116,6 +116,24 @@ sub pilots : PathPart Chained('/') Args(1) {
 
     $c->stash->{'pilot'} = { map { $_ => $res->{$_} } $res->columns };
 
+    $res = $c->model('DB')->do(q{
+        select s.skill_id, s.name, s.rank, s.description, sg.name as group_name,
+            sq.position, sq.level, sq.start_points, sq.end_points,
+            sq.start_time,
+            sq.end_time
+        from plans.skill_queues sq
+            join ccp.skills s on (s.skill_id = sq.skill_id)
+            join ccp.skill_groups sg on (sg.skill_group_id = s.skill_group_id)
+        where sq.pilot_id = ?
+        order by sq.position asc
+    }, $pilot_id);
+
+    $c->stash->{'skill_queue'} = [];
+
+    while ($res->next) {
+        push(@{$c->stash->{'skill_queue'}}, { map { $_ => $res->{$_} } $res->columns });
+    }
+
     push(@{$c->stash->{'breadcrumbs'}}, { name => $res->{'name'}, link => $c->uri_for('/pilots', $pilot_id) });
 
     $c->stash->{'template'} = 'pilots/detail.tt2';
