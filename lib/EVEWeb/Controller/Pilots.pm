@@ -25,8 +25,7 @@ sub auto :Private {
 
     $c->stash->{'layouts'} = [
         { name => 'List', link => $c->uri_for('/pilots', { layout => 'list' }) },
-        { name => 'Small', link => $c->uri_for('/pilots', { layout => 'small' }) },
-        { name => 'Large', link => $c->uri_for('/pilots', { layout => 'large' }) },
+        { name => 'Grid', link => $c->uri_for('/pilots', { layout => 'grid' }) },
     ];
 }
 
