@@ -33,8 +33,6 @@
     </div>
     </a><br />
     [% END %]
-[% ELSIF user.pilot_list_layout == 'small' %]
-<p>You've selected the small layout.</p>
 [% ELSE %]
     [% FOREACH pilot IN pilots %]
     [% IF loop.first || loop.count % 2 == 1 %]
