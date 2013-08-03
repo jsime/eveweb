@@ -8,6 +8,6 @@
         <h1>[% pilot.name %]</h1>
     </div>
     <div class="large-2 columns">
-        <a href="#" class="small button success right">Active</a>
+        <a href="[% c.uri_for('/pilots/toggle_active', { pilot_id => pilot.pilot_id }) %]" class="small button success right">Active</a>
     </div>
 </div>
