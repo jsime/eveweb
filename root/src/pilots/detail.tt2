@@ -36,7 +36,11 @@
     </thead>
 [% FOREACH skill IN skill_queue %]
     <tr>
-        <td>[% skill.name %] [% skill.level | roman %]</td>
+        <td>
+            <a href="[% c.uri_for('/skills', skill.skill_id) %]">
+                [% skill.name %] [% skill.level | roman %]
+            </a>
+        </td>
         <td>[% skill.rank %]</td>
         <td>
             <div class="progress">
