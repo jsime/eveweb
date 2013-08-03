@@ -134,7 +134,7 @@ sub pilots : PathPart Chained('/') Args(1) {
         push(@{$c->stash->{'skill_queue'}}, { map { $_ => $res->{$_} } $res->columns });
     }
 
-    push(@{$c->stash->{'breadcrumbs'}}, { name => $res->{'name'}, link => $c->uri_for('/pilots', $pilot_id) });
+    push(@{$c->stash->{'breadcrumbs'}}, { name => $c->stash->{'pilot'}{'name'}, link => $c->uri_for('/pilots', $pilot_id) });
 
     $c->stash->{'template'} = 'pilots/detail.tt2';
 }
