@@ -4,10 +4,16 @@
 [% PROCESS site/breadcrumbs %]
 
 <div class="row">
-    <div class="large-9 columns">
-        <h1>[% pilot.name %]</h1>
+    <div class="large-4 columns">
+        <img src="//image.eveonline.com/Character/[% pilot.pilot_id %]_512.jpg" />
     </div>
-    <div class="large-3 columns">
+    <div class="large-6 columns">
+        <h1>[% pilot.name %]</h1>
+        <h2>[% pilot.corporation_name %]</h2>
+        <h2>An Alliance</h2>
+        <p>Security: [% pilot.sec_status %]</p>
+    </div>
+    <div class="large-2 columns">
         [% IF pilot.active %]
         <a href="[% c.uri_for('/pilots/toggle_active', { pilot_id => pilot.pilot_id }) %]" class="right button success">Active</a>
         [% ELSE %]
