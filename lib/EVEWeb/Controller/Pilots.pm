@@ -22,11 +22,6 @@ sub auto :Private {
     $c->stash->{'user'}{'pilot_list_layout'} = 'large' unless exists $c->stash->{'user'}{'pilot_list_layout'};
 
     push(@{$c->stash->{'breadcrumbs'}}, { name => 'Pilots', link => $c->uri_for('/pilots') });
-
-    $c->stash->{'layouts'} = [
-        { name => 'List', link => $c->uri_for('/pilots', { layout => 'list' }) },
-        { name => 'Grid', link => $c->uri_for('/pilots', { layout => 'grid' }) },
-    ];
 }
 
 
@@ -36,6 +31,11 @@ sub auto :Private {
 
 sub index :Path Args(0) {
     my ( $self, $c ) = @_;
+
+    $c->stash->{'layouts'} = [
+        { name => 'List', link => $c->uri_for('/pilots', { layout => 'list' }) },
+        { name => 'Grid', link => $c->uri_for('/pilots', { layout => 'grid' }) },
+    ];
 
     my ($res);
 
