@@ -65,7 +65,7 @@
     [% END %]
     [% END %]
 [% ELSE %]
-    [% FOREACH pilot IN pilots %]
+    [% FOREACH pilot IN active_pilots %]
     [% IF loop.first || loop.count % 2 == 1 %]
     <div class="row">
     [% END %]
@@ -95,6 +95,42 @@
     [% IF loop.last || loop.count % 2 == 0 %]
     </div>
     <br />
+    [% END %]
+    [% END %]
+
+    [% IF inactive_pilots.size > 0 %]
+    <h2>Inactive Pilots</h2>
+    [% FOREACH pilot IN inactive_pilots %]
+    [% IF loop.first || loop.count % 2 == 1 %]
+    <div class="row">
+    [% END %]
+    <a href="[% c.uri_for('/pilots', pilot.pilot_id) %]">
+    <div class="large-6 columns">
+        <div class="row">
+            <div class="large-5 columns">
+                <img src="https://image.eveonline.com/Character/[% pilot.pilot_id %]_256.jpg" />
+            </div>
+            <div class="large-7 columns">
+                <h2>[% pilot.name %]</h2>
+                <p>
+                    [% IF pilot.corporation_id %]
+                    [% pilot.corporation_name %] ([% pilot.ticker %])<br />
+                    [% END %]
+                    [% pilot.balance | format_number %] ISK
+                    [% IF pilot.skill_id %]
+                    <br />
+                    [% pilot.skill_name %] [% pilot.skill_level | roman %]<br />
+                    <span class="countdown short" data="[% pilot.skill_end_time_js %]"></span>
+                    [% END %]
+                </p>
+            </div>
+        </div>
+    </div>
+    </a>
+    [% IF loop.last || loop.count % 2 == 0 %]
+    </div>
+    <br />
+    [% END %]
     [% END %]
     [% END %]
 [% END %]
