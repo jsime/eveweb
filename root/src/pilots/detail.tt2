@@ -3,4 +3,11 @@
 
 [% PROCESS site/breadcrumbs %]
 
-<h1>[% pilot.name %]</h1>
+<div class="row">
+    <div class="large-10 columns">
+        <h1>[% pilot.name %]</h1>
+    </div>
+    <div class="large-2 columns">
+        <a href="#" class="small button success right">Active</a>
+    </div>
+</div>
