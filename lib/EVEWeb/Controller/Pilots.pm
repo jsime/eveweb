@@ -114,7 +114,7 @@ sub pilots : PathPart Chained('/') Args(1) {
     $c->stash->{'template'} = 'pilots/detail.tt2';
 }
 
-sub toggle_active {
+sub toggle_active :Local :Args(0) {
     my ($self, $c) = @_;
 
     my $pilot_id = $c->request->params->{'pilot_id'};
