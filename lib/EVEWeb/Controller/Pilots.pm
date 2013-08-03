@@ -101,8 +101,11 @@ sub pilots : PathPart Chained('/') Args(1) {
     my ($self, $c, $pilot_id) = @_;
 
     my $res = $c->model('DB')->do(q{
-        select p.*
+        select p.*,
+            c.corporation_id, c.name as corporation_name, c.ticker as corporation_ticker
         from eve.pilots p
+            left join eve.pilot_corporations pc on (pc.pilot_id = p.pilot_id and pc.to_datetime is null)
+            left join eve.corporations c on (c.corporation_id = pc.corporation_id)
         where p.pilot_id = ?
     }, $pilot_id);
 
