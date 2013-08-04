@@ -56,6 +56,9 @@ create table public.roles (
 
 create unique index roles_lower_role_name_idx on public.roles (lower(role_name));
 
+insert into public.roles (role_name) values
+    ('superadmin'),('admin'),('moderator');
+
 create table public.user_roles (
     user_id     integer not null,
     role_id     integer not null,
