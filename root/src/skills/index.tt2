@@ -5,7 +5,7 @@
 [% PROCESS site/breadcrumbs %]
 
 <div class="row">
-    <div class="large-3 columns">
+    <div class="large-4 columns">
         <div class="section-container accordion" data-section="accordion">
         [% FOREACH group IN skill_groups.keys.sort %]
             <section>
