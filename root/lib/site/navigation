@@ -2,7 +2,7 @@
     <ul class="side-nav">
         <li><a href="[% c.uri_for('/') %]">Dashboard</a></li>
         <li><a href="[% c.uri_for('/pilots') %]">Pilots</a></li>
-        <li><a href="[% c.uri_for('/skill') %]">Skills</a></li>
+        <li><a href="[% c.uri_for('/skills') %]">Skills</a></li>
         <li><a href="[% c.uri_for('/certificate') %]">Certificates</a></li>
         <li><a href="[% c.uri_for('/wallet') %]">Wallet</a></li>
         <li class="divider"></li>
