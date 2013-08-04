@@ -1,0 +1,63 @@
+#!/usr/bin/env perl
+
+use v5.10;
+use strict;
+use warnings FATAL => 'all';
+
+use Config::Any;
+use Data::Dumper;
+use DBIx::DataStore ( config => 'yaml' );
+use File::Basename;
+
+my ($SCRIPT, $BASEDIR) = fileparse(__FILE__);
+eval <<EOV;
+    use lib '$BASEDIR/../lib';
+EOV
+die "Could not set up environment properly.\n" if $@;
+
+my $cfg = Config::Any->load_files({
+    files => ["$BASEDIR/../eveweb.conf"],
+    use_ext => 1,
+    flatten_to_hash => 1,
+});
+$cfg = $cfg->{(keys %{$cfg})[0]};
+
+exit usage() if $ARGV[0] =~ m|^-{0,2}h(elp)?$|o;
+
+my $db = DBIx::DataStore->new($cfg->{'Model::DB'}{'datastore'});
+
+
+sub usage {
+    print <<EOU;
+$SCRIPT - Manage System Roles for EVEWeb
+
+LIST ROLES
+
+    $SCRIPT list
+
+LIST ROLE MEMBERS
+
+    $SCRIPT status [<role>]
+
+SHOW MEMBER ROLES
+
+    $SCRIPT member <userid|username|email>
+
+GRANT ROLE
+
+    $SCRIPT grant <role> <userid|username|email>
+
+Take note that granting superadmin implicitly grants admin as well.
+You may grant to more than one member in a single run by separating
+their ID/name/email with spaces.
+
+REVOKE ROLE
+
+    $SCRIPT revoke <role> <userid|username|email>
+
+Take note that revoking admin implicitly revokes superadmin as well.
+You may revoke from more than one member in a single run by separating
+their ID/name/email with spaces.
+
+EOU
+}
