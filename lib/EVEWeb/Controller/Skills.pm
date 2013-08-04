@@ -20,6 +20,18 @@ sub auto :Private {
     my ($self, $c) = @_;
 
     push(@{$c->stash->{'breadcrumbs'}}, { name => 'Skills', link => $c->uri_for('/skills') });
+
+    my $res = $c->model('DB')->do(q{
+        select *
+        from ccp.skill_groups
+        where published
+        order by name asc
+    });
+
+    $c->stash->{'skill_groups'} = [];
+    while ($res->next) {
+        push(@{$c->stash->{'skill_groups'}}, { map { $_ => $res->{$_} } $res->columns });
+    }
 }
 
 
