@@ -8,6 +8,7 @@ use Config::Any;
 use Data::Dumper;
 use DBIx::DataStore ( config => 'yaml' );
 use File::Basename;
+use Text::Wrap;
 
 my ($SCRIPT, $BASEDIR) = fileparse(__FILE__);
 eval <<EOV;
@@ -37,6 +38,25 @@ exit grant_roles(shift @ARGV, users(@ARGV))  if $command eq 'grant';
 exit revoke_roles(shift @ARGV, users(@ARGV)) if $command eq 'revoke';
 
 sub list_roles {
+    my $res = $db->do(q{
+        select r.role_id, r.role_name, r.description,
+            count(ur.user_id) as num_users
+        from public.roles r
+            left join public.user_roles ur on (ur.role_id = r.role_id)
+        group by r.role_id, r.role_name, r.description
+        order by r.role_name asc
+    });
+
+    return 1 unless $res;
+
+    printf("%-16s  %6s  %s\n", 'Role', 'Users', 'Description');
+    print '-' x 76 . "\n";
+    while ($res->next) {
+        print wrap(sprintf('%-16s  %6d  ', $res->{'role_name'}, $res->{'num_users'}),
+            ' ' x 26, $res->{'description'});
+        print "\n" . '-' x 76 . "\n";
+    }
+
     return 0;
 }
 
