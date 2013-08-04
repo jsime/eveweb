@@ -1,6 +1,6 @@
 [% META title = 'Dashboard' %]
 
-<h1>Pilots</h1>
+<h1>Active Pilots</h1>
 
 [% FOREACH pilot IN pilots %]
 [% IF loop.first || loop.count % 12 == 1 %]

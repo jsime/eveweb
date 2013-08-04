@@ -40,6 +40,7 @@ sub index :Path :Args(0) {
                                   join eve.api_keys k on (k.key_id = pk.key_id)
                               where k.user_id = ?
                             )
+            and p.active
         order by p.name asc
     }, $c->stash->{'user'}{'user_id'});
 
