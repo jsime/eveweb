@@ -50,14 +50,18 @@ create index password_resets_reset_at_idx on public.password_resets (reset_at);
 create index password_resets_valid_until_idx on public.password_resets (valid_until);
 
 create table public.roles (
-    role_id serial not null primary key,
-    role_name text not null
+    role_id     serial not null primary key,
+    role_name   text not null,
+    description text
 );
 
 create unique index roles_lower_role_name_idx on public.roles (lower(role_name));
 
-insert into public.roles (role_name) values
-    ('superadmin'),('admin'),('moderator');
+insert into public.roles (role_name, description) values
+    ('superadmin','Super Admins have all the permissions of Admins, with the added ability to create new Admins and Super Admins.'),
+    ('admin','Administrators may view all users, pilots, corporations and alliances. This role should be granted sparingly.'),
+    ('moderator','Moderators are granted the ability to manage forums and comments, but only within their corporations.')
+;
 
 create table public.user_roles (
     user_id     integer not null,
