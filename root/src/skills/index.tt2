@@ -4,3 +4,21 @@
 
 [% PROCESS site/breadcrumbs %]
 
+<div class="row">
+    <div class="large-3 columns">
+        <div class="section-container accordion" data-section="accordion">
+        [% FOREACH group IN skill_groups %]
+            <section>
+                <p class="title" data-section-title><a href="#">[% group.name %]</a></p>
+                <div class="content" data-section-content>
+                    <ul>
+                        <li>Foo</li>
+                        <li>Bar</li>
+                        <li>Baz</li>
+                    </ul>
+                </div>
+            </section>
+        [% END %]
+        </div>
+    </div>
+</div>
