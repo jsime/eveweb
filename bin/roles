@@ -65,6 +65,28 @@ sub list_members {
 }
 
 sub member_roles {
+    my (@userids) = @_;
+
+    die "No valid users provided.\n" unless @userids > 0;
+
+    my $res = $db->do(q{
+        select u.user_id, u.username, u.email,
+            array_agg(r.role_name) as roles
+        from public.users u
+            left join public.user_roles ur on (ur.user_id = u.user_id)
+            left join public.roles r on (r.role_id = ur.role_id)
+        where u.user_id in ???
+        group by u.user_id, u.username, u.email
+        order by u.username
+    }, \@userids);
+
+    die $res->error unless $res;
+
+    while ($res->next) {
+        printf("%s (%d) - %s\n    Roles: %s\n\n", $res->{'username'}, $res->{'user_id'}, $res->{'email'},
+            join(', ', sort @{$res->{'roles'}}));
+    }
+
     return 0;
 }
 
