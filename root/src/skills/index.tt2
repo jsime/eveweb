@@ -7,14 +7,14 @@
 <div class="row">
     <div class="large-3 columns">
         <div class="section-container accordion" data-section="accordion">
-        [% FOREACH group IN skill_groups %]
+        [% FOREACH group IN skill_groups.keys.sort %]
             <section>
-                <p class="title" data-section-title><a href="#">[% group.name %]</a></p>
+                <p class="title" data-section-title><a href="#">[% skill_groups.$group.skill_group_name %]</a></p>
                 <div class="content" data-section-content>
                     <ul class="side-nav">
-                        <li>Foo</li>
-                        <li>Bar</li>
-                        <li>Baz</li>
+                    [% FOREACH skill IN skill_groups.$group.skills %]
+                        <li>[% skill.name %]</li>
+                    [% END %]
                     </ul>
                 </div>
             </section>
