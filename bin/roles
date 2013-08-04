@@ -22,10 +22,59 @@ my $cfg = Config::Any->load_files({
 });
 $cfg = $cfg->{(keys %{$cfg})[0]};
 
-exit usage() if $ARGV[0] =~ m|^-{0,2}h(elp)?$|o;
+exit usage() if @ARGV < 1 || $ARGV[0] =~ m|^-{0,2}h(elp)?$|o;
+
+my $command = lc(shift @ARGV);
+exit usage() unless $command =~ m{^(list|status|member|grant|revoke)$}o;
 
 my $db = DBIx::DataStore->new($cfg->{'Model::DB'}{'datastore'});
 
+exit list_roles()               if $command eq 'list';
+exit list_members(shift @ARGV)  if $command eq 'status';
+exit member_roles(users(@ARGV)) if $command eq 'member';
+
+exit grant_roles(shift @ARGV, users(@ARGV))  if $command eq 'grant';
+exit revoke_roles(shift @ARGV, users(@ARGV)) if $command eq 'revoke';
+
+sub list_roles {
+    return 0;
+}
+
+sub list_members {
+    return 0;
+}
+
+sub member_roles {
+    return 0;
+}
+
+sub grant_roles {
+    return 0;
+}
+
+sub revoke_roles {
+    return 0;
+}
+
+sub users {
+    my @keys = map { lc($_) } @_;
+
+    my $res = $db->do(q{
+        select u.user_id
+        from public.users u
+        where u.user_id in ???
+      union
+        select u.user_id
+        from public.users u
+        where lower(u.username) in ??? or lower(u.email) in ???
+    }, [-1, grep { $_ =~ m{^\d+$}o } @keys], ['',@keys], ['',@keys]);
+
+    die $res->error unless $res;
+
+    my @users;
+    push(@users, $res->{'user_id'}) while $res->next;
+    return @users;
+}
 
 sub usage {
     print <<EOU;
