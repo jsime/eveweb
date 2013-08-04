@@ -69,6 +69,38 @@ sub member_roles {
 }
 
 sub grant_roles {
+    my ($role, @userids) = @_;
+
+    die "No valid users provided.\n" unless @userids > 0;
+
+    my $res = $db->do(q{
+        select r.role_id
+        from public.roles r
+        where lower(r.role_name) = ?
+    }, lc($role));
+
+    die "Invalid role name: $role\n" unless $res && $res->next;
+
+    my $role_id = $res->{'role_id'};
+
+    $res = $db->do(q{
+        insert into public.user_roles
+            ( role_id, user_id )
+        select cast(? as integer), u.user_id
+        from public.users u
+        where u.user_id in ???
+      except
+        select ?, u.user_id
+        from public.users u
+            join public.user_roles ur on (ur.user_id = u.user_id)
+        where u.user_id in ???
+            and ur.role_id = ?
+    }, $role_id, \@userids, $role_id, \@userids, $role_id);
+
+    die $res->error unless $res;
+
+    print "Roles granted.\n";
+
     return 0;
 }
 
