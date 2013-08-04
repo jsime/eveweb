@@ -83,8 +83,13 @@ sub member_roles {
     die $res->error unless $res;
 
     while ($res->next) {
-        printf("%s (%d) - %s\n    Roles: %s\n\n", $res->{'username'}, $res->{'user_id'}, $res->{'email'},
-            join(', ', sort @{$res->{'roles'}}));
+        printf("%s (%d) - %s\n", $res->{'username'}, $res->{'user_id'}, $res->{'email'});
+
+        if (grep { defined $_ } @{$res->{'roles'}}) {
+            printf("    Roles: %s\n\n", join(', ', sort @{$res->{'roles'}}));
+        } else {
+            print "    No Roles\n\n";
+        }
     }
 
     return 0;
