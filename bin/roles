@@ -105,6 +105,29 @@ sub grant_roles {
 }
 
 sub revoke_roles {
+    my ($role, @userids) = @_;
+
+    die "No valid users provided.\n" unless @userids > 0;
+
+    my $res = $db->do(q{
+        select r.role_id
+        from public.roles r
+        where lower(r.role_name) = ?
+    }, lc($role));
+
+    die "Invalid role name: $role\n" unless $res && $res->next;
+
+    my $role_id = $res->{'role_id'};
+
+    $res = $db->do(q{
+        delete from public.user_roles
+        where role_id = ? and user_id in ???
+    }, $role_id, \@userids);
+
+    die $res->error unless $res;
+
+    print "Roles revoked.\n";
+
     return 0;
 }
 
