@@ -22,15 +22,27 @@ sub auto :Private {
     push(@{$c->stash->{'breadcrumbs'}}, { name => 'Skills', link => $c->uri_for('/skills') });
 
     my $res = $c->model('DB')->do(q{
-        select *
-        from ccp.skill_groups
-        where published
-        order by name asc
+        select sg.skill_group_id, sg.name as skill_group_name,
+            s.skill_id, s.name, s.description, s.rank,
+            s.primary_attribute_id, s.secondary_attribute_id
+        from ccp.skill_groups sg
+            join ccp.skills s on (s.skill_group_id = sg.skill_group_id)
+        where sg.published and s.published
+        order by sg.name asc, s.name asc
     });
 
-    $c->stash->{'skill_groups'} = [];
+    $c->stash->{'skill_groups'} = {};
+
     while ($res->next) {
-        push(@{$c->stash->{'skill_groups'}}, { map { $_ => $res->{$_} } $res->columns });
+        my $group = $res->{'skill_group_name'};
+
+        $c->stash->{'skill_groups'}{$group} = {
+            skill_group_id   => $res->{'skill_group_id'},
+            skill_group_name => $res->{'skill_group_name'},
+            skills           => [],
+        } unless exists $c->stash->{'skill_groups'}{$group};
+
+        push(@{$c->stash->{'skill_groups'}{$group}{'skills'}}, { map { $_ => $res->{$_} } $res->columns });
     }
 }
 
