@@ -238,17 +238,9 @@ GRANT ROLE
 
     $SCRIPT grant <role> <userid|username|email>
 
-Take note that granting superadmin implicitly grants admin as well.
-You may grant to more than one member in a single run by separating
-their ID/name/email with spaces.
-
 REVOKE ROLE
 
     $SCRIPT revoke <role> <userid|username|email>
-
-Take note that revoking admin implicitly revokes superadmin as well.
-You may revoke from more than one member in a single run by separating
-their ID/name/email with spaces.
 
 EOU
 }
