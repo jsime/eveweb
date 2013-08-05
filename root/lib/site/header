@@ -5,6 +5,15 @@
     [% IF c.user_exists %]
     <section class="top-bar-section">
         <ul class="right">
+            [% IF c.check_user_roles('admin') %]
+            <li class="has-dropdown">
+                <a href="/admin">Admin</a>
+                <ul class="dropdown">
+                    <li><a href="/admin/users">Users</a></li>
+                    <li><a href="/admin/jobs">Jobs</a></li>
+                </ul>
+            </li>
+            [% END %]
             <li class="has-dropdown">
                 <a href="/messages">Messages (72)</a>
                 <ul class="dropdown">
