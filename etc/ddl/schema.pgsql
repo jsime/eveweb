@@ -58,7 +58,7 @@ create table public.roles (
 create unique index roles_lower_role_name_idx on public.roles (lower(role_name));
 
 insert into public.roles (role_name, description) values
-    ('superadmin','Super Admins have all the permissions of Admins, with the added ability to create new Admins and Super Admins.'),
+    ('superadmin','Super Admins are able to create administrators (and other super admins), but otherwise have no privileges.'),
     ('admin','Administrators may view all users, pilots, corporations and alliances. This role should be granted sparingly.'),
     ('moderator','Moderators are granted the ability to manage forums and comments, but only within their corporations.')
 ;
