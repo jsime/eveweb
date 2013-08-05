@@ -61,6 +61,46 @@ sub list_roles {
 }
 
 sub list_members {
+    my ($role) = @_;
+
+    my ($res);
+
+    if ($role) {
+        $res = $db->do(q{
+            select r.role_id, r.role_name, r.description,
+                array_agg(u.username) as usernames
+            from public.roles r
+                left join public.user_roles ur on (ur.role_id = r.role_id)
+                left join public.users u on (u.user_id = ur.user_id)
+            where lower(r.role_name) = ?
+            group by r.role_id, r.role_name, r.description
+        }, $role);
+    } else {
+        $res = $db->do(q{
+            select r.role_id, r.role_name, r.description,
+                array_agg(u.username) as usernames
+            from public.roles r
+                left join public.user_roles ur on (ur.role_id = r.role_id)
+                left join public.users u on (u.user_id = ur.user_id)
+            group by r.role_id, r.role_name, r.description
+            order by r.role_name asc
+        });
+    }
+
+    die $res->error unless $res;
+
+    while ($res->next) {
+       printf("%s\nRole: %s\n%s\n%s\n\nMembers:\n",
+            '-' x 76, $res->{'role_name'}, '-' x 76, wrap('','',$res->{'description'}));
+
+        if (grep { defined $_ } @{$res->{'usernames'}}) {
+            print wrap('    ', '    ', join(', ', sort @{$res->{'usernames'}}));
+            print "\n\n";
+        } else {
+            print "    None\n\n";
+        }
+    }
+
     return 0;
 }
 
