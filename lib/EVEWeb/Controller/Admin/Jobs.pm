@@ -29,6 +29,8 @@ sub auto :Private {
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
+    my $json = JSON->new;
+
     my $res = $c->model('DB')->do(q{
         select j.job_id, j.job_type, j.job_key, j.stash, j.run_host, j.run_pid,
             to_char(j.run_at      at time zone ?, ?) as run_at,
@@ -47,6 +49,9 @@ sub index :Path :Args(0) {
 
         while ($res->next) {
             push(@{$c->stash->{'current_jobs'}}, { map { $_ => $res->{$_} } $res->columns });
+
+            $c->stash->{'current_jobs'}[-1]->{'stash'} =
+                $json->pretty->encode($json->decode($c->stash->{'current_jobs'}[-1]->{'stash'}));
         }
     }
     
@@ -67,6 +72,9 @@ sub index :Path :Args(0) {
 
         while ($res->next) {
             push(@{$c->stash->{'open_jobs'}}, { map { $_ => $res->{$_} } $res->columns });
+
+            $c->stash->{'open_jobs'}[-1]->{'stash'} =
+                $json->pretty->encode($json->decode($c->stash->{'open_jobs'}[-1]->{'stash'}));
         }
     }
     
@@ -87,6 +95,9 @@ sub index :Path :Args(0) {
 
         while ($res->next) {
             push(@{$c->stash->{'finished_jobs'}}, { map { $_ => $res->{$_} } $res->columns });
+
+            $c->stash->{'finished_jobs'}[-1]->{'stash'} =
+                $json->pretty->encode($json->decode($c->stash->{'finished_jobs'}[-1]->{'stash'}));
         }
     }
     
