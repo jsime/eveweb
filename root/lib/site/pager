@@ -1,0 +1,31 @@
+[% IF pager.last_page > 1 %]
+<div class="center">
+    <ul class="pagination">
+        [% IF pager.current_page == pager.first_page %]
+        <li class="arrow unavailable"><a>&laquo;</a></li>
+        [% ELSE %]
+        <li class="arrow"><a href="">&laquo;</a></li>
+        [% END %]
+
+        [% IF pager.last_page <= 10 %]
+            [% pager_i = 1 %]
+            [% WHILE pager_i <= pager.last_page %]
+                [% IF pager_i == pager.current_page %]
+                    <li class="current"><a>[% pager_i %]</a></li>
+                [% ELSE %]
+                    <li><a href="">[% pager_i %]</a></li>
+                [% END %]
+                [% pager_i = pager_i + 1 %]
+            [% END %]
+        [% ELSE %]
+
+        [% END %]
+
+        [% IF pager.current_page == pager.last_page %]
+        <li class="arrow unavailable"><a>&raquo;</a></li>
+        [% ELSE %]
+        <li class="arrow"><a href="">&raquo;</a></li>
+        [% END %]
+    </ul>
+</div>
+[% END %]
