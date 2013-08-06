@@ -20,7 +20,7 @@
     <tr>
         <td>[% job.job_id %]</td>
         <td>[% job.job_key %]</td>
-        <td>[% job.stash %]</td>
+        <td><span class="has-tip" title="[% job.stash | html %]">{&hellip;}</span></td>
         <td>[% job.run_at %]</td>
         <td>[% job.created_at %]</td>
         <td>[% job.started_at %]</td>
@@ -45,7 +45,7 @@
     <tr>
         <td>[% job.job_id %]</td>
         <td>[% job.job_key %]</td>
-        <td>[% job.stash %]</td>
+        <td><span class="has-tip" title="[% job.stash | html %]">{&hellip;}</span></td>
         <td>[% job.run_at %]</td>
         <td>[% job.created_at %]</td>
     </tr>
@@ -89,7 +89,7 @@
     <tr>
         <td>[% job.job_id %]</td>
         <td>[% job.job_key %]</td>
-        <td>[% job.stash %]</td>
+        <td><span class="has-tip" title="[% job.stash | html %]">{&hellip;}</span></td>
         <td>[% job.run_at %]</td>
         <td>[% job.created_at %]</td>
         <td>[% job.started_at %]</td>
