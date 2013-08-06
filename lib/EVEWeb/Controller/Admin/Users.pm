@@ -35,11 +35,14 @@ sub index :Path :Args(0) {
             to_char(u.updated_at at time zone ?, ?) as updated_at,
             to_char(u.deleted_at at time zone ?, ?) as deleted_at,
             count(distinct(k.key_id)) as api_keys,
-            count(distinct(p.pilot_id)) as pilots
+            count(distinct(p.pilot_id)) as pilots,
+            array_agg(r.role_name) as roles
         from public.users u
             left join eve.api_keys k on (k.user_id = u.user_id)
             left join eve.pilot_api_keys pk on (pk.key_id = k.key_id)
             left join eve.pilots p on (p.pilot_id = pk.pilot_id)
+            left join public.user_roles ur on (ur.user_id = u.user_id)
+            left join public.roles r on (r.role_id = ur.role_id)
         group by u.user_id, u.email, u.username, u.verified,
             u.created_at, u.updated_at, u.deleted_at
         order by u.username asc
