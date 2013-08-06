@@ -38,7 +38,8 @@ sub index :Path :Args(0) {
         from public.jobs j
         where j.started_at is not null
             and j.finished_at is null
-        order by j.run_at asc limit 25
+        order by j.started_at asc
+        limit 25
     }, ($c->stash->{'user'}{'timezone'}, $c->stash->{'user'}{'format_datetime'}) x 4);
 
     if ($res) {
@@ -57,7 +58,8 @@ sub index :Path :Args(0) {
             to_char(j.created_at  at time zone ?, ?) as created_at
         from public.jobs j
         where j.started_at is null
-        order by j.run_at asc limit 10
+        order by j.run_at asc
+        limit 10
     }, ($c->stash->{'user'}{'timezone'}, $c->stash->{'user'}{'format_datetime'}) x 4);
 
     if ($res) {
@@ -76,7 +78,8 @@ sub index :Path :Args(0) {
             to_char(j.created_at  at time zone ?, ?) as created_at
         from public.jobs j
         where j.finished_at is not null
-        order by j.run_at asc limit 10
+        order by j.finished_at desc
+        limit 10
     }, ($c->stash->{'user'}{'timezone'}, $c->stash->{'user'}{'format_datetime'}) x 4);
 
     if ($res) {
