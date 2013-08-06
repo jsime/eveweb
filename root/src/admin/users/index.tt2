@@ -11,9 +11,8 @@
             <td>Email</td>
             <td>Roles</td>
             <td>Verified</td>
-            <td>Created</td>
-            <td>Updated</td>
-            <td>Deleted</td>
+            <td>Pilots</td>
+            <td>Joined</td>
         </tr>
     </thead>
 [% FOREACH user IN users %]
@@ -26,9 +25,8 @@
         <td>[% user.email %]</td>
         <td>[% user.roles.join(', ') %]</td>
         <td>[% user.verified ? 'Yes' : '' %]</td>
+        <td>[% user.pilots %]</td>
         <td>[% user.created_at %]</td>
-        <td>[% user.updated_at %]</td>
-        <td>[% user.deleted_at %]</td>
     </tr>
 [% END %]
 </table>
