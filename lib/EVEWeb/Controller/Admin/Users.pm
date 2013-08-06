@@ -36,7 +36,7 @@ sub index :Path :Args(0) {
             to_char(u.deleted_at at time zone ?, ?) as deleted_at,
             count(distinct(k.key_id)) as api_keys,
             count(distinct(p.pilot_id)) as pilots,
-            array_agg(r.role_name) as roles
+            array_agg(distinct(r.role_name)) as roles
         from public.users u
             left join eve.api_keys k on (k.user_id = u.user_id)
             left join eve.pilot_api_keys pk on (pk.key_id = k.key_id)
