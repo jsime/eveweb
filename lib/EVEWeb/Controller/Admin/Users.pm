@@ -16,6 +16,11 @@ Catalyst Controller.
 
 =cut
 
+sub auto :Private {
+    my ($self, $c) = @_;
+
+    push(@{$c->stash->{'breadcrumbs'}}, { name => 'Users', link => $c->uri_for('/admin/users') });
+}
 
 =head2 index
 

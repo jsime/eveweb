@@ -20,6 +20,8 @@ Catalyst Controller.
 sub auto :Private {
     my ($self, $c) = @_;
 
+    push(@{$c->stash->{'breadcrumbs'}}, { name => 'Administration', link => $c->uri_for('/admin') });
+
     $c->response->redirect($c->uri_for('/')) unless $c->check_user_roles('admin');
 }
 
