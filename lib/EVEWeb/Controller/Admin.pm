@@ -17,6 +17,12 @@ Catalyst Controller.
 =cut
 
 
+sub auto :Private {
+    my ($self, $c) = @_;
+
+    $c->response->redirect($c->uri_for('/')) unless $c->check_user_roles('admin');
+}
+
 =head2 index
 
 =cut
