@@ -9,6 +9,7 @@
         <tr>
             <td>Username</td>
             <td>Email</td>
+            <td>Roles</td>
             <td>Verified</td>
             <td>Created</td>
             <td>Updated</td>
@@ -23,6 +24,7 @@
             </a>
         </td>
         <td>[% user.email %]</td>
+        <td>[% user.roles.join(', ') %]</td>
         <td>[% user.verified ? 'Yes' : '' %]</td>
         <td>[% user.created_at %]</td>
         <td>[% user.updated_at %]</td>
