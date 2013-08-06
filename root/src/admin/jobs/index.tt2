@@ -66,6 +66,25 @@
             <td>Finished</td>
         </tr>
     </thead>
+    <tfoot>
+        <tr>
+            <td colspan="7">
+                <div class="center">
+                <ul class="pagination">
+                    <li class="arrow"><a href="">&laquo;</a></li>
+                    <li><a href="">1</a></li>
+                    <li class="current"><a href="">2</a></li>
+                    <li><a href="">3</a></li>
+                    <li><a href="">4</a></li>
+                    <li class="unavailable">&hellip;</li>
+                    <li><a href="">17</a></li>
+                    <li><a href="">18</a></li>
+                    <li class="arrow"><a href="">&raquo;</a></li>
+                </ul>
+                </div>
+            </td>
+        </tr>
+    </tfoot>
 [% FOREACH job IN finished_jobs %]
     <tr>
         <td>[% job.job_id %]</td>

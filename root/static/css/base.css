@@ -58,3 +58,14 @@ table tbody tr td {
 ul.breadcrumbs li.right.first :before {
     content: "" !important;
 }
+tfoot tr td ul.pagination {
+    margin: 0 auto;
+    display: inline;
+    list-style: none;
+}
+div.center {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
