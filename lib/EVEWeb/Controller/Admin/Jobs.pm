@@ -36,14 +36,54 @@ sub index :Path :Args(0) {
             to_char(j.finished_at at time zone ?, ?) as finished_at,
             to_char(j.created_at  at time zone ?, ?) as created_at
         from public.jobs j
-        order by j.run_at desc limit 50;
+        where j.started_at is not null
+            and j.finished_at is null
+        order by j.run_at asc limit 25
     }, ($c->stash->{'user'}{'timezone'}, $c->stash->{'user'}{'format_datetime'}) x 4);
 
     if ($res) {
-        $c->stash->{'jobs'} = [];
+        $c->stash->{'current_jobs'} = [];
 
         while ($res->next) {
-            push(@{$c->stash->{'jobs'}}, { map { $_ => $res->{$_} } $res->columns });
+            push(@{$c->stash->{'current_jobs'}}, { map { $_ => $res->{$_} } $res->columns });
+        }
+    }
+    
+    $res = $c->model('DB')->do(q{
+        select j.job_id, j.job_type, j.job_key, j.stash, j.run_host, j.run_pid,
+            to_char(j.run_at      at time zone ?, ?) as run_at,
+            to_char(j.started_at  at time zone ?, ?) as started_at,
+            to_char(j.finished_at at time zone ?, ?) as finished_at,
+            to_char(j.created_at  at time zone ?, ?) as created_at
+        from public.jobs j
+        where j.started_at is null
+        order by j.run_at asc limit 10
+    }, ($c->stash->{'user'}{'timezone'}, $c->stash->{'user'}{'format_datetime'}) x 4);
+
+    if ($res) {
+        $c->stash->{'open_jobs'} = [];
+
+        while ($res->next) {
+            push(@{$c->stash->{'open_jobs'}}, { map { $_ => $res->{$_} } $res->columns });
+        }
+    }
+    
+    $res = $c->model('DB')->do(q{
+        select j.job_id, j.job_type, j.job_key, j.stash, j.run_host, j.run_pid,
+            to_char(j.run_at      at time zone ?, ?) as run_at,
+            to_char(j.started_at  at time zone ?, ?) as started_at,
+            to_char(j.finished_at at time zone ?, ?) as finished_at,
+            to_char(j.created_at  at time zone ?, ?) as created_at
+        from public.jobs j
+        where j.finished_at is not null
+        order by j.run_at asc limit 10
+    }, ($c->stash->{'user'}{'timezone'}, $c->stash->{'user'}{'format_datetime'}) x 4);
+
+    if ($res) {
+        $c->stash->{'finished_jobs'} = [];
+
+        while ($res->next) {
+            push(@{$c->stash->{'finished_jobs'}}, { map { $_ => $res->{$_} } $res->columns });
         }
     }
     
