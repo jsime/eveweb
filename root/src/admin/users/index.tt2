@@ -7,7 +7,6 @@
 <table class="full-width">
     <thead>
         <tr>
-            <td>ID</td>
             <td>Username</td>
             <td>Email</td>
             <td>Verified</td>
@@ -18,8 +17,11 @@
     </thead>
 [% FOREACH user IN users %]
     <tr>
-        <td>[% user.user_id %]</td>
-        <td>[% user.username %]</td>
+        <td>
+            <a href="[% c.uri_for('/admin/users', user.user_id) %]">
+                [% user.username %]
+            </a>
+        </td>
         <td>[% user.email %]</td>
         <td>[% user.verified ? 'Yes' : '' %]</td>
         <td>[% user.created_at %]</td>
