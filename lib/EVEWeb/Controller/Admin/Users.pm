@@ -38,7 +38,7 @@ sub index :Path :Args(0) {
         group by u.user_id, u.email, u.username, u.verified,
             u.created_at, u.updated_at, u.deleted_at
         order by u.username asc
-    });
+    }, ($c->stash->{'user'}{'timezone'}, $c->stash->{'user'}{'format_datetime'}) x 3);
 
     if ($res) {
         $c->stash->{'users'} = [];
