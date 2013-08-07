@@ -13,7 +13,7 @@
                 <div class="content" data-section-content>
                     <ul class="side-nav">
                     [% FOREACH skill IN skill_groups.$group.skills %]
-                        <li><a onclick="view_skill([% skill.skill_id %]);">[% skill.name %]</a></li>
+                        <li><a href="[% c.uri_for('/skills', skill.skill_id) %]">[% skill.name %]</a></li>
                     [% END %]
                     </ul>
                 </div>
