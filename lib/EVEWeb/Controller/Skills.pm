@@ -57,6 +57,25 @@ sub index :Path :Args(0) {
     $c->stash->{'template'} = 'skills/index.tt2';
 }
 
+sub skills :PathPart Chained('/') Args(1) {
+    my ($self, $c, $skill_id) = @_;
+
+    my $res = $c->model('DB')->do(q{
+        select s.*, sg.name as skill_group_name
+        from ccp.skills s
+            join ccp.skill_groups sg on (sg.skill_group_id = s.skill_group_id)
+        where s.skill_id = ? and s.published and sg.published
+    }, $skill_id);
+
+    unless ($res && $res->next) {
+        $c->response->redirect($c->uri_for('/skills'));
+        return;
+    }
+
+    $c->stash->{'skill'} = { map { $_ => $res->{$_} } $res->columns };
+
+    $c->stash->{'template'} = 'skills/detail.tt2';
+}
 
 =head1 AUTHOR
 
