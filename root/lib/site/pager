@@ -18,7 +18,45 @@
                 [% pager_i = pager_i + 1 %]
             [% END %]
         [% ELSE %]
-
+            [% IF pager.current_page <= 4 %]
+                [% pager_i = 1 %]
+                [% WHILE pager_i <= 4 %]
+                    [% IF pager.current_page == pager_i %]
+                        <li class="current"><a>[% pager_i %]</a></li>
+                    [% ELSE %]
+                        <li><a href="">[% pager_i %]</a></li>
+                    [% END %]
+                    [% pager_i = pager_i + 1 %]
+                [% END %]
+                <li class="unavailable">&hellip;</li>
+                <li><a href="">[% pager.last_page %]</a></li>
+            [% ELSIF pager.last_page - pager.current_page < 4 %]
+                <li><a href="">[% pager.first_page %]</a></li>
+                <li class="unavailable">&hellip;</li>
+                [% pager_i = pager.last_page - 3 %]
+                [% WHILE pager_i <= pager.last_page %]
+                    [% IF pager.current_page == pager_i %]
+                        <li class="current"><a>[% pager_i %]</a></li>
+                    [% ELSE %]
+                        <li><a href="">[% pager_i %]</a></li>
+                    [% END %]
+                    [% pager_i = pager_i + 1 %]
+                [% END %]
+            [% ELSE %]
+                <li><a href="">[% pager.first_page %]</a></li>
+                <li class="unavailable">&hellip;</li>
+                [% pager_i = pager.current_page - 2 %]
+                [% WHILE pager_i <= pager.current_page + 2 %]
+                    [% IF pager.current_page == pager_i %]
+                        <li class="current"><a>[% pager_i %]</a></li>
+                    [% ELSE %]
+                        <li><a href="">[% pager_i %]</a></li>
+                    [% END %]
+                    [% pager_i = pager_i + 1 %]
+                [% END %]
+                <li class="unavailable">&hellip;</li>
+                <li><a href="">[% pager.last_page %]</a></li>
+            [% END %]
         [% END %]
 
         [% IF pager.current_page == pager.last_page %]
