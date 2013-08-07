@@ -1,0 +1,27 @@
+[% META title = 'Skills' %]
+[% USE Number.Format %]
+[% USE Roman %]
+
+[% PROCESS site/breadcrumbs %]
+
+<div class="row">
+    <div class="large-4 columns">
+        <div class="section-container accordion" data-section="accordion">
+        [% FOREACH group IN skill_groups.keys.sort %]
+            <section>
+                <p class="title" data-section-title><a href="#">[% skill_groups.$group.skill_group_name %]</a></p>
+                <div class="content" data-section-content>
+                    <ul class="side-nav">
+                    [% FOREACH skill IN skill_groups.$group.skills %]
+                        <li><a onclick="view_skill([% skill.skill_id %]);">[% skill.name %]</a></li>
+                    [% END %]
+                    </ul>
+                </div>
+            </section>
+        [% END %]
+        </div>
+    </div>
+    <div class="large-8 columns">
+        <h1>[% skill.name %]</h1>
+    </div>
+</div>
