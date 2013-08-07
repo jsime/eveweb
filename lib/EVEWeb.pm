@@ -56,11 +56,13 @@ __PACKAGE__->config(
     default_view => 'Web',
 
     'Plugin::Session' => {
-        cookie_domain   => 'dev.ube-kosan.com',
-        cookie_secure   => 1,
-        cookie_httponly => 1,
-        cookie_expires  => 86_400 * 7,
-        expires         => 86_400 * 7,
+        cookie_domain      => 'dev.ube-kosan.com',
+        cookie_secure      => 1,
+        cookie_httponly    => 1,
+        cookie_expires     => 86_400 * 7,
+        expires            => 86_400 * 7,
+        verify_address     => 1,
+        verify_user_agent  => 1,
         memcached_new_args => {
             'data'       => { servers => ['192.168.122.1:11211'], debug => 0 },
             'namespace'  => 'eveweb',
