@@ -90,6 +90,7 @@ sub auto :Private {
     die "Invalid user provided" unless $res && $res->next;
 
     $c->stash->{'user'} = { map { $_ => $res->{$_} } $res->columns };
+    delete $c->stash->{'user'}{'password'};
 
     # Hardcode a user settings for timezone, datetime and date formats.
     $c->stash->{'user'}{'timezone'} = 'UTC';
