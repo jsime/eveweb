@@ -16,6 +16,15 @@
             <td>Owner</td>
         </tr>
     </thead>
+    <tfoot>
+        <tr>
+            <td colspan="7">
+                [% INCLUDE site/pager
+                    pager = current_jobs_pager
+                %]
+            </td>
+        </tr>
+    </tfoot>
 [% FOREACH job IN current_jobs %]
     <tr>
         <td>[% job.job_id %]</td>
@@ -41,6 +50,15 @@
             <td>Created</td>
         </tr>
     </thead>
+    <tfoot>
+        <tr>
+            <td colspan="5">
+                [% INCLUDE site/pager
+                    pager = open_jobs_pager
+                %]
+            </td>
+        </tr>
+    </tfoot>
 [% FOREACH job IN open_jobs %]
     <tr>
         <td>[% job.job_id %]</td>
@@ -69,19 +87,9 @@
     <tfoot>
         <tr>
             <td colspan="7">
-                <div class="center">
-                <ul class="pagination">
-                    <li class="arrow"><a href="">&laquo;</a></li>
-                    <li><a href="">1</a></li>
-                    <li class="current"><a href="">2</a></li>
-                    <li><a href="">3</a></li>
-                    <li><a href="">4</a></li>
-                    <li class="unavailable">&hellip;</li>
-                    <li><a href="">17</a></li>
-                    <li><a href="">18</a></li>
-                    <li class="arrow"><a href="">&raquo;</a></li>
-                </ul>
-                </div>
+                [% INCLUDE site/pager
+                    pager = finished_jobs_pager
+                %]
             </td>
         </tr>
     </tfoot>
