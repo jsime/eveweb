@@ -27,17 +27,19 @@
         </tr>
     </tfoot>
     [% END %]
+    <tbody>
 [% FOREACH job IN current_jobs %]
-    <tr>
-        <td>[% job.job_id %]</td>
-        <td>[% job.job_key %]</td>
-        <td><span class="has-tip" title="[% job.stash | html %]">{&hellip;}</span></td>
-        <td>[% job.run_at %]</td>
-        <td>[% job.created_at %]</td>
-        <td>[% job.started_at %]</td>
-        <td>[% job.run_host %] / [% job.run_pid %]</td>
-    </tr>
+        <tr>
+            <td>[% job.job_id %]</td>
+            <td>[% job.job_key %]</td>
+            <td><span class="has-tip" title="[% job.stash | html %]">{&hellip;}</span></td>
+            <td>[% job.run_at %]</td>
+            <td>[% job.created_at %]</td>
+            <td>[% job.started_at %]</td>
+            <td>[% job.run_host %] / [% job.run_pid %]</td>
+        </tr>
 [% END %]
+    </tbody>
 </table>
 
 <h1>Queued Jobs</h1>
@@ -63,15 +65,17 @@
         </tr>
     </tfoot>
     [% END %]
+    <tbody>
 [% FOREACH job IN open_jobs %]
-    <tr>
-        <td>[% job.job_id %]</td>
-        <td>[% job.job_key %]</td>
-        <td><span class="has-tip" title="[% job.stash | html %]">{&hellip;}</span></td>
-        <td>[% job.run_at %]</td>
-        <td>[% job.created_at %]</td>
-    </tr>
+        <tr>
+            <td>[% job.job_id %]</td>
+            <td>[% job.job_key %]</td>
+            <td><span class="has-tip" title="[% job.stash | html %]">{&hellip;}</span></td>
+            <td>[% job.run_at %]</td>
+            <td>[% job.created_at %]</td>
+        </tr>
 [% END %]
+    </tbody>
 </table>
 
 <h1>Finished Jobs</h1>
@@ -99,15 +103,17 @@
         </tr>
     </tfoot>
     [% END %]
+    <tbody>
 [% FOREACH job IN finished_jobs %]
-    <tr>
-        <td>[% job.job_id %]</td>
-        <td>[% job.job_key %]</td>
-        <td><span class="has-tip" title="[% job.stash | html %]">{&hellip;}</span></td>
-        <td>[% job.run_at %]</td>
-        <td>[% job.created_at %]</td>
-        <td>[% job.started_at %]</td>
-        <td>[% job.finished_at %]</td>
-    </tr>
+        <tr>
+            <td>[% job.job_id %]</td>
+            <td>[% job.job_key %]</td>
+            <td><span class="has-tip" title="[% job.stash | html %]">{&hellip;}</span></td>
+            <td>[% job.run_at %]</td>
+            <td>[% job.created_at %]</td>
+            <td>[% job.started_at %]</td>
+            <td>[% job.finished_at %]</td>
+        </tr>
 [% END %]
+    </tbody>
 </table>
