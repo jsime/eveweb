@@ -6,19 +6,8 @@
 
 <div class="row">
     <div class="large-4 columns">
-        <div class="section-container accordion" data-section="accordion">
-        [% FOREACH group IN skill_groups.keys.sort %]
-            <section>
-                <p class="title" data-section-title><a href="#">[% skill_groups.$group.skill_group_name %]</a></p>
-                <div class="content" data-section-content>
-                    <ul class="side-nav">
-                    [% FOREACH skill IN skill_groups.$group.skills %]
-                        <li><a href="[% c.uri_for('/skills', skill.skill_id) %]">[% skill.name %]</a></li>
-                    [% END %]
-                    </ul>
-                </div>
-            </section>
-        [% END %]
-        </div>
+        [% INCLUDE skills/group_accordian.tt2
+            groups = skill_groups
+        %]
     </div>
 </div>

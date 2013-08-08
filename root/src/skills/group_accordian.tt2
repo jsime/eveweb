@@ -1,0 +1,14 @@
+<div class="section-container accordion" data-section="accordion">
+[% FOREACH group IN groups.keys.sort %]
+    <section>
+        <p class="title" data-section-title><a href="#">[% groups.$group.skill_group_name %]</a></p>
+        <div class="content" data-section-content>
+            <ul class="side-nav">
+            [% FOREACH skill IN groups.$group.skills %]
+                <li><a href="[% c.uri_for('/skills', skill.skill_id) %]">[% skill.name %]</a></li>
+            [% END %]
+            </ul>
+        </div>
+    </section>
+[% END %]
+</div>
