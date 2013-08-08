@@ -141,6 +141,31 @@ printf("Created: %d / Updated: %d\n", $created, $updated);
 #######################
 #### SKILL REQUIREMENTS
 
+# Need to collect the appropriate required levels for each skill,
+# depending on whether it is a primary/secondary/tertiary dependency.
+$res = $sde_db->do(q{
+    select "typeID" as skill_id,
+        case
+            when "attributeID" = 277 then 1
+            when "attributeID" = 278 then 2
+            when "attributeID" = 279 then 3
+        end as tier,
+        coalesce("valueInt","valueFloat") as required_level
+    from "dgmTypeAttributes"
+    where "attributeID" in (277,278,279)
+        and "typeID" in ???
+}, \@skill_ids);
+
+die $res->error unless $res;
+
+my %levels;
+
+while ($res->next) {
+    $levels{$res->{'skill_id'}} = [1,1,1,1] unless exists $levels{$res->{'skill_id'}};
+    $levels{$res->{'skill_id'}}[$res->{'tier'}] = $res->{'required_level'};
+}
+
+# Now we get the skill tree itself
 $res = $sde_db->do(q{
     select "typeID" as skill_id,
         case
@@ -154,7 +179,6 @@ $res = $sde_db->do(q{
     where "attributeID" in (182,183,184)
         and "typeID" in ???
 }, \@skill_ids);
-# TODO - update query once i figure out where in the SDE the required level value is
 
 die $res->error unless $res;
 
@@ -164,6 +188,9 @@ print "\n-------------------\n";
 ($created, $updated) = (0,0);
 PREREQ:
 while ($res->next) {
+    # Grab the required level for this tier from earlier query
+    $res->{'required_level'} = $levels{$res->{'skill_id'}}[$res->{'tier'}];
+
     printf("%8d -> %8d (Tier %d, Level: %d)\n",
         $res->{'skill_id'},
         $res->{'required_skill_id'},
