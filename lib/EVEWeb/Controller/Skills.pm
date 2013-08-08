@@ -19,8 +19,6 @@ Catalyst Controller.
 sub auto :Private {
     my ($self, $c) = @_;
 
-    push(@{$c->stash->{'breadcrumbs'}}, { name => 'Skills', link => $c->uri_for('/skills') });
-
     my $res = $c->model('DB')->do(q{
         select sg.skill_group_id, sg.name as skill_group_name,
             s.skill_id, s.name, s.description, s.rank,
@@ -44,6 +42,8 @@ sub auto :Private {
 
         push(@{$c->stash->{'skill_groups'}{$group}{'skills'}}, { map { $_ => $res->{$_} } $res->columns });
     }
+
+    push(@{$c->stash->{'breadcrumbs'}}, { name => 'Skills', link => $c->uri_for('/skills') });
 }
 
 
@@ -73,6 +73,11 @@ sub skills :PathPart Chained('/') Args(1) {
     }
 
     $c->stash->{'skill'} = { map { $_ => $res->{$_} } $res->columns };
+
+    push(@{$c->stash->{'breadcrumbs'}},
+        { name => $c->stash->{'skill'}{'skill_group_name'} },
+        { name => $c->stash->{'skill'}{'name'}, , link => $c->uri_for('/skills', $skill_id) },
+    );
 
     $c->stash->{'template'} = 'skills/detail.tt2';
 }
