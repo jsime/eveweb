@@ -173,6 +173,23 @@ create index skill_requirements_required_skill_id_idx on ccp.skill_requirements 
 alter table ccp.skill_requirements add foreign key (skill_id) references ccp.skills (skill_id) on update cascade on delete cascade;
 alter table ccp.skill_requirements add foreign key (required_skill_id) references ccp.skills (skill_id) on update cascade on delete cascade;
 
+create view ccp.skill_tree as
+    with recursive reqtree (skill_id, required_skill_id, required_level, tier, path, cycle) as (
+        select skill_id, required_skill_id, required_level, tier, ARRAY[skill_id], false
+        from skill_requirements
+        union all
+        select sr.skill_id, sr.required_skill_id, sr.required_level, sr.tier,
+            path || sr.required_skill_id, ARRAY[sr.skill_id, sr.required_skill_id] <@ path
+        from skill_requirements sr,
+            reqtree r
+        where r.required_skill_id = sr.skill_id
+            and not cycle
+    )
+    select q.path[1] as skill_id, q.skill_id as parent_skill_id,
+        q.required_skill_id, q.tier, q.required_level
+    from reqtree q
+;
+
 -- SCHEMA: eve
 -- Contains data collected through the EVE API provided by CCP
 create schema eve;
