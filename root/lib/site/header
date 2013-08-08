@@ -25,7 +25,6 @@
             <li class="has-dropdown">
                 <a href="/account">[% c.stash.user.username %]</a>
                 <ul class="dropdown">
-                    <li><label>Account</label></li>
                     <li><a href="/account">Account Settings</a></li>
                     <li><a href="/account/api">API Keys</a></li>
                     <li class="divider"></li>
