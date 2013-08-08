@@ -163,7 +163,8 @@ alter table ccp.skills add foreign key (secondary_attribute_id) references ccp.a
 create table ccp.skill_requirements (
     skill_id            integer not null,
     required_skill_id   integer not null,
-    required_level      integer not null
+    required_level      integer not null,
+    tier                integer not null
 );
 
 alter table ccp.skill_requirements add primary key (skill_id, required_skill_id);
