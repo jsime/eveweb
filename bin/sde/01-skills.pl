@@ -87,10 +87,14 @@ die $res->error unless $res;
 print "\nSkills";
 print "\n------\n";
 
+my @skill_ids; # used later to limit dgmTypeAttributes query to just skills
+
 ($created, $updated) = (0,0);
 SKILL:
 while ($res->next) {
     printf("%10d -> %s (Group %d)\n", $res->{'typeID'}, $res->{'typeName'}, $res->{'groupID'});
+
+    push(@skill_ids, $res->{'typeID'});
 
     my $update = $db->do(q{
         update ccp.skills
@@ -134,3 +138,68 @@ while ($res->next) {
 
 printf("Created: %d / Updated: %d\n", $created, $updated);
 
+#######################
+#### SKILL REQUIREMENTS
+
+$res = $sde_db->do(q{
+    select "typeID" as skill_id,
+        case
+            when "attributeID" = 182 then 1
+            when "attributeID" = 183 then 2
+            when "attributeID" = 184 then 3
+        end as tier,
+        coalesce("valueInt","valueFloat") as required_skill_id,
+        1 as required_level
+    from "dgmTypeAttributes"
+    where "attributeID" in (182,183,184)
+        and "typeID" in ???
+}, \@skill_ids);
+# TODO - update query once i figure out where in the SDE the required level value is
+
+die $res->error unless $res;
+
+print "\nSkills Requirements";
+print "\n-------------------\n";
+
+($created, $updated) = (0,0);
+PREREQ:
+while ($res->next) {
+    printf("%8d -> %8d (Tier %d, Level: %d)\n",
+        $res->{'skill_id'},
+        $res->{'required_skill_id'},
+        $res->{'tier'},
+        $res->{'required_level'},
+    );
+
+    my $update = $db->do(q{
+        update ccp.skill_requirements
+        set ???
+        where skill_id = ? and required_skill_id = ?
+    }, {
+        required_level => $res->{'required_level'},
+        tier           => $res->{'tier'},
+    }, $res->{'skill_id'}, $res->{'required_skill_id'});
+
+    if ($update->count > 0) {
+        $updated++;
+        next PREREQ;
+    } else {
+        my $insert = $db->do(q{
+            insert into ccp.skill_requirements ???
+        }, {
+            skill_id          => $res->{'skill_id'},
+            required_skill_id => $res->{'required_skill_id'},
+            required_level    => $res->{'required_level'},
+            tier              => $res->{'tier'},
+        });
+
+        if ($insert->count > 0) {
+            $created++;
+            next PREREQ;
+        }
+    }
+
+    die sprintf("Couldn't update or insert skill requirement of %d for %d.\n", $res->{'skill_id'}, $res->{'required_skill_id'});
+}
+
+printf("Created: %d / Updated: %d\n", $created, $updated);
