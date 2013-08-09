@@ -1,7 +1,7 @@
 <table class="full-width">
     <thead>
         <tr>
-            <td colspan="2">[% skills.first.skill_name %]</td>
+            <td colspan="2">[% skills.first.skill_name || skill.name %]</td>
         </tr>
     </thead>
     <tfoot>
@@ -10,29 +10,35 @@
         </tr>
     </tfoot>
     <tbody>
-    [% FOREACH skill IN skills %]
-        [% IF skill.tier_path_str == 1 %]
+    [% IF skills.size < 1 %]
         <tr>
-            <td colspan="2">Primary Skill</td>
+            <td colspan="2"><em>No pre-requisites</em></td>
         </tr>
-        [% ELSIF skill.tier_path_str == 2 %]
-        <tr>
-            <td colspan="2">Secondary Skill</td>
-        </tr>
-        [% ELSIF skill.tier_path_str == 3 %]
-        <tr>
-            <td colspan="2">Tertiary Skill</td>
-        </tr>
+    [% ELSE %]
+        [% FOREACH skill IN skills %]
+            [% IF skill.tier_path_str == 1 %]
+            <tr>
+                <td colspan="2">Primary Skill</td>
+            </tr>
+            [% ELSIF skill.tier_path_str == 2 %]
+            <tr>
+                <td colspan="2">Secondary Skill</td>
+            </tr>
+            [% ELSIF skill.tier_path_str == 3 %]
+            <tr>
+                <td colspan="2">Tertiary Skill</td>
+            </tr>
+            [% END %]
+            <tr>
+                <td class="indent-[% skill.tier_path.size %]">
+                    <a href="[% c.uri_for('/skills', skill.required_skill_id) %]">
+                    [% skill.required_skill_name %]
+                    [% skill.required_level | roman %]
+                    </a>
+                </td>
+                <td>Rank [% skill.rank %]</td>
+            </tr>
         [% END %]
-        <tr>
-            <td class="indent-[% skill.tier_path.size %]">
-                <a href="[% c.uri_for('/skills', skill.required_skill_id) %]">
-                [% skill.required_skill_name %]
-                [% skill.required_level | roman %]
-                </a>
-            </td>
-            <td>Rank [% skill.rank %]</td>
-        </tr>
     [% END %]
     </tbody>
 </table>
