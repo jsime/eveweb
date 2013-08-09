@@ -77,8 +77,10 @@ printf("Created: %d / Updated: %d\n", $created, $updated);
 ###########
 #### SKILLS
 $res = $sde_db->do(q{
-    select *
-    from "invTypes"
+    select t.*,
+        coalesce(ta."valueInt", ta."valueFloat", 1) as rank
+    from "invTypes" t
+        left join "dgmTypeAttributes" ta on (ta."typeID" = t."typeID" and ta."attributeID" = 275)
     where "groupID" IN (select "groupID" from "invGroups" where "categoryID" = 16)
 });
 
@@ -104,7 +106,7 @@ while ($res->next) {
         skill_group_id => $res->{'groupID'},
         name           => $res->{'typeName'},
         description    => $res->{'description'} || '',
-        rank           => 1, # TODO get the real rank
+        rank           => $res->{'rank'},
         primary_attribute_id   => 1, # TODO
         secondary_attribute_id => 1, # TODO
         published      => ($res->{'published'} ? 1 : 0)
@@ -121,7 +123,7 @@ while ($res->next) {
             skill_group_id => $res->{'groupID'},
             name           => $res->{'typeName'},
             description    => $res->{'description'} || '',
-            rank           => 1, # TODO get the real rank
+            rank           => $res->{'rank'},
             primary_attribute_id   => 1, # TODO
             secondary_attribute_id => 1, # TODO
             published      => ($res->{'published'} ? 1 : 0)
