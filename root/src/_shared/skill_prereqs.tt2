@@ -28,9 +28,10 @@
             <td class="indent-[% skill.tier_path.size %]">
                 <a href="[% c.uri_for('/skills', skill.required_skill_id) %]">
                 [% skill.required_skill_name %]
+                [% skill.required_level | roman %]
                 </a>
             </td>
-            <td>[% skill.required_level %]</td>
+            <td>Rank [% skill.rank %]</td>
         </tr>
     [% END %]
     </tbody>
