@@ -39,7 +39,7 @@ print "\n----------\n";
 ($created, $updated) = (0,0);
 ATTRIBUTE:
 while ($res->next) {
-    printf("%10d -> %s\n        ", $res->{'attributeID'}, $res->{'attributeName'});
+    printf("%10d -> %s\n", $res->{'attributeID'}, $res->{'attributeName'});
 
     my $update = $db->do(q{
         update ccp.attributes
