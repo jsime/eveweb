@@ -74,6 +74,21 @@ sub skills :PathPart Chained('/') Args(1) {
 
     $c->stash->{'skill'} = { map { $_ => $res->{$_} } $res->columns };
 
+    $res = $c->model('DB')->do(q{
+        select *
+        from ccp.skill_tree
+        where skill_id = ?
+        order by tier_path
+    }, $skill_id);
+
+    if ($res) {
+        $c->stash->{'required_skills'} = [];
+
+        while ($res->next) {
+            push(@{$c->stash->{'required_skills'}}, { map { $_ => $res->{$_} } $res->columns });
+        }
+    }
+
     push(@{$c->stash->{'breadcrumbs'}},
         { name => $c->stash->{'skill'}{'skill_group_name'} },
         { name => $c->stash->{'skill'}{'name'}, , link => $c->uri_for('/skills', $skill_id) },

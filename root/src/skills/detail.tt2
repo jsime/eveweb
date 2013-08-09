@@ -17,5 +17,9 @@
         <p>
             [% skill.description %]
         </p>
+
+        [% INCLUDE _shared/skill_prereqs.tt2
+            skills = required_skills
+        %]
     </div>
 </div>
