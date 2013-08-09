@@ -96,6 +96,11 @@ SKILL:
 while ($res->next) {
     printf("%10d -> %s (Group %d)\n", $res->{'typeID'}, $res->{'typeName'}, $res->{'groupID'});
 
+    # We've grabbed testing skills indiscriminately, but some of them have non-integer
+    # values. Because the training time makes no difference for these (a real character
+    # will never possess these skills), we'll set any non-integer ranks to 1.
+    $res->{'rank'} = 1 unless $res->{'rank'} =~ m{^\d+$}o;
+
     push(@skill_ids, $res->{'typeID'});
 
     my $update = $db->do(q{
