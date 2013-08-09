@@ -174,20 +174,27 @@ alter table ccp.skill_requirements add foreign key (skill_id) references ccp.ski
 alter table ccp.skill_requirements add foreign key (required_skill_id) references ccp.skills (skill_id) on update cascade on delete cascade;
 
 create view ccp.skill_tree as
-    with recursive reqtree (skill_id, required_skill_id, required_level, tier, path, cycle) as (
-        select skill_id, required_skill_id, required_level, tier, ARRAY[skill_id], false
+    with recursive reqtree (skill_id, required_skill_id, required_level, tier, path, tier_path, cycle) as (
+        select skill_id, required_skill_id, required_level, tier, ARRAY[skill_id], ARRAY[tier], false
         from skill_requirements
         union all
         select sr.skill_id, sr.required_skill_id, sr.required_level, sr.tier,
-            path || sr.required_skill_id, ARRAY[sr.skill_id, sr.required_skill_id] <@ path
+            path || sr.required_skill_id, tier_path || sr.tier,
+            ARRAY[sr.skill_id, sr.required_skill_id] <@ path
         from skill_requirements sr,
             reqtree r
         where r.required_skill_id = sr.skill_id
             and not cycle
     )
-    select q.path[1] as skill_id, q.skill_id as parent_skill_id,
-        q.required_skill_id, q.tier, q.required_level
+    select q.path[1] as skill_id, s1.name as skill_name,
+        q.skill_id as parent_skill_id, s2.name as parent_skill_name,
+        q.required_skill_id, s3.name as required_skill_name,
+        q.tier, q.required_level,
+        q.tier_path, array_to_string(q.tier_path, '.', '*') as tier_path_str
     from reqtree q
+        join ccp.skills s1 on (s1.skill_id = q.path[1])
+        join ccp.skills s2 on (s2.skill_id = q.skill_id)
+        join ccp.skills s3 on (s3.skill_id = q.required_skill_id)
 ;
 
 -- SCHEMA: eve
