@@ -72,3 +72,12 @@ div.center {
     margin-right: auto;
     text-align: center;
 }
+.indent-1 { padding-left: 1em; }
+.indent-2 { padding-left: 2em; }
+.indent-3 { padding-left: 3em; }
+.indent-4 { padding-left: 4em; }
+.indent-5 { padding-left: 5em; }
+.indent-6 { padding-left: 6em; }
+.indent-7 { padding-left: 7em; }
+.indent-8 { padding-left: 8em; }
+.indent-9 { padding-left: 9em; }
