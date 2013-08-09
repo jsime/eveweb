@@ -75,10 +75,11 @@ sub skills :PathPart Chained('/') Args(1) {
     $c->stash->{'skill'} = { map { $_ => $res->{$_} } $res->columns };
 
     $res = $c->model('DB')->do(q{
-        select *
-        from ccp.skill_tree
-        where skill_id = ?
-        order by tier_path
+        select t.*, s.rank, s.description
+        from ccp.skill_tree t
+            join ccp.skills s on (s.skill_id = t.required_skill_id)
+        where t.skill_id = ?
+        order by t.tier_path
     }, $skill_id);
 
     if ($res) {
