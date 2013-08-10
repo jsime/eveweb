@@ -1,6 +1,6 @@
 <div class="section-container accordion" data-section="accordion">
 [% FOREACH group IN groups.keys.sort %]
-    <section>
+    <section class="[% groups.$group.skill_group_id == current_group_id ? 'active' : '' %]">
         <p class="title" data-section-title><a href="#">[% groups.$group.skill_group_name %]</a></p>
         <div class="content" data-section-content>
             <ul class="side-nav">
