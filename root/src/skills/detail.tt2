@@ -18,6 +18,21 @@
             [% skill.description %]
         </p>
 
+        <div class="row">
+            <div class="large-5 columns">
+                <p>
+                    Rank [% skill.rank %]
+                </p>
+            </div>
+            <div class="large-7 columns right">
+                <p>
+                    [% skill.primary_attribute_name %]
+                    <br />
+                    [% skill.secondary_attribute_name %]
+                </p>
+            </div>
+        </div>
+
         [% INCLUDE _shared/skill_prereqs.tt2
             skills = required_skills
         %]
