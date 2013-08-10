@@ -31,7 +31,8 @@
             [% END %]
             <tr>
                 <td class="indent-[% skill.tier_path.size %]">
-                    <a href="[% c.uri_for('/skills', skill.required_skill_id) %]">
+                    <a href="[% c.uri_for('/skills', skill.required_skill_id) %]" class="has-tip" title="Primary: [% skill.primary_attribute_name %]
+Secondary: [% skill.secondary_attribute_name %]">
                     [% skill.required_skill_name %]
                     [% skill.required_level | roman %]
                     </a>
