@@ -22,9 +22,13 @@ sub auto :Private {
     my $res = $c->model('DB')->do(q{
         select sg.skill_group_id, sg.name as skill_group_name,
             s.skill_id, s.name, s.description, s.rank,
-            s.primary_attribute_id, s.secondary_attribute_id
+            s.primary_attribute_id, s.secondary_attribute_id,
+            a1.name as primary_attribute_name,
+            a2.name as secondary_attribute_name
         from ccp.skill_groups sg
             join ccp.skills s on (s.skill_group_id = sg.skill_group_id)
+            join ccp.attributes a1 on (a1.attribute_id = s.primary_attribute_id)
+            join ccp.attributes a2 on (a2.attribute_id = s.secondary_attribute_id)
         where sg.published and s.published
         order by sg.name asc, s.name asc
     });
@@ -61,9 +65,13 @@ sub skills :PathPart Chained('/') Args(1) {
     my ($self, $c, $skill_id) = @_;
 
     my $res = $c->model('DB')->do(q{
-        select s.*, sg.name as skill_group_name
+        select s.*, sg.name as skill_group_name,
+            a1.name as primary_attribute_name,
+            a2.name as secondary_attribute_name
         from ccp.skills s
             join ccp.skill_groups sg on (sg.skill_group_id = s.skill_group_id)
+            join ccp.attributes a1 on (a1.attribute_id = s.primary_attribute_id)
+            join ccp.attributes a2 on (a2.attribute_id = s.secondary_attribute_id)
         where s.skill_id = ? and s.published and sg.published
     }, $skill_id);
 
@@ -75,9 +83,13 @@ sub skills :PathPart Chained('/') Args(1) {
     $c->stash->{'skill'} = { map { $_ => $res->{$_} } $res->columns };
 
     $res = $c->model('DB')->do(q{
-        select t.*, s.rank, s.description
+        select t.*, s.rank, s.description,
+            a1.name as primary_attribute_name,
+            a2.name as secondary_attribute_name
         from ccp.skill_tree t
             join ccp.skills s on (s.skill_id = t.required_skill_id)
+            join ccp.attributes a1 on (a1.attribute_id = s.primary_attribute_id)
+            join ccp.attributes a2 on (a2.attribute_id = s.secondary_attribute_id)
         where t.skill_id = ?
         order by t.tier_path
     }, $skill_id);
