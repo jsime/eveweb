@@ -5,10 +5,10 @@
 [% PROCESS site/breadcrumbs %]
 
 <div class="row">
-    <div class="large-4 columns">
+    <div class="large-5 columns">
         <img src="//image.eveonline.com/Character/[% pilot.pilot_id %]_512.jpg" />
     </div>
-    <div class="large-8 columns">
+    <div class="large-7 columns">
         <div class="row">
             <div class="large-6 columns">
                 <h1>[% pilot.name %]</h1>
@@ -29,28 +29,40 @@
         </div>
         <div class="row">
             <div class="large-4 columns">
+                <p>
                 Security Status
+                </p>
             </div>
             <div class="large-8 columns">
+                <p>
                 [% pilot.sec_status %]
+                </p>
             </div>
         </div>
         <div class="row">
             <div class="large-4 columns">
+                <p>
                 Birthdate
+                </p>
             </div>
             <div class="large-8 columns">
+                <p>
                 [% pilot.birthdate %]
                 <br />
                 [% pilot.age %]
+                </p>
             </div>
         </div>
         <div class="row">
             <div class="large-4 columns">
+                <p>
                 Next Update
+                </p>
             </div>
             <div class="large-8 columns">
+                <p>
                 <span class="countdown" data="[% pilot.cached_until_js %]"></span>
+                </p>
             </div>
         </div>
     </div>
