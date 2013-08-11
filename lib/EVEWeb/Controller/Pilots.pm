@@ -101,13 +101,17 @@ sub pilots : PathPart Chained('/') Args(1) {
     my ($self, $c, $pilot_id) = @_;
 
     my $res = $c->model('DB')->do(q{
-        select p.*,
+        select p.pilot_id, p.name, p.race, p.bloodline, p.ancestry, p.gender,
+            p.balance, p.sec_status, p.active, age(p.birthdate) as age,
+            to_char(p.birthdate at time zone ?, ?) as birthdate,
+            to_char(p.cached_until at time zone ?, ?) as cached_until,
+            p.birthdate as birthdate_js, p.cached_until as cached_until_js,
             c.corporation_id, c.name as corporation_name, c.ticker as corporation_ticker
         from eve.pilots p
             left join eve.pilot_corporations pc on (pc.pilot_id = p.pilot_id and pc.to_datetime is null)
             left join eve.corporations c on (c.corporation_id = pc.corporation_id)
         where p.pilot_id = ?
-    }, $pilot_id);
+    }, ($c->stash->{'user'}{'timezone'}, $c->stash->{'user'}{'format_datetime'}) x 2, $pilot_id);
 
     unless ($res && $res->next) {
         $c->response->redirect($c->uri_for('/pilots'));
@@ -115,6 +119,9 @@ sub pilots : PathPart Chained('/') Args(1) {
     }
 
     $c->stash->{'pilot'} = { map { $_ => $res->{$_} } $res->columns };
+
+    # Remove time part from pilot age
+    $c->stash->{'pilot'}{'age'} =~ s{\s+\d+:\d+:\d+.*$}{}o;
 
     $res = $c->model('DB')->do(q{
         select s.skill_id, s.name, s.rank, s.description, sg.name as group_name,
