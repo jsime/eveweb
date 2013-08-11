@@ -152,7 +152,7 @@ sub finish {
 sub save {
     my ($self) = @_;
 
-    my ($res);
+    my ($res, %job);
 
     if (!$self->has_job_id) {
         $self->key($self->make_key) unless $self->has_key;
@@ -184,18 +184,18 @@ sub save {
         $self->job_id($res->{'job_id'});
         return 1;
     } else {
+        $job{'stash'} = to_json($self->stash, { utf8 => 1, pretty => 0 }) if $self->stash;
+        $job{'run_host'}    = $self->host     if $self->host;
+        $job{'run_pid'}     = $self->pid      if $self->pid;
+        $job{'started_at'}  = $self->started  if $self->started;
+        $job{'finished_at'} = $self->finished if $self->finished;
+
         $res = $self->db->do(q{
             update public.jobs
             set ???
             where job_id = ? and finished_at is null
             returning job_id
-        }, {
-            stash       => to_json($self->stash, { utf8 => 1, pretty => 0 }),
-            run_host    => $self->host,
-            run_pid     => $self->pid,
-            started_at  => $self->started,
-            finished_at => $self->finished,
-        }, $self->job_id);
+        }, \%job, $self->job_id);
 
         return unless $res && $res->next;
         return 1;
