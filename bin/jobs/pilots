@@ -84,6 +84,8 @@ sub get_pilot_keys {
 sub update_pilot {
     my ($pilot) = @_;
 
+    printf("Updating Pilot %s (%d)\n", $pilot->name, $pilot->character_id);
+
     my %updates;
 
     $updates{'balance'} =    $pilot->balance         if $pilot->has_balance;
