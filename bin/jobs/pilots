@@ -232,6 +232,8 @@ sub update_skills {
             }
         }
     }
+
+    $db->commit;
 }
 
 sub update_skill_queue {
