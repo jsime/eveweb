@@ -103,6 +103,7 @@ sub update_pilot {
         }
     }
 
+    update_skills($pilot);
     update_skill_queue($pilot);
 
     return 1;
@@ -186,6 +187,51 @@ sub update_membership {
     }
 
     return 1;
+}
+
+sub update_skills {
+    my ($pilot) = @_;
+
+    my @skills = $pilot->skills;
+
+    return 0 unless @skills > 0;
+
+    $db->begin;
+
+    foreach my $skill (@skills) {
+        my $res = $db->do(q{
+            update eve.pilot_skills
+            set ???
+            where pilot_id = ?
+                and skill_id = ?
+        }, {
+            level        => $skill->level,
+            skill_points => $skill->skill_points,
+        }, $pilot->character_id, $skill->skill_id);
+
+        unless ($res) {
+            $db->rollback;
+            warn $res->error;
+            return;
+        }
+
+        if ($res->count < 1) {
+            $res = $db->do(q{
+                insert into eve.pilot_skills ???
+            }, {
+                pilot_id     => $pilot->character_id,
+                skill_id     => $skill->skill_id,
+                level        => $skill->level,
+                skill_points => $skill->skill_points,
+            });
+
+            unless ($res) {
+                $db->rollback;
+                warn $res->error;
+                return;
+            }
+        }
+    }
 }
 
 sub update_skill_queue {
