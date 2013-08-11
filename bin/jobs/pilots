@@ -206,7 +206,7 @@ sub update_skills {
                 and skill_id = ?
         }, {
             level        => $skill->level,
-            skill_points => $skill->skill_points,
+            skill_points => $skill->skillpoints_trained,
         }, $pilot->character_id, $skill->skill_id);
 
         unless ($res) {
@@ -222,7 +222,7 @@ sub update_skills {
                 pilot_id     => $pilot->character_id,
                 skill_id     => $skill->skill_id,
                 level        => $skill->level,
-                skill_points => $skill->skill_points,
+                skill_points => $skill->skillpoints_trained,
             });
 
             unless ($res) {
