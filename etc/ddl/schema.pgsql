@@ -341,5 +341,66 @@ alter table plans.skill_queues add foreign key (skill_id) references ccp.skills 
 create schema fits;
 
 
+-- SCHEMA: forums
+-- Discussion forums
+create schema forums;
+
+create table forums.forums (
+    forum_id        serial not null primary key,
+    parent_forum_id integer,
+    name            text not null,
+    description     text,
+    created_at      timestamp with time zone not null default now()
+);
+
+create index forums_parent_forum_id_idx on forums.forums (parent_forum_id);
+
+alter table forums.forums add foreign key (parent_forum_id) references forums.forums (forum_id) on update cascade on delete cascade;
+
+create table forums.forum_visibility (
+    visibility_id     serial not null primary key,
+    forum_id          integer not null,
+    global            boolean not null default 'f',
+    alliance          integer,
+    corporation       integer,
+    corporate_role_id integer,
+    created_by        integer not null,
+    created_at        timestamp with time zone not null default now()
+);
+
+create table forums.threads (
+    thread_id serial not null primary key,
+    forum_id  integer not null,
+    locked    boolean not null default 'f',
+    sticky    boolean not null default 'f'
+);
+
+create table forums.posts (
+    post_id     serial not null primary key,
+    thread_id   integer not null,
+    pilot_id    integer not null,
+    in_reply_to integer,
+    subject     text not null,
+    body        text not null,
+    created_at  timestamp with time zone not null default now()
+);
+
+create table forums.post_votes (
+    post_id     integer not null,
+    user_id     integer not null,
+    vote        integer not null,
+    created_at  timestamp with time zone not null default now()
+);
+
+alter table forums.post_votes add primary key (post_id, user_id);
+
+create table forums.thread_reads (
+    user_id   integer not null,
+    thread_id integer not null,
+    read_at   timestamp with time zone not null
+);
+
+alter table forums.thread_reads add primary key (user_id, thread_id);
+
 -- Wonders will never cease if we got here and the transaction hasn't already failed.
 commit;
