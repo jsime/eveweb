@@ -197,6 +197,15 @@ create view ccp.skill_tree as
         join ccp.skills s3 on (s3.skill_id = q.required_skill_id)
 ;
 
+create table ccp.corporation_roles (
+    corporation_role_id serial not null primary key,
+    role_mask           bigint not null,
+    role_name           text not null
+);
+
+create index corporation_roles_role_mask_idx on ccp.corporation_roles (role_mask);
+create index corporation_roles_role_name_idx on ccp.corporation_roles (role_name);
+
 -- SCHEMA: eve
 -- Contains data collected through the EVE API provided by CCP
 create schema eve;
