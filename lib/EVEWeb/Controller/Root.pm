@@ -119,7 +119,8 @@ Standard 404 error page
 
 sub default :Path {
     my ( $self, $c ) = @_;
-    $c->response->body( 'Page not found' );
+
+    $c->stash->{'template'} = '404.tt2';
     $c->response->status(404);
 }
 
