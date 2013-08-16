@@ -265,6 +265,18 @@ create index pilot_api_keys_key_id_idx on eve.pilot_api_keys (key_id);
 alter table eve.pilot_api_keys add foreign key (pilot_id) references eve.pilots (pilot_id) on update cascade on delete cascade;
 alter table eve.pilot_api_keys add foreign key (key_id) references eve.api_keys (key_id) on update cascade on delete cascade;
 
+create table eve.pilot_attributes (
+    pilot_id     integer not null,
+    attribute_id integer not null,
+    level        integer not null
+);
+
+alter table eve.pilot_attributes add primary key (pilot_id, attribute_id);
+create index pilot_attributes_attribute_id_idx on eve.pilot_attributes (attribute_id);
+
+alter table eve.pilot_attributes add foreign key (pilot_id) references eve.pilots (pilot_id) on update cascade on delete cascade;
+alter table eve.pilot_attributes add foreign key (attribute_id) references ccp.attributes (attribute_id) on update cascade;
+
 create table eve.pilot_skills (
     pilot_id        integer not null,
     skill_id        integer not null,
