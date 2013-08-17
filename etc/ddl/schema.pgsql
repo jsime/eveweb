@@ -206,6 +206,47 @@ create table ccp.corporation_roles (
 create index corporation_roles_role_mask_idx on ccp.corporation_roles (role_mask);
 create index corporation_roles_role_name_idx on ccp.corporation_roles (role_name);
 
+create table ccp.type_categories (
+    type_category_id integer not null primary key,
+    name             text not null,
+    description      text,
+    published        boolean not null default 't'
+);
+
+create index type_categories_name_idx on ccp.type_categories (name);
+create index type_categories_published_idx on ccp.type_categories (published);
+
+create table ccp.type_groups (
+    type_group_id    integer not null primary key,
+    type_category_id integer not null,
+    name             text not null,
+    description      text,
+    -- TODO
+    published        boolean not null default 't'
+);
+
+create index type_groups_type_category_id_idx on ccp.type_groups (type_category_id);
+create index type_groups_name_idx on ccp.type_groups (name);
+create index type_groups_published_idx on ccp.type_groups (published);
+
+alter table ccp.type_groups add foreign key (type_category_id) references ccp.type_categories (type_category_id) on update cascade on delete cascade;
+
+create table ccp.types (
+    type_id       integer not null primary key,
+    type_group_id integer not null,
+    name          text not null,
+    description   text,
+    base_price    numeric(20,4),
+    -- TODO
+    published     boolean not null default 't'
+);
+
+create index types_type_group_id_idx on ccp.types (type_group_id);
+create index types_name_idx on ccp.types (name);
+create index types_published_idx on ccp.types (published);
+
+alter table ccp.types add foreign key (type_group_id) references ccp.type_groups (type_group_id) on update cascade on delete cascade;
+
 -- SCHEMA: eve
 -- Contains data collected through the EVE API provided by CCP
 create schema eve;
