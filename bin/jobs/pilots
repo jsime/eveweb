@@ -105,6 +105,7 @@ sub update_pilot {
         }
     }
 
+    update_attributes($pilot);
     update_skills($pilot);
     update_skill_queue($pilot);
 
@@ -189,6 +190,54 @@ sub update_membership {
     }
 
     return 1;
+}
+
+sub update_attributes {
+    my ($pilot) = @_;
+
+    $db->begin;
+
+    foreach my $attr (qw( intelligence memory charisma perception willpower )) {
+        my $has_attr = 'has_' . $attr;
+
+        next unless $pilot->$has_attr;
+
+        my $res = $db->do(q{
+            update eve.pilot_attributes
+            set ???
+            where pilot_id = ?
+                and attribute_id = (select attribute_id
+                                    from ccp.attributes
+                                    where lower(name) = ?)
+        }, {
+            level => $pilot->$attr
+        }, $pilot->character_id, $attr);
+
+        unless ($res) {
+            $db->rollback;
+            warn $res->error;
+            return;
+        }
+
+        if ($res->count < 1) {
+            $res = $db->do(q{
+                insert into eve.pilot_attributes
+                    ( pilot_id, level, attribute_id )
+                values
+                    ( ?, ?, (select attribute_id
+                             from ccp.attributes
+                             where lower(name) = ?))
+            }, $pilot->character_id, $pilot->$attr, $attr);
+
+            unless ($res) {
+                $db->rollback;
+                warn $res->error;
+                return;
+            }
+        }
+    }
+
+    $db->commit;
 }
 
 sub update_skills {
