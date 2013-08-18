@@ -130,6 +130,19 @@ create table ccp.attributes (
 
 create index attributes_name_idx on ccp.attributes (name);
 
+create table ccp.skill_level_points (
+    level   integer not null primary key,
+    points  integer not null
+);
+
+insert into ccp.skill_level_points values
+    (1, 250),
+    (2, 1415),
+    (3, 8000),
+    (4, 45255),
+    (5, 256000)
+;
+
 create table ccp.skill_groups (
     skill_group_id  integer not null primary key,
     name            text not null,
@@ -378,6 +391,21 @@ alter table eve.pilot_corporations add foreign key (corporation_id) references e
 -- SCHEMA: plans
 -- Skill queue/plan management
 create schema plans;
+
+create view plans.training_times as
+    select p.pilot_id, s.skill_id, s.primary_attribute_id, s.secondary_attribute_id,
+        coalesce(pa1.level, 20) as primary_level, coalesce(pa2.level, 20) as secondary_level,
+        s.rank, slp.level as train_level, s.rank * slp.points as train_points,
+        (coalesce(pa1.level, 20) + cast(coalesce(pa2.level, 20) as float) / 2) * 60 as rate,
+        (s.rank * slp.points) / ((coalesce(pa1.level, 20) + cast(coalesce(pa2.level, 20) as float) / 2) / 60) as train_seconds
+    from eve.pilots p
+        cross join ccp.skills s
+        cross join ccp.skill_level_points slp
+        join ccp.attributes a1 on (a1.attribute_id = s.primary_attribute_id)
+        join ccp.attributes a2 on (a2.attribute_id = s.secondary_attribute_id)
+        left join eve.pilot_attributes pa1 on (pa1.attribute_id = a1.attribute_id and pa1.pilot_id = p.pilot_id)
+        left join eve.pilot_attributes pa2 on (pa2.attribute_id = a2.attribute_id and pa2.pilot_id = p.pilot_id)
+;
 
 create table plans.skill_queues (
     pilot_id     integer not null,
