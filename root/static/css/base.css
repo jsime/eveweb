@@ -47,7 +47,7 @@ ul.side-nav li label {
 table.full-width {
     width: 100%;
 }
-table thead tr td {
+table thead tr td, table tfoot tr td {
     font-family: "Source Sans Pro";
     font-weight: 600;
 }
