@@ -108,6 +108,21 @@ sub auto :Private {
         $c->stash->{'user'}{$res->{'pref_name'}} = $res->{'pref_value'};
     }
 
+    $c->stash->{'user'}{'pilots'} = [];
+
+    $res = $c->model('DB')->do(q{
+        select p.pilot_id, p.name, p.active
+        from eve.pilots p
+            join eve.pilot_api_keys pk on (pk.pilot_id = p.pilot_id)
+            join eve.api_keys k on (k.key_id = pk.key_id)
+        where k.user_id = ?
+        order by p.name asc
+    }, $c->stash->{'user'}{'user_id'});
+
+    while ($res->next) {
+        push(@{$c->stash->{'user'}{'pilots'}}, { map { $_ => $res->{$_} } $res->columns });
+    }
+
     return 1;
 }
 
