@@ -7,12 +7,25 @@
                     <img src="/static/images/icons/round-plus.png" width="32" height="32" />
                 </a>
                 <ul id="add-pilot" class="f-dropdown">
+                    <li><label>Active Pilot</label></li>
                 [% FOREACH pilot IN user.pilots %]
+                    [% IF pilot.active %]
                     <li>
                         <a href="#">
                             <img src="//image.eveonline.com/Character/[% pilot.pilot_id %]_32.jpg" />[% pilot.name %]
                         </a>
                     </li>
+                    [% END %]
+                [% END %]
+                    <li><label>Inactive Pilot</label></li>
+                [% FOREACH pilot IN user.pilots %]
+                    [% UNLESS pilot.active %]
+                    <li>
+                        <a href="#">
+                            <img src="//image.eveonline.com/Character/[% pilot.pilot_id %]_32.jpg" />[% pilot.name %]
+                        </a>
+                    </li>
+                    [% END %]
                 [% END %]
                 </ul>
             </td>
