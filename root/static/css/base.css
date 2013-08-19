@@ -63,6 +63,9 @@ tfoot > tr > td > div.center > ul.pagination {
     display: inline-block;
     list-style: none;
 }
+table thead tr td a.button {
+    margin: 0;
+}
 ul.pagination > li {
     display: inline-block;
 }
