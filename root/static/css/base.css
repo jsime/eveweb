@@ -70,6 +70,12 @@ a.button.image {
     padding: 0;
     border: 0;
 }
+ul.f-dropdown li {
+    padding: 0.2em;
+}
+ul.f-dropdown li img {
+    margin-right: 0.5em;
+}
 ul.pagination > li {
     display: inline-block;
 }
