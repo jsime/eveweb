@@ -11,7 +11,7 @@
                 [% FOREACH pilot IN user.pilots %]
                     [% IF pilot.active %]
                     <li>
-                        <a href="#">
+                        <a href="[% c.uri_for('/common/add_pilot_compare', pilot.pilot_id) %]">
                             <img src="//image.eveonline.com/Character/[% pilot.pilot_id %]_32.jpg" />[% pilot.name %]
                         </a>
                     </li>
@@ -21,7 +21,7 @@
                 [% FOREACH pilot IN user.pilots %]
                     [% UNLESS pilot.active %]
                     <li>
-                        <a href="#">
+                        <a href="[% c.uri_for('/common/add_pilot_compare', pilot.pilot_id) %]">
                             <img src="//image.eveonline.com/Character/[% pilot.pilot_id %]_32.jpg" />[% pilot.name %]
                         </a>
                     </li>
