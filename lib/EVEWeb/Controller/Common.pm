@@ -17,14 +17,51 @@ Catalyst Controller.
 =cut
 
 
-=head2 index
+=head2 add_pilot_compare
+
+Accepts a pilot ID to add to the current user's list of pilots to show
+in comparison/skill tables.
 
 =cut
 
-sub index :Path :Args(0) {
-    my ( $self, $c ) = @_;
+sub add_pilot_compare :Local :Args(1) {
+    my ($self, $c, $pilot_id) = @_;
 
-    $c->response->body('Matched EVEWeb::Controller::Common in Common.');
+    my $redir_to = $c->request->params->{'to'} || $c->request->referer;
+
+    if (grep { $_->{'pilot_id'} == $pilot_id } @{$c->stash->{'user'}{'pilots'}}) {
+        if (exists $c->stash->{'user'}{'pilots_compare'}) {
+            $c->stash->{'user'}{'pilots_compare'} = [split(',', $c->stash->{'user'}{'pilots_compare'})];
+        } else {
+            $c->stash->{'user'}{'pilots_compare'} = [];
+        }
+
+        unless (grep { $_ == $pilot_id } @{$c->stash->{'user'}{'pilots_compare'}}) {
+            push(@{$c->stash->{'user'}{'pilots_compare'}}, $pilot_id);
+
+            my $res = $c->model('DB')->do(q{
+                update public.user_prefs
+                set ???
+                where user_id = ?
+                    and pref_name = 'pilots_compare'
+            }, {
+                pref_value => join(',', @{$c->stash->{'user'}{'pilots_compare'}}),
+                updated_at => 'now',
+            }, $c->stash->{'user'}{'user_id'});
+
+            if ($res && $res->count < 1) {
+                $res = $c->model('DB')->do(q{
+                    insert into public.user_prefs ???
+                }, {
+                    user_id    => $c->stash->{'user'}{'user_id'},
+                    pref_name  => 'pilots_compare',
+                    pref_value => join(',', @{$c->stash->{'user'}{'pilots_compare'}}),
+                });
+            }
+        }
+    }
+
+    $c->response->redirect($redir_to);
 }
 
 
