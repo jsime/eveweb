@@ -73,6 +73,13 @@ a.button.image {
 ul.f-dropdown li img {
     margin-right: 0.5em;
 }
+ul.f-dropdown li label {
+    font-size: 140%;
+    padding: 0.5em;
+}
+ul.f-dropdown li label:hover {
+    background-color: white;
+}
 ul.pagination > li {
     display: inline-block;
 }
