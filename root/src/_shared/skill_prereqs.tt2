@@ -2,31 +2,45 @@
     <thead>
         <tr>
             <td colspan="2">[% skills.first.skill_name || skill.name %]</td>
+            <td width="48">
+                <a class="right" href="#" class="button image" data-dropdown="add-pilot">
+                    <img src="/static/images/icons/round-plus.png" width="32" height="32" />
+                </a>
+                <ul id="add-pilot" class="f-dropdown">
+                [% FOREACH pilot IN user.pilots %]
+                    <li>
+                        <a href="#">
+                            <img src="//image.eveonline.com/Character/[% pilot.pilot_id %]_32.jpg" />[% pilot.name %]
+                        </a>
+                    </li>
+                [% END %]
+                </ul>
+            </td>
         </tr>
     </thead>
     <tfoot>
         <tr>
-            <td colspan="2">Time to train: 763y 279d 14h 52m 8s</td>
+            <td colspan="3">Time to train: 763y 279d 14h 52m 8s</td>
         </tr>
     </tfoot>
     <tbody>
     [% IF skills.size < 1 %]
         <tr>
-            <td colspan="2"><em>No pre-requisites</em></td>
+            <td colspan="3"><em>No pre-requisites</em></td>
         </tr>
     [% ELSE %]
         [% FOREACH skill IN skills %]
             [% IF skill.tier_path_str == 1 %]
             <tr>
-                <td colspan="2">Primary Skill</td>
+                <td colspan="3">Primary Skill</td>
             </tr>
             [% ELSIF skill.tier_path_str == 2 %]
             <tr>
-                <td colspan="2">Secondary Skill</td>
+                <td colspan="3">Secondary Skill</td>
             </tr>
             [% ELSIF skill.tier_path_str == 3 %]
             <tr>
-                <td colspan="2">Tertiary Skill</td>
+                <td colspan="3">Tertiary Skill</td>
             </tr>
             [% END %]
             <tr>
@@ -38,6 +52,7 @@ Secondary: [% skill.secondary_attribute_name %]">
                     </a>
                 </td>
                 <td>Rank [% skill.rank %]</td>
+                <td></td>
             </tr>
         [% END %]
     [% END %]
