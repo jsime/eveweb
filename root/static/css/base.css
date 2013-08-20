@@ -55,6 +55,11 @@ table tbody tr td {
     font-family: "Source Sans Pro";
     font-weight: 400;
 }
+table tbody tr.section {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background-color: white;
+}
 ul.breadcrumbs li.right.first :before {
     content: "" !important;
 }
