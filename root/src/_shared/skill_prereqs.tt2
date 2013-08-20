@@ -61,15 +61,15 @@
         [% FOREACH skill IN skills %]
             [% skill_id = skill.required_skill_id %]
             [% IF skill.tier_path_str == 1 %]
-            <tr>
+            <tr class="section">
                 <td colspan="[% 2 + pilots.size %]">Primary Skill</td>
             </tr>
             [% ELSIF skill.tier_path_str == 2 %]
-            <tr>
+            <tr class="section">
                 <td colspan="[% 2 + pilots.size %]">Secondary Skill</td>
             </tr>
             [% ELSIF skill.tier_path_str == 3 %]
-            <tr>
+            <tr class="section">
                 <td colspan="[% 2 + pilots.size %]">Tertiary Skill</td>
             </tr>
             [% END %]
