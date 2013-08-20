@@ -37,7 +37,7 @@
                 <ul id="prereq-pilot-[% pilot_id %]" class="f-dropdown">
                     <li><label>[% pilots.$pilot_id.name %]</label></li>
                     <li>
-                        <a href="[% c.uri_for('/common/remove_pilot_compare', pilot.pilot_id) %]">Remove</a>
+                        <a href="[% c.uri_for('/common/remove_pilot_compare', pilot_id) %]">Remove</a>
                     </li>
                 </ul>
             </td>
