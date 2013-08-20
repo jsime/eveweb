@@ -29,6 +29,20 @@ sub add_pilot_compare :Local :Args(1) {
 
     my $redir_to = $c->request->params->{'to'} || $c->request->referer;
 
+    my $res = $c->model('DB')->do(q{
+        select p.pilot_id
+        from eve.pilots p
+            join eve.pilot_api_keys pk on (pk.pilot_id = p.pilot_id)
+            join eve.api_keys k on (k.key_id = pk.key_id)
+        where p.pilot_id = ?
+            and k.user_id = ?
+    }, $pilot_id, $c->stash->{'user'}{'user_id'});
+
+    unless ($res && $res->next) {
+        $c->response->redirect($redir_to);
+        return;
+    }
+
     if (grep { $_->{'pilot_id'} == $pilot_id } @{$c->stash->{'user'}{'pilots'}}) {
         if (exists $c->stash->{'user'}{'pilots_compare'}) {
             $c->stash->{'user'}{'pilots_compare'} = [split(',', $c->stash->{'user'}{'pilots_compare'})]
@@ -40,7 +54,7 @@ sub add_pilot_compare :Local :Args(1) {
         unless (grep { $_ == $pilot_id } @{$c->stash->{'user'}{'pilots_compare'}}) {
             push(@{$c->stash->{'user'}{'pilots_compare'}}, $pilot_id);
 
-            my $res = $c->model('DB')->do(q{
+            $res = $c->model('DB')->do(q{
                 update public.user_prefs
                 set ???
                 where user_id = ?
