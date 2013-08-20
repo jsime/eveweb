@@ -31,7 +31,8 @@ sub add_pilot_compare :Local :Args(1) {
 
     if (grep { $_->{'pilot_id'} == $pilot_id } @{$c->stash->{'user'}{'pilots'}}) {
         if (exists $c->stash->{'user'}{'pilots_compare'}) {
-            $c->stash->{'user'}{'pilots_compare'} = [split(',', $c->stash->{'user'}{'pilots_compare'})];
+            $c->stash->{'user'}{'pilots_compare'} = [split(',', $c->stash->{'user'}{'pilots_compare'})]
+                unless ref($c->stash->{'user'}{'pilots_compare'}) eq 'ARRAY';
         } else {
             $c->stash->{'user'}{'pilots_compare'} = [];
         }
