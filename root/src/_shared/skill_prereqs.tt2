@@ -78,9 +78,9 @@ Secondary: [% skill.secondary_attribute_name %]">
                 [% FOREACH pilot_id IN pilots.keys.sort %]
                 <td>
                     [% pilot_skill = pilots.$pilot_id.skills.$skill_id %]
-                    [% IF pilot_skill && pilot_skill.trained_level >= 1 && pilot_skill.trained_level < skill.required_level %]
+                    [% IF pilot_skill && pilot_skill.trained_level && pilot_skill.trained_level >= 1 && pilot_skill.trained_level < skill.required_level %]
                         [% pilot_skill.trained_level | roman %]
-                    [% ELSIF pilot_skill && pilot_skill.trained_level >= skill.required_level %]
+                    [% ELSIF pilot_skill && pilot_skill.trained_level && pilot_skill.trained_level >= skill.required_level %]
                         @
                     [% ELSE %]
                         -
