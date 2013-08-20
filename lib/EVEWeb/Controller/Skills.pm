@@ -94,11 +94,54 @@ sub skills :PathPart Chained('/') Args(1) {
         order by t.tier_path
     }, $skill_id);
 
+    my @skill_ids;
+
     if ($res) {
         $c->stash->{'required_skills'} = [];
 
         while ($res->next) {
             push(@{$c->stash->{'required_skills'}}, { map { $_ => $res->{$_} } $res->columns });
+            push(@skill_ids, $res->{'required_skill_id'});
+        }
+    }
+
+    if (@skill_ids > 0 && @{$c->stash->{'user'}{'pilots_compare'}} > 0) {
+        $res = $c->model('DB')->do(q{
+            select p.pilot_id, p.name,
+                tt.skill_id, tt.train_level, tt.train_points, tt.rate, tt.train_seconds,
+                justify_interval(interval '1 second' * tt.train_seconds),
+                ps.level as trained_level
+            from plans.training_times tt
+                join eve.pilots p on (p.pilot_id = tt.pilot_id)
+                left join eve.pilot_skills ps on (ps.pilot_id = tt.pilot_id and ps.skill_id = tt.skill_id)
+            where tt.pilot_id in ???
+                and tt.skill_id in ???
+        }, $c->stash->{'user'}{'pilots_compare'}, \@skill_ids);
+
+        if ($res) {
+            $c->stash->{'pilot_skills'} = {};
+
+            while ($res->next) {
+                $c->stash->{'pilot_skills'}{$res->{'pilot_id'}} = {
+                    name   => $res->{'name'},
+                    skills => {},
+                } unless exists $c->stash->{'pilot_skills'}{$res->{'pilot_id'}};
+
+                $c->stash->{'pilot_skills'}{$res->{'pilot_id'}}{'skills'}{$res->{'skill_id'}} = {
+                    trained_level => $res->{'trained_level'},
+                    rate          => $res->{'rate'},
+                    train_points  => 0,
+                    train_seconds => 0,
+                } unless exists $c->stash->{'pilot_skills'}{$res->{'pilot_id'}}{'skills'}{$res->{'skill_id'}};
+
+                # don't tack on numbers for what remains to be trained if they already meet the requirements
+                next if $res->{'trained_level'} >= $res->{'train_level'};
+
+                $c->stash->{'pilot_skills'}{$res->{'pilot_id'}}{'skills'}{$res->{'skill_id'}}{'train_points'}
+                    += $res->{'train_points'};
+                $c->stash->{'pilot_skills'}{$res->{'pilot_id'}}{'skills'}{$res->{'skill_id'}}{'train_seconds'}
+                    += $res->{'train_seconds'};
+            }
         }
     }
 
