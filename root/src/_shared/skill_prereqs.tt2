@@ -1,7 +1,7 @@
 <table class="full-width">
     <thead>
         <tr>
-            <td colspan="2">[% skills.first.skill_name || skill.name %]</td>
+            <td>[% skills.first.skill_name || skill.name %]</td>
             <td width="48">
                 <a class="right" href="#" class="button image" data-dropdown="add-pilot">
                     <img src="/static/images/icons/round-plus.png" width="32" height="32" />
@@ -46,7 +46,7 @@
     </thead>
     <tfoot>
         <tr>
-            <td colspan="3">Time to train [% skill.name %] to I:</td>
+            <td colspan="2">Time to train [% skill.name %] to I:</td>
             [% FOREACH pilot_id IN pilots.keys %]
             <td></td>
             [% END %]
@@ -55,22 +55,22 @@
     <tbody>
     [% IF skills.size < 1 %]
         <tr>
-            <td colspan="3"><em>No pre-requisites</em></td>
+            <td colspan="2"><em>No pre-requisites</em></td>
         </tr>
     [% ELSE %]
         [% FOREACH skill IN skills %]
             [% skill_id = skill.required_skill_id %]
             [% IF skill.tier_path_str == 1 %]
             <tr>
-                <td colspan="3">Primary Skill</td>
+                <td colspan="[% 2 + pilots.size %]">Primary Skill</td>
             </tr>
             [% ELSIF skill.tier_path_str == 2 %]
             <tr>
-                <td colspan="3">Secondary Skill</td>
+                <td colspan="[% 2 + pilots.size %]">Secondary Skill</td>
             </tr>
             [% ELSIF skill.tier_path_str == 3 %]
             <tr>
-                <td colspan="3">Tertiary Skill</td>
+                <td colspan="[% 2 + pilots.size %]">Tertiary Skill</td>
             </tr>
             [% END %]
             <tr>
@@ -82,7 +82,6 @@ Secondary: [% skill.secondary_attribute_name %]">
                     </a>
                 </td>
                 <td>Rank [% skill.rank %]</td>
-                <td></td>
                 [% FOREACH pilot_id IN pilots.keys.sort %]
                 <td>
                     [% pilot_skill = pilots.$pilot_id.skills.$skill_id %]
