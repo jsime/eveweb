@@ -108,6 +108,15 @@ sub auto :Private {
         $c->stash->{'user'}{$res->{'pref_name'}} = $res->{'pref_value'};
     }
 
+    # Convert the formats of some preferences (since everything's just a string in the DB)
+    if (exists $c->stash->{'user'}{'pilots_compare'}) {
+        $c->stash->{'user'}{'pilots_compare'} = [
+            split(',', $c->stash->{'user'}{'pilots_compare'})
+        ];
+    } else {
+        $c->stash->{'user'}{'pilots_compare'} = [];
+    }
+
     $c->stash->{'user'}{'pilots'} = [];
 
     $res = $c->model('DB')->do(q{
