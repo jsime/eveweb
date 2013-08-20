@@ -29,11 +29,19 @@
                 [% END %]
                 </ul>
             </td>
+            [% FOREACH pilot_id IN pilots.keys.sort %]
+            <td width="48">
+                <img src="//image.eveonline.com/Character/[% pilot_id %]_32.jpg" />
+            </td>
+            [% END %]
         </tr>
     </thead>
     <tfoot>
         <tr>
-            <td colspan="3">Time to train: 763y 279d 14h 52m 8s</td>
+            <td colspan="3">Time to train [% skill.name %] to I:</td>
+            [% FOREACH pilot_id IN pilots.keys %]
+            <td></td>
+            [% END %]
         </tr>
     </tfoot>
     <tbody>
@@ -43,6 +51,7 @@
         </tr>
     [% ELSE %]
         [% FOREACH skill IN skills %]
+            [% skill_id = skill.required_skill_id %]
             [% IF skill.tier_path_str == 1 %]
             <tr>
                 <td colspan="3">Primary Skill</td>
@@ -66,6 +75,18 @@ Secondary: [% skill.secondary_attribute_name %]">
                 </td>
                 <td>Rank [% skill.rank %]</td>
                 <td></td>
+                [% FOREACH pilot_id IN pilots.keys.sort %]
+                <td>
+                    [% pilot_skill = pilots.$pilot_id.skills.$skill_id %]
+                    [% IF pilot_skill && pilot_skill.trained_level >= 1 && pilot_skill.trained_level < skill.required_level %]
+                        [% pilot_skill.trained_level | roman %]
+                    [% ELSIF pilot_skill && pilot_skill.trained_level >= skill.required_level %]
+                        @
+                    [% ELSE %]
+                        -
+                    [% END %]
+                </td>
+                [% END %]
             </tr>
         [% END %]
     [% END %]

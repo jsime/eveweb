@@ -36,6 +36,7 @@
 
         [% INCLUDE _shared/skill_prereqs.tt2
             skills = required_skills
+            pilots = pilot_skills
         %]
     </div>
 </div>
