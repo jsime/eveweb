@@ -135,7 +135,7 @@ sub skills :PathPart Chained('/') Args(1) {
                 } unless exists $c->stash->{'pilot_skills'}{$res->{'pilot_id'}}{'skills'}{$res->{'skill_id'}};
 
                 # don't tack on numbers for what remains to be trained if they already meet the requirements
-                next if $res->{'trained_level'} >= $res->{'train_level'};
+                next if $res->{'trained_level'} && $res->{'trained_level'} >= $res->{'train_level'};
 
                 $c->stash->{'pilot_skills'}{$res->{'pilot_id'}}{'skills'}{$res->{'skill_id'}}{'train_points'}
                     += $res->{'train_points'};
