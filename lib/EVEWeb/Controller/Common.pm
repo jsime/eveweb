@@ -77,29 +77,27 @@ sub remove_pilot_compare :Local :Args(1) {
 
     my $redir_to = $c->request->params->{'to'} || $c->request->referer;
 
-    if (grep { $_ == $pilot_id } @{$c->stash->{'user'}{'pilots_compare'}}) {
-        my @pilot_ids = grep { $_ != $pilot_id } @{$c->stash->{'user'}{'pilots_compare'}};
+    my @pilot_ids = grep { $_ != $pilot_id } @{$c->stash->{'user'}{'pilots_compare'}};
 
-        my $res;
+    my $res;
 
-        if (@pilot_ids > 0) {
-            $res = $c->model('DB')->do(q{
-                update public.user_prefs
-                set pref_value = ?,
-                    updated_at = now()
-                where user_id = ?
-                    and pref_name = 'pilots_compare'
-            }, join(',', @pilot_ids), $c->stash->{'user'}{'user_id'});
-        } else {
-            $res = $c->model('DB')->do(q{
-                delete from public.user_prefs
-                where user_id = ?
-                    and pref_name = 'pilots_compare'
-            }, $c->stash->{'user'}{'user_id'});
-        }
-
-        warn $res->error unless $res;
+    if (@pilot_ids > 0) {
+        $res = $c->model('DB')->do(q{
+            update public.user_prefs
+            set pref_value = ?,
+                updated_at = now()
+            where user_id = ?
+                and pref_name = 'pilots_compare'
+        }, join(',', @pilot_ids), $c->stash->{'user'}{'user_id'});
+    } else {
+        $res = $c->model('DB')->do(q{
+            delete from public.user_prefs
+            where user_id = ?
+                and pref_name = 'pilots_compare'
+        }, $c->stash->{'user'}{'user_id'});
     }
+
+    warn $res->error unless $res;
 
     $c->response->redirect($redir_to);
 }
