@@ -31,7 +31,15 @@
             </td>
             [% FOREACH pilot_id IN pilots.keys.sort %]
             <td width="48">
-                <img src="//image.eveonline.com/Character/[% pilot_id %]_32.jpg" />
+                <a href="#" class="button image" data-dropdown="prereq-pilot-[% pilot_id %]">
+                    <img src="//image.eveonline.com/Character/[% pilot_id %]_32.jpg" />
+                </a>
+                <ul id="prereq-pilot-[% pilot_id %]" class="f-dropdown">
+                    <li><label>[% pilots.$pilot_id.name %]</label></li>
+                    <li>
+                        <a href="[% c.uri_for('/common/remove_pilot_compare', pilot.pilot_id) %]">Remove</a>
+                    </li>
+                </ul>
             </td>
             [% END %]
         </tr>
