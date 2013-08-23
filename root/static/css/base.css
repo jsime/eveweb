@@ -103,3 +103,12 @@ div.center {
 .indent-7 { padding-left: 7em; }
 .indent-8 { padding-left: 8em; }
 .indent-9 { padding-left: 9em; }
+.skill.none {
+    color: #f00;
+}
+.skill.partial {
+    color: #fc0;
+}
+.skill.full {
+    color: #090;
+}
