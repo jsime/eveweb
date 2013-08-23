@@ -86,11 +86,11 @@ Secondary: [% skill.secondary_attribute_name %]">
                 <td>
                     [% pilot_skill = pilots.$pilot_id.skills.$skill_id %]
                     [% IF pilot_skill && pilot_skill.trained_level && pilot_skill.trained_level >= 1 && pilot_skill.trained_level < skill.required_level %]
-                        [% pilot_skill.trained_level | roman %]
+                        <span class="skill partial">[% pilot_skill.trained_level | roman %]</span>
                     [% ELSIF pilot_skill && pilot_skill.trained_level && pilot_skill.trained_level >= skill.required_level %]
-                        @
+                        <span class="skill full">[% pilot_skill.trained_level | roman %]</span>
                     [% ELSE %]
-                        -
+                        <span class="skill none">-</span>
                     [% END %]
                 </td>
                 [% END %]
