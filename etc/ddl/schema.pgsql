@@ -375,6 +375,21 @@ create unique index corporations_name_idx on eve.corporations (name);
 create unique index corporations_ticker_idx on eve.corporations (ticker);
 create index corporations_cached_until_idx on eve.corporations (cached_until);
 
+create table eve.alliance_corporations (
+    alliance_id    bigint not null,
+    corporation_id bigint not null,
+    from_datetime  timestamp with time zone not null,
+    to_datetime    timestamp with time zone
+);
+
+alter table eve.alliance_corporations add primary key (alliance_id, corporation_id, from_datetime);
+create index alliance_corporations_corporation_id_idx on eve.alliance_corporations (corporation_id);
+create index alliance_corporations_from_datetime_idx on eve.alliance_corporations (from_datetime);
+create index alliance_corporations_to_datetime_idx on eve.alliance_corporations (to_datetime);
+
+alter table eve.alliance_corporations add foreign key (alliance_id) references eve.alliances (alliance_id) on update cascade;
+alter table eve.alliance_corporations add foreign key (corporation_id) references eve.corporations (corporation_id) on update cascade;
+
 create table eve.corporation_api_keys (
     corporation_id  bigint not null,
     key_id          integer not null
