@@ -375,6 +375,9 @@ create unique index corporations_name_idx on eve.corporations (name);
 create unique index corporations_ticker_idx on eve.corporations (ticker);
 create index corporations_cached_until_idx on eve.corporations (cached_until);
 
+-- add the executor FKEY from alliances now that we have the referenced object
+alter table eve.alliances add foreign key (executor) references eve.corporations (corporation_id) on update cascade;
+
 create table eve.alliance_corporations (
     alliance_id    bigint not null,
     corporation_id bigint not null,
