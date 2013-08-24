@@ -347,6 +347,19 @@ alter table eve.pilot_skills add foreign key (skill_id) references ccp.skills (s
 
 alter table eve.pilot_skills add constraint valid_skill_level check (level between 0 and 5);
 
+create table eve.alliances (
+    alliance_id bigint not null primary key,
+    name        text not null,
+    short_name  text not null,
+    executor    bigint,
+    founded     timestamp with time zone not null
+);
+
+create unique index alliances_name_idx on eve.alliances (name);
+create unique index alliances_short_name_idx on eve.alliances (short_name);
+create index alliances_executor_idx on eve.alliances (executor);
+create index alliances_founded_idx on eve.alliances (founded);
+
 create table eve.corporations (
     corporation_id  bigint not null primary key,
     name            text not null,
