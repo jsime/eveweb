@@ -1,0 +1,73 @@
+#!/usr/bin/env perl
+
+use v5.10;
+use strict;
+use warnings FATAL => 'all';
+
+use Config::Any;
+use Data::Dumper;
+use DBIx::DataStore ( config => 'yaml' );
+use File::Basename;
+use Games::EVE::APIv2;
+
+my ($SCRIPT, $BASEDIR) = fileparse(__FILE__);
+eval <<EOV;
+    use lib '$BASEDIR/../../lib';
+
+    use EVEWeb::Job;
+EOV
+die "Could not set up environment properly.\n" if $@;
+
+my $cfg = Config::Any->load_files({
+    files => ["$BASEDIR/../../eveweb.conf"],
+    use_ext => 1,
+    flatten_to_hash => 1,
+});
+$cfg = $cfg->{(keys %{$cfg})[0]};
+
+my $db = DBIx::DataStore->new($cfg->{'Model::DB'}{'datastore'});
+
+update_alliance($_) for Games::EVE::APIv2::Alliance->all();
+
+sub update_alliance {
+    my ($alliance) = @_;
+
+    printf("Updating Alliance %s (%d)\n", $alliance->name, $alliance->alliance_id);
+
+    $db->begin;
+
+    my $res = $db->do(q{
+        update eve.alliances
+        set ???
+        where alliance_id = ?
+    }, {
+        name        => $alliance->name,
+        short_name  => $alliance->short_name,
+        founded     => $alliance->founded . '+0000',
+    }, $alliance->alliance_id);
+
+    unless ($res) {
+        warn $res->error;
+        $db->rollback;
+        return 0;
+    }
+
+    if ($res->count < 1) {
+        $res = $db->do(q{
+            insert into eve.alliances ???
+        }, {
+            alliance_id => $alliance->alliance_id,
+            name        => $alliance->name,
+            short_name  => $alliance->short_name,
+            founded     => $alliance->founded . '+0000',
+        });
+
+        unless ($res) {
+            warn $res->error;
+            $db->rollback;
+            return 0;
+        }
+    }
+
+    $db->commit;
+}
