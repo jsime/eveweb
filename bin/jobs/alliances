@@ -27,7 +27,27 @@ $cfg = $cfg->{(keys %{$cfg})[0]};
 
 my $db = DBIx::DataStore->new($cfg->{'Model::DB'}{'datastore'});
 
-update_alliance($_) for Games::EVE::APIv2::Alliance->all();
+# Get a random admin user's key. Doesn't really matter whose, or what its access
+# mask is. We just need something to pass in to the API lib.
+my $res = $db->do(q{
+    select k.key_id, k.v_code
+    from eve.api_keys k
+        join public.users u on (u.user_id = k.user_id)
+        join public.user_roles ur on (ur.user_id = u.user_id)
+        join public.roles r on (r.role_id = ur.role_id)
+    where r.role_name in ('admin','superadmin')
+        and k.active
+        and coalesce(k.expires_at, 'infinity'::timestamptz) > now()
+    order by random()
+    limit 1
+});
+
+die $res->error unless $res;
+die "Could not find a suitable API Key for retrieving alliance information.\n"
+    unless $res->next;
+
+my $api = Games::EVE::APIv2->new( key_id => $res->{'key_id'}, v_code => $res->{'v_code'} );
+update_alliance($_) for Games::EVE::APIv2::Alliance->all($api->key);
 
 sub update_alliance {
     my ($alliance) = @_;
