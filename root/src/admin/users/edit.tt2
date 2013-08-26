@@ -1,1 +1,5 @@
+[% META title = 'Admin - Users' %]
+
+[% PROCESS site/breadcrumbs %]
+
 <h1>Edit User: [% edit_user.username %]</h1>
