@@ -59,6 +59,25 @@ sub index :Path :Args(0) {
     $c->stash->{'template'} = 'admin/users/index.tt2';
 }
 
+sub edit : Local Args(1) {
+    my ($self, $c, $user_id) = @_;
+
+    my $res = $c->model('DB')->do(q{
+        select u.*
+        from public.users u
+        where u.user_id = ?
+    }, $user_id);
+
+    unless ($res && $res->next) {
+        $c->response->redirect($c->uri_for('/admin/users'));
+        return;
+    }
+
+    $c->stash->{'edit_user'} = { map { $_ => $res->{$_} } $res->columns };
+
+    $c->stash->{'template'} = 'admin/users/edit.tt2';
+}
+
 
 =head1 AUTHOR
 
