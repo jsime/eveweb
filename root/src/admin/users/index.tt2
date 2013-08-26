@@ -19,7 +19,7 @@
 [% FOREACH user IN users %]
     <tr>
         <td>
-            <a href="[% c.uri_for('/admin/users', user.user_id) %]">
+            <a href="[% c.uri_for('/admin/users/edit', user.user_id) %]">
                 [% user.username %]
             </a>
         </td>
