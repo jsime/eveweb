@@ -75,6 +75,11 @@ sub edit : Local Args(1) {
 
     $c->stash->{'edit_user'} = { map { $_ => $res->{$_} } $res->columns };
 
+    push(@{$c->stash->{'breadcrumbs'}},
+        { name => $c->stash->{'edit_user'}{'username'},
+          link => $c->uri_for('/admin/users/edit', $c->stash->{'edit_user'}{'user_id'}),
+        });
+
     $c->stash->{'template'} = 'admin/users/edit.tt2';
 }
 
