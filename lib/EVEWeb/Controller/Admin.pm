@@ -32,7 +32,7 @@ sub auto :Private {
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->response->body('Matched EVEWeb::Controller::Admin in Admin.');
+    $c->stash->{'template'} = 'admin/index.tt2';
 }
 
 
