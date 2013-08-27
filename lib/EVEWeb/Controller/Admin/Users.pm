@@ -75,6 +75,25 @@ sub edit : Local Args(1) {
 
     $c->stash->{'edit_user'} = { map { $_ => $res->{$_} } $res->columns };
 
+    $res = $c->model('DB')->do(q{
+        select p.pref_name, p.pref_value,
+            to_char(p.created_at at time zone ?, ?) as created_at,
+            to_char(p.updated_at at time zone ?, ?) as updated_at
+        from public.user_prefs p
+        where p.user_id = ?
+        order by p.pref_name asc
+    }, ($c->stash->{'user'}{'timezone'}, $c->stash->{'user'}{'format_datetime'}) x 2,
+        $c->stash->{'edit_user'}{'user_id'}
+    );
+
+    if ($res) {
+        $c->stash->{'preferences'} = [];
+
+        while ($res->next) {
+            push(@{$c->stash->{'preferences'}}, { map { $_ => $res->{$_} } $res->columns });
+        }
+    }
+
     push(@{$c->stash->{'breadcrumbs'}},
         { name => $c->stash->{'edit_user'}{'username'},
           link => $c->uri_for('/admin/users/edit', $c->stash->{'edit_user'}{'user_id'}),
