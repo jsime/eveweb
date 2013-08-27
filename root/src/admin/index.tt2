@@ -1,0 +1,5 @@
+[% META title = 'Administration' %]
+
+[% PROCESS site/breadcrumbs %]
+
+<h1>Administration Dashboard</h1> 
