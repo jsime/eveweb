@@ -94,6 +94,26 @@ sub edit : Local Args(1) {
         }
     }
 
+    $res = $c->model('DB')->do(q{
+        select k.key_id, k.key_type, k.access_mask, k.active, k.verified,
+            to_char(k.expires_at at time zone ?, ?) as expires_at,
+            to_char(k.created_at at time zone ?, ?) as created_at,
+            to_char(k.updated_at at time zone ?, ?) as updated_at
+        from eve.api_keys k
+        where k.user_id = ?
+        order by k.key_id asc
+    }, ($c->stash->{'user'}{'timezone'}, $c->stash->{'user'}{'format_datetime'}) x 3,
+        $c->stash->{'edit_user'}{'user_id'}
+    );
+
+    if ($res) {
+        $c->stash->{'edit_user'}{'keys'} = [];
+
+        while ($res->next) {
+            push(@{$c->stash->{'edit_user'}{'keys'}}, { map { $_ => $res->{$_} } $res->columns });
+        }
+    }
+
     push(@{$c->stash->{'breadcrumbs'}},
         { name => $c->stash->{'edit_user'}{'username'},
           link => $c->uri_for('/admin/users/edit', $c->stash->{'edit_user'}{'user_id'}),
