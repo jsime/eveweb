@@ -16,7 +16,7 @@
         </tr>
     </thead>
     <tbody>
-    [% FOREACH pref IN preferences %]
+    [% FOREACH pref IN edit_user.preferences %]
         <tr>
             <td>[% pref.pref_name | html%]</td>
             <td>[% pref.pref_value | html %]</td>

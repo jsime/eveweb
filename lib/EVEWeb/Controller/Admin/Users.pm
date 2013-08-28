@@ -87,10 +87,10 @@ sub edit : Local Args(1) {
     );
 
     if ($res) {
-        $c->stash->{'preferences'} = [];
+        $c->stash->{'edit_user'}{'preferences'} = [];
 
         while ($res->next) {
-            push(@{$c->stash->{'preferences'}}, { map { $_ => $res->{$_} } $res->columns });
+            push(@{$c->stash->{'edit_user'}{'preferences'}}, { map { $_ => $res->{$_} } $res->columns });
         }
     }
 
