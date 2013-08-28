@@ -26,3 +26,28 @@
     [% END %]
     </tbody>
 </table>
+
+<h2>API Keys</h2>
+
+<table class="full-width">
+    <thead>
+        <tr>
+            <td>Key ID</td>
+            <td>Type</td>
+            <td>Access Mask</td>
+            <td>Expires</td>
+            <td>Added</td>
+        </tr>
+    </thead>
+    <tbody>
+    [% FOREACH key IN edit_user.keys %]
+        <tr>
+            <td>[% key.key_id %]</td>
+            <td>[% key.key_type %]</td>
+            <td>[% key.access_mask || '-' %]</td>
+            <td>[% key.expires_at || 'Never' %]</td>
+            <td>[% key.created_at %]</td>
+        </tr>
+    [% END %]
+    </tbody>
+</table>
