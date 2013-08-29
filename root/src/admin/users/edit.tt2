@@ -51,3 +51,26 @@
     [% END %]
     </tbody>
 </table>
+
+<h2>Pilots</h2>
+
+<table class="full-width">
+    <thead>
+        <tr>
+            <td>Pilot Name</td>
+            <td>Active</td>
+            <td>Corporation</td>
+            <td>Alliance</td>
+        </tr>
+    </thead>
+    <tbody>
+    [% FOREACH pilot IN edit_user.pilots %]
+        <tr>
+            <td>[% pilot.name %]</td>
+            <td>[% pilot.active ? 'Y' : '-' %]</td>
+            <td>[% pilot.corporation %]</td>
+            <td>[% pilot.alliance %]</td>
+        </tr>
+    [% END %]
+    </tbody>
+</table>
