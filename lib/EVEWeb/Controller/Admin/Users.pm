@@ -121,6 +121,8 @@ sub edit : Local Args(1) {
         from eve.pilots p
             join eve.pilot_api_keys pk on (pk.pilot_id = p.pilot_id)
             join eve.api_keys k on (k.key_id = pk.key_id)
+            left join eve.pilot_corporations pc on (pc.pilot_id = p.pilot_id and pc.to_datetime is null)
+            left join eve.corporations c on (c.corporation_id = pc.corporation_id)
         where k.user_id = ?
         order by p.name asc
     }, $c->stash->{'edit_user'}{'user_id'});
