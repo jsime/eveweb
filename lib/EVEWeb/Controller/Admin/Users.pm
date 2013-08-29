@@ -114,6 +114,25 @@ sub edit : Local Args(1) {
         }
     }
 
+    $res = $c->model('DB')->do(q{
+        select p.pilot_id, p.name, p.active,
+            c.corporation_id, c.name as corporation,
+            0 as alliance_id, 'An Alliance' as alliance
+        from eve.pilots p
+            join eve.pilot_api_keys pk on (pk.pilot_id = p.pilot_id)
+            join eve.api_keys k on (k.key_id = pk.key_id)
+        where k.user_id = ?
+        order by p.name asc
+    }, $c->stash->{'edit_user'}{'user_id'});
+
+    if ($res) {
+        $c->stash->{'edit_user'}{'pilots'} = [];
+
+        while ($res->next) {
+            push(@{$c->stash->{'edit_user'}{'pilots'}}, { map { $_ => $res->{$_} } $res->columns });
+        }
+    }
+
     push(@{$c->stash->{'breadcrumbs'}},
         { name => $c->stash->{'edit_user'}{'username'},
           link => $c->uri_for('/admin/users/edit', $c->stash->{'edit_user'}{'user_id'}),
