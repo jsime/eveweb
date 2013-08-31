@@ -115,7 +115,7 @@ sub edit : Local Args(1) {
     }
 
     $res = $c->model('DB')->do(q{
-        select p.pilot_id, p.name, p.active,
+        select p.pilot_id, p.name, p.active, age(p.birthdate) as age,
             c.corporation_id, c.name as corporation,
             0 as alliance_id, 'An Alliance' as alliance
         from eve.pilots p
