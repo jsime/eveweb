@@ -59,6 +59,7 @@
         <tr>
             <td>Pilot Name</td>
             <td>Active</td>
+            <td>Age</td>
             <td>Corporation</td>
             <td>Alliance</td>
         </tr>
@@ -68,6 +69,7 @@
         <tr>
             <td>[% pilot.name %]</td>
             <td>[% pilot.active ? 'Y' : '-' %]</td>
+            <td>[% pilot.age %]</td>
             <td>[% pilot.corporation %]</td>
             <td>[% pilot.alliance %]</td>
         </tr>
