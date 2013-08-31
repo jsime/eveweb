@@ -132,6 +132,8 @@ sub edit : Local Args(1) {
 
         while ($res->next) {
             push(@{$c->stash->{'edit_user'}{'pilots'}}, { map { $_ => $res->{$_} } $res->columns });
+
+            $c->stash->{'edit_user'}{'pilots'}[-1]{'age'} =~ s{\s+\d+:\d+:\d+.*$}{}o;
         }
     }
 
