@@ -90,4 +90,50 @@ sub update_alliance {
     }
 
     $db->commit;
+
+    update_alliance_corps($alliance);
+}
+
+sub update_alliance_corps {
+    my ($alliance) = @_;
+
+    CORP:
+    foreach my $corp ($alliance->corporations) {
+        printf("    Updating Corporation %s (%d)\n", $corp->name, $corp->corporation_id);
+
+        $db->begin;
+
+        my $res = $db->do(q{
+            update eve.corporations
+            set ???
+            where corporation_id = ?
+        }, {
+            name   => $corp->name,
+            ticker => $corp->ticker,
+        }, $corp->corporation_id);
+
+        unless ($res) {
+            warn $res->error;
+            $db->rollback;
+            return 0;
+        }
+
+        if ($res->count < 1) {
+            $res = $db->do(q{
+                insert into eve.corporations ???
+            }, {
+                corporation_id  => $corp->corporation_id,
+                name            => $corp->name,
+                ticker          => $corp->ticker,
+            });
+
+            unless ($res) {
+                warn $res->error;
+                $db->rollback;
+                return 0;
+            }
+        }
+
+        $db->commit;
+    }
 }
