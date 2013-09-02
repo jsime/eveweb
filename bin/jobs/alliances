@@ -108,8 +108,12 @@ sub update_alliance_corps {
             set ???
             where corporation_id = ?
         }, {
-            name   => $corp->name,
-            ticker => $corp->ticker,
+            name         => $corp->name,
+            ticker       => $corp->ticker,
+            tax_rate     => $corp->tax_rate,
+            members      => $corp->member_count,
+            shares       => $corp->shares,
+            cached_until => $corp->cached_until . '+0000',
         }, $corp->corporation_id);
 
         unless ($res) {
@@ -122,9 +126,13 @@ sub update_alliance_corps {
             $res = $db->do(q{
                 insert into eve.corporations ???
             }, {
-                corporation_id  => $corp->corporation_id,
-                name            => $corp->name,
-                ticker          => $corp->ticker,
+                corporation_id => $corp->corporation_id,
+                name           => $corp->name,
+                ticker         => $corp->ticker,
+                tax_rate       => $corp->tax_rate,
+                members        => $corp->member_count,
+                shares         => $corp->shares,
+                cached_until   => $corp->cached_until . '+0000',
             });
 
             unless ($res) {
