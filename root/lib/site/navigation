@@ -18,7 +18,8 @@
         <li><a href="[% c.uri_for('/structure') %]">Structures</a></li>
         <li class="divider"></li>
         <li><label>Strategic</label></li>
-        <li><a href="[% c.uri_for('/fitting') %]">Fitting</a></li>
+        <li><a href="[% c.uri_for('/plans') %]">Skill Plans</a></li>
+        <li><a href="[% c.uri_for('/fittings') %]">Ship Fitting</a></li>
         <li><a href="[% c.uri_for('/fleet') %]">Fleets</a></li>
     </ul>
 </div>
