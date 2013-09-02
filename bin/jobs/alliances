@@ -146,6 +146,33 @@ sub update_alliance_corps {
             }
         }
 
+        $res = $db->do(q{
+            select *
+            from eve.alliance_corporations
+            where alliance_id = ?
+                and corporation_id = ?
+                and from_datetime = ?
+        }, $alliance->alliance_id, $corp->corporation_id, $corp->from_datetime);
+
+        unless ($res) {
+            warn $res->error;
+            $db->rollback;
+            return 0;
+        }
+
+        unless ($res->next) {
+            # TODO ensure that the current corporation's membership in any other alliance
+            # is closed out (by setting a to_datetime)
+
+            $res = $db->do(q{
+               insert into eve.alliance_corporations ???
+            }, {
+                alliance_id    => $alliance->alliance_id,
+                corporation_id => $corp->corporation_id,
+                from_datetime  => $corp->start_date . '+0000',
+            });
+        }
+
         $db->commit;
     }
 }
