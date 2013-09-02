@@ -7,7 +7,7 @@
                     <img src="/static/images/icons/round-plus.png" width="32" height="32" />
                 </a>
                 <ul id="add-pilot" class="f-dropdown">
-                    <li><label>Active Pilot</label></li>
+                    <li><label>Active Pilots</label></li>
                 [% FOREACH pilot IN user.pilots %]
                     [% IF pilot.active %]
                     <li>
@@ -17,7 +17,7 @@
                     </li>
                     [% END %]
                 [% END %]
-                    <li><label>Inactive Pilot</label></li>
+                    <li><label>Inactive Pilots</label></li>
                 [% FOREACH pilot IN user.pilots %]
                     [% UNLESS pilot.active %]
                     <li>
