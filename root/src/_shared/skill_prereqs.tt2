@@ -68,10 +68,14 @@
                 <td colspan="[% 2 + pilots.size %]">Primary Skill</td>
             </tr>
             [% ELSIF skill.tier_path_str == 2 %]
+        </tbody>
+        <tbody>
             <tr class="section">
                 <td colspan="[% 2 + pilots.size %]">Secondary Skill</td>
             </tr>
             [% ELSIF skill.tier_path_str == 3 %]
+        </tbody>
+        <tbody>
             <tr class="section">
                 <td colspan="[% 2 + pilots.size %]">Tertiary Skill</td>
             </tr>
