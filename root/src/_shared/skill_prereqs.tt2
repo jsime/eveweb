@@ -1,7 +1,7 @@
 <table class="full-width">
     <thead>
         <tr>
-            <td>[% skills.first.skill_name || skill.name %]</td>
+            <td>Requirements</td>
             <td width="48">
                 <a class="right" href="#" class="button image" data-dropdown="add-pilot">
                     <img src="/static/images/icons/round-plus.png" width="32" height="32" />
@@ -55,6 +55,13 @@
             [% END %]
         </tr>
     </tfoot>
+    <tbody>
+        <tr>
+            <td colspan="2">
+                [% skill.name %]
+            </td>
+        </tr>
+    </tbody>
     <tbody>
     [% IF skills.size < 1 %]
         <tr>
