@@ -103,6 +103,10 @@ sub update_alliance_corps {
 
         $db->begin;
 
+        my $cached_until = $corp->cached_until
+            ? $corp->cached_until
+            : DateTime->now->add( hours => 1 );
+
         my $res = $db->do(q{
             update eve.corporations
             set ???
@@ -113,7 +117,7 @@ sub update_alliance_corps {
             tax_rate     => $corp->tax_rate,
             members      => $corp->member_count,
             shares       => $corp->shares,
-            cached_until => $corp->cached_until . '+0000',
+            cached_until => $cached_until,
         }, $corp->corporation_id);
 
         unless ($res) {
@@ -132,7 +136,7 @@ sub update_alliance_corps {
                 tax_rate       => $corp->tax_rate,
                 members        => $corp->member_count,
                 shares         => $corp->shares,
-                cached_until   => $corp->cached_until . '+0000',
+                cached_until   => $cached_until,
             });
 
             unless ($res) {
