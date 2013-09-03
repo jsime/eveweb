@@ -143,6 +143,9 @@ sub skills :PathPart Chained('/') Args(1) {
                     += $res->{'train_seconds'};
             }
         }
+
+use Data::Dumper;
+        print STDERR "\n\n\n" . Dumper($c->stash->{'pilot_skills'}) . "\n\n\n";
     }
 
     push(@{$c->stash->{'breadcrumbs'}},
