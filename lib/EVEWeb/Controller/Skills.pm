@@ -94,7 +94,7 @@ sub skills :PathPart Chained('/') Args(1) {
         order by t.tier_path
     }, $skill_id);
 
-    my @skill_ids;
+    my @skill_ids = ($skill_id);
 
     if ($res) {
         $c->stash->{'required_skills'} = [];
