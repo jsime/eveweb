@@ -56,9 +56,12 @@ table tbody tr td {
     font-weight: 400;
 }
 table tbody tr.section {
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
     background-color: white;
+}
+table tbody tr.section td {
+    padding-top: 1.0em;
+    font-weight: 200;
+    font-size: 120%;
 }
 ul.breadcrumbs li.right.first :before {
     content: "" !important;
