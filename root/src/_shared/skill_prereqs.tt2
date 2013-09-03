@@ -60,6 +60,13 @@
             <td colspan="2">
                 [% skill.name %]
             </td>
+        [% FOREACH pilot_id IN pilots.keys.sort %]
+            [% skill_id = skill.skill_id %]
+            [% pilot_skill = pilots.$pilot_id.skills.$skill_id %]
+            <td>
+                [% pilot_skill.level | roman %]
+            </td>
+        [% END %]
         </tr>
     </tbody>
     <tbody>
