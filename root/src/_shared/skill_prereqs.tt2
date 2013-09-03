@@ -64,15 +64,19 @@
             [% skill_id = skill.skill_id %]
             [% pilot_skill = pilots.$pilot_id.skills.$skill_id %]
             <td class="text-center">
-                [% pilot_skill.trained_level | roman %]
+                [% IF pilot_skill.trained_level %]
+                    [% pilot_skill.trained_level | roman %]
+                [% ELSE %]
+                    -
+                [% END %]
             </td>
         [% END %]
         </tr>
     </tbody>
     <tbody>
     [% IF skills.size < 1 %]
-        <tr>
-            <td colspan="2"><em>No pre-requisites</em></td>
+        <tr class="section">
+            <td colspan="[% 2 + pilots.keys.size %]">No pre-requisites</td>
         </tr>
     [% ELSE %]
         [% FOREACH skill IN skills %]
