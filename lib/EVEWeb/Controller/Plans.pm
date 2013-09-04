@@ -30,6 +30,21 @@ sub auto :Private {
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
+    my $res = $c->model('DB')->do(q{
+        select pl.*
+        from plans.plans pl
+        where pl.user_id = ?
+        order by pl.name asc, pl.created_at asc
+    }, $c->stash->{'user'}{'user_id'});
+
+    if ($res) {
+        $c->stash->{'plans'}{'personal'} = [];
+
+        while ($res->next) {
+            push(@{$c->stash->{'plans'}{'personal'}}, { map { $_ => $res->{$_} } $res->columns });
+        }
+    }
+
     $c->stash->{'template'} = 'plans/index.tt2';
 }
 
