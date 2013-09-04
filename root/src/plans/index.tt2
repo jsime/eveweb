@@ -1,0 +1,13 @@
+[% META title = 'Skill Plans' %]
+
+[% PROCESS site/breadcrumbs %]
+
+<h2>Personal Skill Plans</h2>
+
+<h2>Shared Plans</h2>
+
+<h3>Corporation</h3>
+
+<h3>Alliance</h3>
+
+<h3>Global</h3>

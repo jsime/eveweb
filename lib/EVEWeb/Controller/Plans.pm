@@ -24,7 +24,7 @@ Catalyst Controller.
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->response->body('Matched EVEWeb::Controller::Plans in Plans.');
+    $c->stash->{'template'} = 'plans/index.tt2';
 }
 
 
