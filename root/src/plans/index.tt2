@@ -28,6 +28,7 @@
     [% END %]
     [% END %]
 </div>
+<br />
 [% END %]
 [% IF showed_add == 0 %]
 <div class="row">
