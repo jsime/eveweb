@@ -8,30 +8,36 @@
 [% WHILE plans.personal.size > 0 %]
 <div class="row">
     [% FOREACH plan IN plans.personal.splice(0, 6) %]
-    <a href="[% c.uri_for('/plans', plan.plan_id) %]">
-    <div class="large-2 columns panel">
-        <h4>[% plan.name %]</h4>
-        <p>[% plan.summary %]</p>
+    <div class="large-2 columns">
+        <a href="[% c.uri_for('/plans', plan.plan_id) %]">
+            <div class="plan-box">
+                <p>[% plan.name %]</p>
+                <small>[% plan.summary %]</small>
+            </div>
+        </a>
     </div>
-    </a>
     [% IF loop.last && loop.index < 5 %]
         [% showed_add = 1 %]
-        <a href="[% c.uri_for('/plans/new') %]">
-        <div class="large-2 columns panel">
-            + New Plan +
+        <div class="large-2 columns">
+            <a href="[% c.uri_for('/plans/new') %]">
+                <div class="plan-box">
+                    + New Plan +
+                </div>
+            </a>
         </div>
-        </a>
     [% END %]
     [% END %]
 </div>
 [% END %]
 [% IF showed_add == 0 %]
 <div class="row">
-    <a href="[% c.uri_for('/plans/new') %]">
-    <div class="large-2 columns panel">
-        + New Plan
+    <div class="large-2 columns">
+        <a href="[% c.uri_for('/plans/new') %]">
+            <div class="plan-box">
+                + New Plan
+            </div>
+        </a>
     </div>
-    </a>
 </div>
 [% END %]
 
