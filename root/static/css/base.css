@@ -123,3 +123,10 @@ div.center {
 .skill.full {
     color: #090;
 }
+.plan-box {
+    height: 100%;
+    width: 100%;
+    background-color: #f8f8f8;
+    padding: 0.5em;
+    border-radius: 0.25em;
+}
