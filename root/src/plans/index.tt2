@@ -4,6 +4,37 @@
 
 <h2>Personal Skill Plans</h2>
 
+[% showed_add = 0 %]
+[% WHILE plans.personal.size > 0 %]
+<div class="row">
+    [% FOREACH plan IN plans.personal.splice(0, 6) %]
+    <a href="[% c.uri_for('/plans', plan.plan_id) %]">
+    <div class="large-2 columns panel">
+        <h4>[% plan.name %]</h4>
+        <p>[% plan.summary %]</p>
+    </div>
+    </a>
+    [% IF loop.last && loop.index < 5 %]
+        [% showed_add = 1 %]
+        <a href="[% c.uri_for('/plans/new') %]">
+        <div class="large-2 columns panel">
+            + New Plan +
+        </div>
+        </a>
+    [% END %]
+    [% END %]
+</div>
+[% END %]
+[% IF showed_add == 0 %]
+<div class="row">
+    <a href="[% c.uri_for('/plans/new') %]">
+    <div class="large-2 columns panel">
+        + New Plan
+    </div>
+    </a>
+</div>
+[% END %]
+
 <h2>Shared Plans</h2>
 
 <h3>Corporation</h3>
