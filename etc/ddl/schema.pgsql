@@ -457,6 +457,20 @@ create index skill_queues_start_time_idx on plans.skill_queues (start_time);
 alter table plans.skill_queues add foreign key (pilot_id) references eve.pilots (pilot_id) on update cascade on delete cascade;
 alter table plans.skill_queues add foreign key (skill_id) references ccp.skills (skill_id) on update cascade on delete cascade;
 
+create table plans.plans (
+    plan_id     serial not null primary key,
+    user_id     integer not null,
+    name        text not null,
+    summary     text,
+    created_at  timestamp with time zone not null default now(),
+    updated_at  timestamp with time zone
+);
+
+create index plans_user_id_idx on plans.plans (user_id);
+create index plans_name_idx on plans.plans (name);
+
+alter table plans.plans add foreign key (user_id) references public.users (user_id) on update cascade on delete cascade;
+
 -- SCHEMA: fits
 -- Ship fittings
 create schema fits;
