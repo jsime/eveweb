@@ -56,12 +56,12 @@ sub add :Local {
             (user_id, name)
         values (
             1,
-            'Untitled ' || coalesce(select cast(regexp_replace(name, '\D+', '') as integer) + 1 as num
-                                    from plans.plans
-                                    where user_id = ?
-                                        and name ilike 'Untitled %'
-                                    order by 1 desc
-                                    limit 1), 1)
+            'Untitled ' || coalesce((select cast(regexp_replace(name, '\D+', '') as integer) + 1 as num
+                                     from plans.plans
+                                     where user_id = ?
+                                         and name ilike 'Untitled %'
+                                     order by 1 desc
+                                     limit 1), 1)
         )
     }, $c->stash->{'user'}{'user_id'});
 
