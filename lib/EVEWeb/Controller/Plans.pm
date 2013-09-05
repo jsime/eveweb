@@ -48,6 +48,22 @@ sub index :Path :Args(0) {
     $c->stash->{'template'} = 'plans/index.tt2';
 }
 
+sub add :Local {
+    my ($self, $c) = @_;
+
+    my $res = $c->model('DB')->do(q{
+        insert into plans.plans
+            (user_id, name)
+        values (1, 'Untitled ' || (select cast(regexp_replace(name, '\D+', '') as integer) + 1 as num
+                                   from plans.plans
+                                   where user_id = ?
+                                       and name ilike 'Untitled %'
+                                   order by 1 desc
+                                   limit 1))
+    }, $c->stash->{'user'}{'user_id'});
+
+    $c->response->redirect($c->uri_for('/plans'));
+}
 
 =head1 AUTHOR
 
