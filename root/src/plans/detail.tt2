@@ -1,0 +1,5 @@
+[% META title = 'Skill Plans' %]
+
+[% PROCESS site/breadcrumbs %]
+
+<h1>[% plan.name %]</h1>
