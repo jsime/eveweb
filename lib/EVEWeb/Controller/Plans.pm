@@ -84,6 +84,11 @@ sub plans : PathPart Chained('/') Args(1) {
 
     $c->stash->{'plan'} = { map { $_ => $res->{$_} } $res->columns };
 
+    push(@{$c->stash->{'breadcrumbs'}},
+        { name => $c->stash->{'plan'}{'name'},
+          link => $c->uri_for('/plans', $c->stash->{'plan'}{'plan_id'}),
+        });
+
     $c->stash->{'template'} = 'plans/detail.tt2';
 }
 
