@@ -68,6 +68,25 @@ sub add :Local {
     $c->response->redirect($c->uri_for('/plans'));
 }
 
+sub plans : PathPart Chained('/') Args(1) {
+    my ($self, $c, $plan_id) = @_;
+
+    my $res = $c->model('DB')->do(q{
+        select pl.*
+        from plans.plans pl
+        where pl.plan_id = ?
+    }, $plan_id);
+
+    unless ($res && $res->next) {
+        $c->response->redirect($c->uri_for('/plans'));
+        return;
+    }
+
+    $c->stash->{'plan'} = { map { $_ => $res->{$_} } $res->columns };
+
+    $c->stash->{'template'} = 'plans/detail.tt2';
+}
+
 =head1 AUTHOR
 
 Jon Sime,,,
