@@ -474,6 +474,22 @@ create index plans_name_idx on plans.plans (name);
 alter table plans.plans add foreign key (user_id) references public.users (user_id) on update cascade on delete cascade;
 alter table plans.plans add foreign key (pilot_id) references eve.pilots (pilot_id) on update cascade on delete cascade;
 
+create table plans.plan_skills (
+    plan_id  integer not null,
+    skill_id integer not null,
+    level    integer not null,
+    position integer not null
+);
+
+alter table plans.plan_skills add primary key (plan_id, skill_id, level);
+create index plan_skills_skill_id_idx on plans.plan_skills (skill_id);
+create index plan_skills_position_idx on plans.plan_skills (position);
+
+alter table plans.plan_skills add foreign key (plan_id) references plans.plans (plan_id) on update cascade on delete cascade;
+alter table plans.plan_skills add foreign key (skill_id) references ccp.skills (skill_id) on update cascade on delete cascade;
+
+alter table plans.plan_skills add constraint valid_skill_level check (level between 1 and 5);
+
 -- SCHEMA: fits
 -- Ship fittings
 create schema fits;
