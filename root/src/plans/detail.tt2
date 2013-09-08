@@ -3,3 +3,43 @@
 [% PROCESS site/breadcrumbs %]
 
 <h1>[% plan.name %]</h1>
+
+[% IF plan.user_id == user.user_id %]
+<div class="row">
+<div class="large-12 columns">
+<form>
+<fieldset>
+<legend>Skill Plan Metadata</legend>
+<div class="row">
+<div class="large-2 columns">
+    Plan Name
+</div>
+<div class="large-4 columns">
+<input type="text" name="name" value="[% plan.name | html %]" placeholder="Plan Name" />
+</div>
+</div>
+<div class="row">
+<div class="large-2 columns">
+    Summary
+</div>
+<div class="large-4 columns">
+    <input type="text" name="summary" value="[% plan.summary | html %]" placeholder="Summary" />
+</div>
+</div>
+<div class="row">
+<div class="large-2 columns">
+    Share as Pilot
+</div>
+<div class="large-4 columns">
+    <select name="pilot_id">
+[% FOREACH pilot IN user.pilots %]
+        <option value="[% pilot.pilot_id %]">[% pilot.name %]</option>
+[% END %]
+    </select>
+</div>
+</div>
+</fieldset>
+</form>
+</div>
+</div>
+[% END %]
