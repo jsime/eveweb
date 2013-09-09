@@ -490,6 +490,20 @@ alter table plans.plan_skills add foreign key (skill_id) references ccp.skills (
 
 alter table plans.plan_skills add constraint valid_skill_level check (level between 1 and 5);
 
+create table plans.plan_visibility (
+    plan_id        integer not null,
+    corporation_id integer,
+    alliance_id    integer
+);
+
+alter table plans.plan_visibility add primary key (plan_id, corporation_id, alliance_id);
+create index plan_visibility_corporation_id_idx on plans.plan_visibility (corporation_id);
+create index plan_visibility_alliance_id_idx on plans.plan_visibility (alliance_id);
+
+alter table plans.plan_visibility add foreign key (plan_id) references plans.plans (plan_id) on update cascade on delete cascade;
+alter table plans.plan_visibility add foreign key (corporation_id) references eve.corporations (corporation_id) on update cascade on delete cascade;
+alter table plans.plan_visibility add foreign key (alliance_id) references eve.alliances (alliance_id) on update cascade on delete cascade;
+
 -- SCHEMA: fits
 -- Ship fittings
 create schema fits;
