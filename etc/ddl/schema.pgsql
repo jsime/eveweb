@@ -463,6 +463,7 @@ create table plans.plans (
     pilot_id    integer,
     name        text not null,
     summary     text,
+    global      boolean not null default 'f',
     created_at  timestamp with time zone not null default now(),
     updated_at  timestamp with time zone
 );
@@ -470,6 +471,7 @@ create table plans.plans (
 create index plans_user_id_idx on plans.plans (user_id);
 create index plans_pilot_id_idx on plans.plans (pilot_id);
 create index plans_name_idx on plans.plans (name);
+create index plans_global_idx on plans.plans (global);
 
 alter table plans.plans add foreign key (user_id) references public.users (user_id) on update cascade on delete cascade;
 alter table plans.plans add foreign key (pilot_id) references eve.pilots (pilot_id) on update cascade on delete cascade;
