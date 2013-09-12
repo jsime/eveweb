@@ -7,7 +7,7 @@
 [% IF plan.user_id == user.user_id %]
 <div class="row">
 <div class="large-12 columns">
-<form>
+<form class="custom">
 <fieldset>
 <legend>Skill Plan Metadata</legend>
 <div class="row">
