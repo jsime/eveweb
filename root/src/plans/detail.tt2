@@ -2,7 +2,16 @@
 
 [% PROCESS site/breadcrumbs %]
 
-<h1>[% plan.name %]</h1>
+<div class="row">
+    <div class="large-8 columns">
+        <h1>[% plan.name %]</h1>
+    </div>
+    [% IF plan.user_id == user.user_id %]
+    <div class="large-4 columns">
+        <a class="button alert right" href="[% c.uri_for('/plans/delete', plan.plan_id) %]">Delete Plan</a>
+    </div>
+    [% END %]
+</div>
 
 [% IF plan.user_id == user.user_id %]
 <div class="row">
