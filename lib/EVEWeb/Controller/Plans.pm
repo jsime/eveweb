@@ -68,6 +68,27 @@ sub add :Local {
     $c->response->redirect($c->uri_for('/plans'));
 }
 
+sub delete : Local Args(1) {
+    my ($self, $c, $plan_id) = @_;
+
+    my $res = $c->model('DB')->do(q{
+        delete from plans.plans
+        where plans.user_id = ?
+            amd plans.plan_id = ?
+        returning *
+    }, $c->stash->{'user'}{'user_id'}, $plan_id);
+
+    if ($res && $res->next) {
+        $c->flash->{'message'} = sprintf('The plan <em>%s</em> has been deleted.', $res->{'name'});
+        $c->response->redirect($c->uri_for('/plans'));
+        return;
+    }
+
+    $c->flash->{'error'} = sprintf('An error occurred when attempted to delete the specified plan.');
+    $c->response->redirect($c->uri_for('/plans'));
+    return;
+}
+
 sub plans : PathPart Chained('/') Args(1) {
     my ($self, $c, $plan_id) = @_;
 
