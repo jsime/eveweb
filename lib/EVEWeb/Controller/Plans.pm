@@ -74,7 +74,7 @@ sub delete : Local Args(1) {
     my $res = $c->model('DB')->do(q{
         delete from plans.plans
         where plans.user_id = ?
-            amd plans.plan_id = ?
+            and plans.plan_id = ?
         returning *
     }, $c->stash->{'user'}{'user_id'}, $plan_id);
 
