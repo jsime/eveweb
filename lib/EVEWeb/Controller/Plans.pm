@@ -89,6 +89,64 @@ sub delete : Local Args(1) {
     return;
 }
 
+sub update : Local Args(1) {
+    my ($self, $c, $plan_id) = @_;
+
+    my $plan = $c->model('DB')->do(q{
+        select p.*
+        from plans.plans p
+        where p.plan_id = ?
+    }, $plan_id);
+
+    unless ($plan && $plan->next) {
+        $c->response->redirect($c->uri_for('/plans'));
+        return;
+    }
+
+    unless ($c->stash->{'user'}{'user_id'} == $plan->{'user_id'}) {
+        $c->flash->{'message'} = 'You are not the owner of this plan and are not allowed to update it.';
+        $c->response->redirect($c->uri_for('/plans', $plan->{'plan_id'}));
+        return;
+    }
+
+    my %new_plan;
+
+    foreach my $fld (qw( name summary )) {
+        if (exists $c->request->params->{$fld} && $c->request->params->{$fld} ne $plan->{$fld}) {
+            $new_plan{$fld} = $c->request->params->{$fld};
+        }
+    }
+
+    if (exists $c->request->params->{'pilot_id'} && $c->request->params->{'pilot_id'} != $plan->{'pilot_id'}) {
+        my $pilot = $c->model('DB')->do(q{
+            select p.*
+            from eve.pilots p
+                join eve.user_pilots up on (up.pilot_id = p.pilot_id)
+            where up.user_id = ?
+                and up.pilot_id ?
+        }, $c->stash->{'user'}{'user_id'}, $c->request->params->{'pilot_id'});
+
+        $new_plan{'pilot_id'} = $pilot->{'pilot_id'};
+    }
+
+    if (keys %new_plan > 0) {
+        $new_plan{'updated_at'} = 'now';
+
+        my $res = $c->model('DB')->do(q{
+            update plans.plans set ??? where plan_id = ?
+        }, \%new_plan, $plan->{'plan_id'});
+
+        if ($res) {
+            $c->flash->{'message'} = 'Your changes have been saved.';
+        } else {
+            $c->flash->{'message'} = 'An error occurred while saving your changes.';
+        }
+    }
+
+    $c->response->redirect($c->uri_for('/plans', $plan->{'plan_id'}));
+    return;
+}
+
 sub plans : PathPart Chained('/') Args(1) {
     my ($self, $c, $plan_id) = @_;
 
