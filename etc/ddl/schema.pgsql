@@ -319,6 +319,14 @@ create index pilot_api_keys_key_id_idx on eve.pilot_api_keys (key_id);
 alter table eve.pilot_api_keys add foreign key (pilot_id) references eve.pilots (pilot_id) on update cascade on delete cascade;
 alter table eve.pilot_api_keys add foreign key (key_id) references eve.api_keys (key_id) on update cascade on delete cascade;
 
+create view eve.user_pilots as
+    select u.user_id, p.pilot_id
+    from public.users u
+        join eve.api_keys k on (k.user_id = u.user_id)
+        join eve.pilot_api_keys pk on (pk.key_id = k.key_id)
+        join eve.pilots p on (p.pilot_id = pk.pilot_id)
+    group by u.user_id, p.pilot_id;
+
 create table eve.pilot_attributes (
     pilot_id     integer not null,
     attribute_id integer not null,
