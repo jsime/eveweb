@@ -168,6 +168,35 @@ sub plans : PathPart Chained('/') Args(1) {
           link => $c->uri_for('/plans', $c->stash->{'plan'}{'plan_id'}),
         });
 
+    $res = $c->model('DB')->do(q{
+        select c.corporation_id, c.name as corporation_name,
+            a.alliance_id, a.name as alliance_name
+        from eve.user_pilots up
+            left join eve.pilot_corporations pc on (pc.pilot_id = up.pilot_id and pc.to_datetime is null)
+            left join eve.corporations c on (c.corporation_id = pc.corporation_id)
+            left join eve.alliance_corporations ac on (ac.corporation_id = c.corporation_id and ac.to_datetime is null)
+            left join eve.alliances a on (a.alliance_id = ac.alliance_id)
+        where up.user_id = ?
+        group by c.corporation_id, c.name, a.alliance_id, a.name
+    }, $c->stash->{'user'}{'user_id'});
+
+    if ($res) {
+        $c->stash->{'corporations'} = {};
+        $c->stash->{'alliances'} = {};
+
+        while ($res->next) {
+            $c->stash->{'corporations'}{$res->{'corporation_id'}} = {
+                corporation_id => $res->{'corporation_id'},
+                name           => $res->{'corporation_name'},
+            };
+
+            $c->stash->{'alliances'}{$res->{'alliance_id'}} = {
+                alliance_id => $res->{'alliance_id'},
+                name        => $res->{'alliance_name'},
+            };
+        }
+    }
+
     $c->stash->{'template'} = 'plans/detail.tt2';
 }
 
