@@ -51,12 +51,20 @@
                         </div>
                     </div>
                     <div class="large-3 columns">
-                        <select name="corporations" multiple>
-                        </select>
+                        [% FOREACH corporation IN corporations.values %]
+                        <label>
+                            <input type="checkbox" name="corporation" value="[% corporation.corporation_id %]" />
+                            [% corporation.name %]
+                        </label>
+                        [% END %]
                     </div>
                     <div class="large-3 columns">
-                        <select name="alliances" multiple>
-                        </select>
+                        [% FOREACH alliance IN alliances.values %]
+                        <label>
+                            <input type="checkbox" name="alliance" value="[% alliance.alliance_id %]" />
+                            [% alliance.name %]
+                        </label>
+                        [% END %]
                     </div>
                 </div>
             </fieldset>
