@@ -67,6 +67,11 @@
                         [% END %]
                     </div>
                 </div>
+                <div class="row">
+                    <div class="large-12 columns">
+                        <button class="right" type="submit">Update Plan</button>
+                    </div>
+                </div>
             </fieldset>
         </form>
     </div>
