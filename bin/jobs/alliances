@@ -152,7 +152,7 @@ sub update_alliance_corps {
             where alliance_id = ?
                 and corporation_id = ?
                 and from_datetime = ?
-        }, $alliance->alliance_id, $corp->corporation_id, $corp->from_datetime);
+        }, $alliance->alliance_id, $corp->corporation_id, $corp->start_date . '+0000');
 
         unless ($res) {
             warn $res->error;
