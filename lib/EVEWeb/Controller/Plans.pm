@@ -123,7 +123,7 @@ sub update : Local Args(1) {
             from eve.pilots p
                 join eve.user_pilots up on (up.pilot_id = p.pilot_id)
             where up.user_id = ?
-                and up.pilot_id ?
+                and up.pilot_id = ?
         }, $c->stash->{'user'}{'user_id'}, $c->request->params->{'pilot_id'});
 
         if ($pilot && $pilot->next) {
