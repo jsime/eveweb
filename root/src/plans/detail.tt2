@@ -16,7 +16,7 @@
 [% IF plan.user_id == user.user_id %]
 <div class="row">
     <div class="large-12 columns">
-        <form class="custom">
+        <form class="custom" method="post" action="[% c.uri_for('/plans/update', plan.plan_id) %]">
             <fieldset>
                 <legend>Skill Plan Metadata</legend>
                 <div class="row">
