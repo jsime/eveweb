@@ -126,7 +126,12 @@ sub update : Local Args(1) {
                 and up.pilot_id ?
         }, $c->stash->{'user'}{'user_id'}, $c->request->params->{'pilot_id'});
 
-        $new_plan{'pilot_id'} = $pilot->{'pilot_id'};
+        if ($pilot && $pilot->next) {
+            $new_plan{'pilot_id'} = $pilot->{'pilot_id'};
+        } else {
+            $c->response->redirect($c->uri_for('/plans', $plan->{'plan_id'}));
+            return;
+        }
     }
 
     if (keys %new_plan > 0) {
