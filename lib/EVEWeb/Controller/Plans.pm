@@ -134,10 +134,12 @@ sub update : Local Args(1) {
         }
     }
 
+    my $res;
+
     if (keys %new_plan > 0) {
         $new_plan{'updated_at'} = 'now';
 
-        my $res = $c->model('DB')->do(q{
+        $res = $c->model('DB')->do(q{
             update plans.plans set ??? where plan_id = ?
         }, \%new_plan, $plan->{'plan_id'});
 
@@ -146,6 +148,39 @@ sub update : Local Args(1) {
         } else {
             $c->flash->{'message'} = 'An error occurred while saving your changes.';
         }
+    }
+
+    $c->model('DB')->begin;
+
+    $res = $c->model('DB')->do(q{
+        delete from plans.plan_visibility
+        where plan_id = ?
+            and corporation_id is not null
+    }, $plan->{'plan_id'});
+
+    if ($res && $c->request->params->{'corporation'}) {
+        my @corp_ids;
+
+        if (ref($c->request->params->{'corporation'}) eq 'ARRAY') {
+            @corp_ids = @{$c->request->params->{'corporation'}};
+        } else {
+            @corp_ids = ($c->request->params->{'corporation'});
+        }
+
+        $res = $c->model('DB')->do(q{
+            insert into plans.plan_visibility ???
+        }, [
+            map {
+                { plan_id => $plan->{'plan_id'}, corporation_id => $_ }
+            } @corp_ids
+        ]);
+    }
+
+    if ($res) {
+        $c->model('DB')->commit;
+    } else {
+        $c->flash->{'error'} = 'An error occurred while modifying corporate visibility.';
+        $c->model('DB')->rollback;
     }
 
     $c->response->redirect($c->uri_for('/plans', $plan->{'plan_id'}));
