@@ -198,7 +198,7 @@ sub plans : PathPart Chained('/') Args(1) {
             $c->stash->{'alliances'}{$res->{'alliance_id'}} = {
                 alliance_id => $res->{'alliance_id'},
                 name        => $res->{'alliance_name'},
-            };
+            } if exists $res->{'alliance_id'} && $res->{'alliance_id'};
         }
     }
 
