@@ -11,5 +11,5 @@ They are safe to run against an existing EVEWeb database with static
 data already loaded. This is useful in cases of SDE updates from CCP
 add new items, skills, etc.
 
-For your convenience, a run_import.sh shell script is provided here
-that will run all the scripts in order for you.
+For your convenience, a run.sh shell script is provided here that will
+run all the scripts in order for you.
