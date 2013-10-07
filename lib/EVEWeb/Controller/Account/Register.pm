@@ -31,7 +31,7 @@ sub index :Path :Args(0) {
     my $captcha = Captcha::reCAPTCHA->new();
 
     $c->stash->{'captcha'} = $captcha->get_html(
-        $c->config->{'recaptcha_api_key_public'},
+        $c->config->{'recaptcha'}{'public_key'},
         (exists $c->stash->{'captcha_error'} ? $c->stash->{'captcha_error'} : undef),
         1,
         { theme => 'white' }
@@ -79,7 +79,7 @@ sub do :Local :Args(0) {
     my $captcha = Captcha::reCAPTCHA->new();
 
     my $result = $captcha->check_answer(
-        $c->config->{'recaptcha_api_key_private'},
+        $c->config->{'recaptcha'}{'private_key'},
         $c->request->address,
         $c->request->params->{'recaptcha_challenge_field'},
         $c->request->params->{'recaptcha_response_field'}
