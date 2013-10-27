@@ -50,6 +50,14 @@ sub index :Path :Args(0) {
     $c->stash->{'template'} = 'corporations/index.tt2';
 }
 
+sub corporations : PathPart Chained('/') Args(1) {
+    my ($self, $c, $corp_id) = @_;
+
+    push(@{$c->stash->{'breadcrumbs'}}, { name => 'Corporation Foobarbaz', link => $c->uri_for('/corporations', $corp_id) });
+
+    $c->stash->{'template'} = 'corporations/detail.tt2';
+}
+
 
 =head1 AUTHOR
 
