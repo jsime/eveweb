@@ -4,4 +4,13 @@
 [% PROCESS site/breadcrumbs %]
 
 <div class="row">
+    <div Class="large-2 columns">
+        <img src="//image.eveonline.com/Corporation/[% corporation.corporation_id %]_256.png" />
+    </div>
+    <div class="large-10 columns">
+        <h1>[% corporation.name %]</h1>
+        [% IF alliance %]
+        <h2>[% alliance.name %]</h2>
+        [% END %]
+    </div>
 </div>
